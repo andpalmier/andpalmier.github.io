@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on andpalmier</title>
+    <link>/categories/</link>
+    <description>Recent content in Categories on andpalmier</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>phishing</title>
+      <link>/categories/phishing/</link>
+      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/phishing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>malware</title>
+      <link>/categories/malware/</link>
+      <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
+      
+      <guid>/categories/malware/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>go</title>
+      <link>/categories/go/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ransomware</title>
+      <link>/categories/ransomware/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/ransomware/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>recommendations</title>
+      <link>/categories/recommendations/</link>
+      <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/recommendations/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

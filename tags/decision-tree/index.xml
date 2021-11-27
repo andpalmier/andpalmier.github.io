@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>decision tree on andpalmier</title>
+    <link>/tags/decision-tree/</link>
+    <description>Recent content in decision tree on andpalmier</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 09 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/decision-tree/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Machine Learning and phishing, pt.1: decision tree</title>
+      <link>/posts/ml-with-phishing-ep1/</link>
+      <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/ml-with-phishing-ep1/</guid>
+      <description>Last week I started hunting and reporting phishing websites on Twitter (follow me here if you are interested). After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
+In this series of posts I am going to use a smaller variant of this dataset to create machine learning models which (hopefully) will be able to identify a phishing website.</description>
+    </item>
+    
+  </channel>
+</rss>

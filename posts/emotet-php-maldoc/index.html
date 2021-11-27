@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Language" content="en">
+
+	<meta name="author" content="Andrea Palmieri">
+	<meta name="description" content="Analysis of a PHP file used to generate a document containing malicious macros for Emotet infection">
+	<meta name="keywords" content="blog, infosec, security, cyber security">
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Emotet infection from PHP: generation of a malicious doc"/>
+<meta name="twitter:description" content="Analysis of a PHP file used to generate a document containing malicious macros for Emotet infection"/>
+
+	<meta property="og:title" content="Emotet infection from PHP: generation of a malicious doc" />
+<meta property="og:description" content="Analysis of a PHP file used to generate a document containing malicious macros for Emotet infection" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/emotet-php-maldoc/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-10-12T10:33:45+02:00" />
+<meta property="article:modified_time" content="2020-10-12T10:33:45+02:00" />
+
+
+
+	
+	<base href="/posts/emotet-php-maldoc/">
+	
+	<title>
+  Emotet infection from PHP: generation of a malicious doc · andpalmier
+</title>
+
+	
+	<link rel="canonical" href="/posts/emotet-php-maldoc/">
+	
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+	
+	
+	
+	<link rel="stylesheet" href="/css/coder.min.d5c572a4dda2996f45f4bd9e584d43751439ce2134c33701e8d32920cc8e7d92.css" integrity="sha256-1cVypN2imW9F9L2eWE1DdRQ5ziE0wzcB6NMpIMyOfZI=" crossorigin="anonymous" media="screen" />
+	
+
+	
+
+	
+	
+	
+	
+	<link rel="stylesheet" href="/css/coder-dark.min.58ba09b2c45d36fcfc1a96c8ad83bbbc03a9de4bce8463f3c30a896134febfb3.css" integrity="sha256-WLoJssRdNvz8GpbIrYO7vAOp3kvOhGPzwwqJYTT&#43;v7M=" crossorigin="anonymous" media="screen" />
+	
+	
+
+	
+	<link rel="stylesheet" href="/css/extra-style.css" />
+	
+
+	
+
+	<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+	
+
+	<meta name="generator" content="Hugo 0.89.4" />
+    </head>
+
+    
+    
+    
+    
+    <body class="colorscheme-dark"
+
+	  onload=""
+	  >
+	  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+	  <main class="wrapper">
+	      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      andpalmier
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/">Home</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/about/">About</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+	      <div class="content">
+		  
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Emotet infection from PHP: generation of a malicious doc</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-10-12T10:33:45&#43;02:00'>
+                October 12, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              7-minute read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="/categories/malware/">malware</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="/tags/malware/">malware</a>
+      <span class="separator">•</span>
+    <a href="/tags/emotet/">emotet</a>
+      <span class="separator">•</span>
+    <a href="/tags/threat-analysis/">threat analysis</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="introduction">Introduction</h2>
+<p>During 2020, the Emotet malware distribution was silent between the beginning of February and the middle of July; this was the longest known break for Emotet. After this pause, the email campaigns started again, with multiple vendors reporting that hundreds of thousands of messages were detected every day<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>.</p>
+<p>There is a long list of security researchers on Twitter that are interested in Emotet, with many accounts sharing samples and findings every day. During this summer I started writing multiple threads reporting abused &ldquo;.it&rdquo; domains which were used to distribute this malware. While I was working on one of this daily threads, I found something interesting:</p>
+<figure><img src="/images/posts/emotet/indexof.png"/>
+</figure>
+
+<p>This domain was reported in multiple occasions during the summer, and it was seen for the first time at the end of July:</p>
+<figure><img src="/images/posts/emotet/firsttime.png"
+         alt="Screenshot from URLhause"/><figcaption>
+            <p>Screenshot from <a href="https://urlhaus.abuse.ch/url/420080/">URLhause</a></p>
+        </figcaption>
+</figure>
+
+<p>I downloaded <code>malware.zip</code> and extracted the content. Although the PHP file in this archive is not detected as malicious in VirusTotal, it is actually used to download a document which contains malicious macros that will attempt to infect the machine.</p>
+<h2 id="background">Background</h2>
+<p>The Emotet malware was firstly identified in 2014. At that time it was acting as a banking malware, attempting to steal sensitive data; however, during these years, several features were added such as the malspam distribution and the further installation of other malware.
+Emotet is currently considered one of the most costly threats, affecting not only individuals, but also private organizations, and even governments.</p>
+<p>The primary distribution method for Emotet is through malspam: the malware is able to detect the contacts list of the infected machine and to replicate itself by sending emails to these contacts. In addition, since the email will be sent from an hijacked account, these will look less suspicious to the recipients.</p>
+<p>The infection methods are multiple: malicious links, document containing macros or scripts. In this case, we will take a look at a PHP file which generates a malicious document file containing macros to infect the machine.</p>
+<h2 id="analysis-of-the-php-downloader">Analysis of the PHP downloader</h2>
+<p><em>malware.zip</em> contains a single PHP file (<code>index.php</code>), which reports August 25th as a modification date. Before analyzing the PHP file, it&rsquo;s worth noting that only the archive <em>malware.zip</em> is found on VirusTotal, with 0 detections for the multiple engines and the first submission from September 26th.</p>
+<figure><img src="/images/posts/emotet/vtzip.png"
+         alt="malware.zip on VirusTotal"/><figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/db1617dc4a09fe856aea8041b90e73467e8d51ad4bdc1fd9a7e0a3197e66339c/detection">malware.zip on VirusTotal</a></p>
+        </figcaption>
+</figure>
+
+<p>The PHP file, instead, has 0 matches.</p>
+<figure><img src="/images/posts/emotet/vtphp.png"
+         alt="index.php on VirusTotal"/><figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/a48791d0e22ba693529285555ebb559bac1786bd703406deb5e1ef9ee8616cc4/detection">index.php on VirusTotal</a></p>
+        </figcaption>
+</figure>
+
+<h3 id="basic-string-obfuscation">Basic string obfuscation</h3>
+<p>The first function that should be discussed in this analysis is called <code>d5f44d5a7878a4()</code>. Indeed, <code>index.php</code> contains some obfuscated strings to avoid being detected as malicious, and this function is used to de-obfuscate these strings. Here is the content of the function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">d5f44d5a7878a4</span>($s) {
+    $string <span style="color:#f92672">=</span> <span style="color:#a6e22e">base64_decode</span>($s);
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#39;::&#39;</span>, $string, <span style="color:#ae81ff">2</span>)[<span style="color:#ae81ff">1</span>];
+}
+</code></pre></div><p>We can see that it was used a very basic obfuscation technique. The de-obfuscation function decodes the given string with Base64 and proceed to create an array of strings by splitting the decoded string on the following sequence of characters <em>&quot;::&quot;</em>. The return value of <code>d5f44d5a7878a4()</code> is contained in the second element of the array obtained after the split.</p>
+<p>For instance, <code>d5f44d5a7878a4()</code> is called later in the file in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$qString <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&#34;</span>);
+</code></pre></div><p>Decoding <em>&ldquo;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&quot;</em> with Base64 we obtain <em>&ldquo;LhCcUWtCLQ==::QUERY_STRING&rdquo;</em>, thus the variable <code>$qString1</code> will contain <em>&ldquo;QUERY_STRING&rdquo;</em>.</p>
+<h3 id="entry-point">Entry point</h3>
+<p>The entry point of <code>index.php</code> is represented by the <code>p5f44d5a786a7c()</code> function. Here are the very first lines:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">p5f44d5a786a7c</span>()
+{
+    $qString <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&#34;</span>);
+    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_SERVER[$qString])) {
+        <span style="color:#66d9ef">return</span> $_SERVER[$qString];
+    }
+</code></pre></div><p>As we already saw it before, we know that the function will just return the full query string if its not empty. If we go on, we will find:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">sha1</span>(<span style="color:#a6e22e">basename</span>(<span style="color:#a6e22e">dirname</span>(<span style="color:#66d9ef">__FILE__</span>)));
+
+<span style="color:#66d9ef">if</span> (($fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>($path, <span style="color:#e6db74">&#39;c+&#39;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">flock</span>($fp, <span style="color:#a6e22e">LOCK_EX</span>)) {
+	$stat <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>();
+        $fileSize <span style="color:#f92672">=</span> <span style="color:#a6e22e">filesize</span>($path);
+
+        <span style="color:#66d9ef">if</span> ($fileSize <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+	    $stat <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>(<span style="color:#a6e22e">fread</span>($fp, $fileSize), <span style="color:#66d9ef">true</span>);
+        }
+</code></pre></div><p>The function will now create a hidden JSON file (it has a <em>&rdquo;.&quot;</em> at the beginning) having as a filename the SHA-1 hash of the name of the current directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">	$platform <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPlatform</span>();
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($stat[$platform]) <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">is_int</span>($stat[$platform])) {
+	    $stat[$platform] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        } <span style="color:#66d9ef">else</span> {
+            $stat[$platform]<span style="color:#f92672">++</span>;
+        }
+
+	<span style="color:#a6e22e">fseek</span>($fp, <span style="color:#ae81ff">0</span>);
+	<span style="color:#a6e22e">fwrite</span>($fp, <span style="color:#a6e22e">json_encode</span>($stat));
+	<span style="color:#a6e22e">fflush</span>($fp);
+	<span style="color:#a6e22e">flock</span>($fp, <span style="color:#a6e22e">LOCK_UN</span>);
+    }
+
+    <span style="color:#a6e22e">fclose</span>($fp);
+}
+</code></pre></div><p>As we can see from the code above, the previously created JSON file is used to count how many instances of different platforms visited the page. The <code>getPlatform()</code> function contains the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getPlatform</span>() {
+    <span style="color:#75715e">// $userAgent = HTTP_USER_AGENT
+</span><span style="color:#75715e"></span>    $userAgent <span style="color:#f92672">=</span> ( <span style="color:#a6e22e">isset</span>($_SERVER[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;YWV6ejFFekE5TE5NbVE9PTo6SFRUUF9VU0VSX0FHRU5U&#34;</span>)]) <span style="color:#f92672">?</span>
+	    $_SERVER[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;YWV6ejFFekE5TE5NbVE9PTo6SFRUUF9VU0VSX0FHRU5U&#34;</span>)] <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span> );
+    $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// PLATFORM_UNKNOWN
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N3VFR0dla2xiZz09Ojp3aW5kb3dz&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+    $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// PLATFORM_WINDOWS -&gt; windows
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;QlFuRXdiZlRKZz09OjppUGFk&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; BQnEwbfTJg==::iPad
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;V1hMdTYyTUw6OmlQb2Q=&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iPod
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N1c3WjVYeld1c0lQZmNnPTo6aVBob25l&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iPhone
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;NllXNWhXMk43RzR4UURFPTo6bWFj&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; mac
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;V0RvWnVPZE5CZnpiZFdVZU93PT06OmFuZHJvaWQ=&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// PLATFORM_ANDROID -&gt; android
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;eVhldjU2RFlYUT09OjpsaW51eA==&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#75715e">// PLATFORM_LINUX -&gt; linux
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TUU0ZmFKekdiRGFPaU42WDo6d2lu&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// PLATFORM_WINDOWS -&gt; win
+</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;cHJoVk9kN291L3FFN0ZxdTo6aU9T&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iOS
+</span><span style="color:#75715e"></span>    }
+
+    <span style="color:#66d9ef">return</span> $platform;
+}
+</code></pre></div><p>I have inserted some comments to make it easier to read, but the piece of code above is used to check the <em>Navigator.platform</em> attribute which every browser expose to the visited pages. Since we have different options, here is a quick recap of what we will get after the execution of <code>getPlatform()</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Unkown 	-&gt; 0
+Android -&gt; 1
+Apple 	-&gt; 2
+Linux	-&gt; 3
+Windows	-&gt; 4
+</code></pre></div><p>Unfortunately I was not able to access the original log file in the first screenshot.</p>
+<h3 id="the-malicious-document">The malicious document</h3>
+<p>The following steps of <code>index.php</code> include a long list of headers being set. I have added again some comments to make it easier to read the code below, since the function <code>d5f44d5a7878a4()</code> is used to de-obfuscate strings while setting almost all the headers.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">// Resist Varnish-cache
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">setcookie</span>(<span style="color:#a6e22e">uniqid</span>(), <span style="color:#a6e22e">time</span>(), <span style="color:#a6e22e">time</span>() <span style="color:#f92672">+</span> <span style="color:#ae81ff">60</span>, <span style="color:#e6db74">&#39;/&#39;</span>);
+
+<span style="color:#75715e">// Send cache headers
+</span><span style="color:#75715e">// gmdate(&#34;D, d M Y H:i:s&#34; . &#34;GMT&#34;)
+</span><span style="color:#75715e"></span>$timestamp <span style="color:#f92672">=</span> <span style="color:#a6e22e">gmdate</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N0s4eFRuRTBZMkNlenRiemlpWT06OkQsIGQgTSBZIEg6aTpz&#34;</span>))
+    <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;SUZYQlBrOFJ6d20zNFl4cmNFVlY6OiBHTVQ=&#34;</span>);
+
+<span style="color:#75715e">// header(&#34;Cache-Control: no-cache, must-revalidate&#34;)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;b0taWDZCUDRleW0veVh4WWtXNGQ6OkNhY2hlLUNvbnRyb2w6IG5vLWNhY2hlLCBtdXN0LXJldmFsaWRhdGU=&#34;</span>));
+
+<span style="color:#75715e">// header(&#34;Pragma: no-cache&#34;)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;U29wSEl0YnRiMEU9OjpQcmFnbWE6IG5vLWNhY2hl&#34;</span>));
+
+<span style="color:#75715e">// header(&#34;Last-Modified:&#34; . $timestamp)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;L1VvdkIxND06Okxhc3QtTW9kaWZpZWQ6IA==&#34;</span>) <span style="color:#f92672">.</span> $timestamp);
+
+<span style="color:#75715e">// header(&#34;Expires:&#34; . $timestamp)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;ZU44eGw1T2N2azlUZ1RUTVhNTU86OkV4cGlyZXM6IA==&#34;</span>) <span style="color:#f92672">.</span> $timestamp);
+
+<span style="color:#75715e">// Send content headers
+</span><span style="color:#75715e"></span>$contentName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;INV_O2GT57A7QBKNN7.doc&#39;</span>;
+$contentType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;application/msword&#39;</span>;
+
+<span style="color:#75715e">// header(&#34;Content-Type:&#34; . $contentType)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;RVpCZ041ZW5TWCtYeE00WGhSRlQ6OkNvbnRlbnQtVHlwZTog&#34;</span>) <span style="color:#f92672">.</span> $contentType);
+
+<span style="color:#75715e">// header(&#34;Content-Disposition: attachment; filename=&#34; . $contentName&#34;)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;NUl6QUhHZ2VPcmpnTzJ0VkpZUTQ6OkNvbnRlbnQtRGlzcG9zaXRpb246IGF0dGFjaG1lbnQ7IGZpbGVuYW1lPSI=&#34;</span>)
+    <span style="color:#f92672">.</span> $contentName <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;&#34;&#39;</span>);
+
+<span style="color:#75715e">// header(&#34;Content-Transfer-Encoding: binary&#34;)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;ekFUS003Szl3Zz09OjpDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiBiaW5hcnk=&#34;</span>));
+</code></pre></div><p>It&rsquo;s also worth noting that the <code>contentName</code> and <code>contentType</code> (respectively the filename and the file type) are also specified.</p>
+<p>The only remaining step is to set the actual content of the malicious document file. This content is hardcoded in the <code>$contentData</code> variable; unfortunately the string is too long to be reported here, but here is a screenshot:</p>
+<figure><img src="/images/posts/emotet/maliciouscontent.png"
+         alt="Just few lines of the encoded malicious document"/><figcaption>
+            <p>Just few lines of the encoded malicious document</p>
+        </figcaption>
+</figure>
+
+<p>The string in <code>$contentData</code> is then used to create the document as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gzinflate</span>(<span style="color:#a6e22e">base64_decode</span>($contentData));
+</code></pre></div><p>After decoding it with Base64 and inflating the result, the malicious document is ready and the browser used by the victim will prompt the download of a file called <code>INV_O2GT57A7QBKNN7.doc</code>. I have created the following CyberChef<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> recipe to replicate this last step from <code>index.php</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">From_Base64(&#39;A-Za-z0-9+/=&#39;,true)
+Raw_Inflate(0,0,&#39;Block&#39;,false,false)
+SHA2(&#39;256&#39;)
+</code></pre></div><p>I have included in the recipe an additional step which creates the hash of the file, that can be used to detect if it&rsquo;s malicious.</p>
+<p>You can also see the CyberChef recipe by clicking <a href="https://gchq.github.io/CyberChef/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true)Raw_Inflate(0,0,'Block',false,false)SHA2('256')">here</a>.</p>
+<p>The document file obtained at the end of the execution of <code>index.php</code> is obviously malicious, being detected by multiple engines in VirusTotal, as you can see from the screenshot below:</p>
+<figure><img src="/images/posts/emotet/vtdoc.png"
+         alt="Screenshot from VirusTotal"/><figcaption>
+            <p>Screenshot from <a href="https://www.virustotal.com/gui/file/a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b574854fbc0c8/detection">VirusTotal</a></p>
+        </figcaption>
+</figure>
+
+<p>If you want a sample of the file, you can find it in the MalwareBazaar database following <a href="https://bazaar.abuse.ch/browse.php?search=a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b574854fbc0c8">this link</a>.</p>
+<h2 id="iocs">IOCs</h2>
+<p>Here is a list of the hashes of files which were analyzed in the post:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">malware.zip				db1617dc4a09fe856aea8041b90e73467e8d51ad4bdc1fd9a7e0a3197e66339c
+index.php				a48791d0e22ba693529285555ebb559bac1786bd703406deb5e1ef9ee8616cc4
+INV_O2GT57A7QBKNN7.doc	a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b574854fbc0c8
+</code></pre></div><p>If you want to take a look at the original PHP file, you can find it <a href="https://gist.github.com/andpalmier/e9a5cdd40fd2db751c07da641bc33bea">here</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post we analyzed a PHP file used to distribute Emotet, a Trojan that has been active since 2014. We saw how <code>index.php</code> uses some basic obfuscation, especially when setting the headers; it also logs which types of OSs are accessing the page in a JSON file.</p>
+<p>At the end of the execution, a malicious document called <code>INV_O2GT57A7QBKNN7.doc</code> is ready for the download.</p>
+<p>If you are interested in Emotet, follow <a href="https://twitter.com/Cryptolaemus1">@Cryptolaemus1</a> on Twitter and the people in the <a href="https://paste.cryptolaemus.com/about/">Cryptolaemus team</a>.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://www.proofpoint.com/us/blog/threat-insight/comprehensive-look-emotets-summer-2020-return">A Comprehensive Look at Emotet’s Summer 2020 Return</a> on ProofPoint&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://www.zdnet.com/article/emotet-botnet-returns-after-a-five-month-absence/">Emotet botnet returns after a five-month absence</a> on ZDNet&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://gchq.github.io/CyberChef/">CyberChef</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+	      </div>
+
+	<footer class="footer">
+
+<hr>
+
+    <section class="container">
+	
+	<p>I am far from being an expert and I like to learn new things. <br> If you have comments or suggestions, feel free to ping me!</p>
+	
+	
+	
+	
+
+
+<ul>
+    
+    
+    <li>
+	<a href="https://twitter.com/andpalmier/" aria-label="Twitter"  target="_blank" >
+	    <i class="fab fa-twitter" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+    <li>
+	<a href="https://github.com/andpalmier/" aria-label="Github"  target="_blank" >
+	    <i class="fab fa-github" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+    <li>
+	<a href="https://www.linkedin.com/in/andreapalmieri95/" aria-label="LinkedIn"  target="_blank" >
+	    <i class="fab fa-linkedin" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+    <li>
+	<a href="mailto:andpalmier@gmail.com" aria-label="Mail"  target="_blank" >
+	    <i class="fas fa-envelope" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+</ul>
+
+    </section>
+</footer>
+
+
+	  </main>
+
+    
+      
+        
+        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+      
+    
+
+	  
+
+	  
+
+	  
+
+    </body>
+
+
+</html>

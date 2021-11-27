@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>lab on andpalmier</title>
+    <link>/tags/lab/</link>
+    <description>Recent content in lab on andpalmier</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 21 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/lab/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Practical malware analysis: solutions for Lab 1</title>
+      <link>/posts/practical-malware-lab1/</link>
+      <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/practical-malware-lab1/</guid>
+      <description>I am trying to acquire some knowledge on malware analysis by using &amp;lsquo;Practical Malware Analysis&amp;rsquo; (by Sikorski, Michael, and Andrew Honig, 2012). I will publish my solutions of the exercises as soon as I complete them; here you can find all the executables for the labs.
+NOTE: I will try to use Linux utilities (such as pev, wrestool and Detect It Easy) instead of the Windows tools which are mentioned in the book.</description>
+    </item>
+    
+  </channel>
+</rss>

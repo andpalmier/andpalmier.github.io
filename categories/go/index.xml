@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go on andpalmier</title>
+    <link>/categories/go/</link>
+    <description>Recent content in go on andpalmier</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 29 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Proof of concept of a ransowmare in Go</title>
+      <link>/posts/poc-goransom/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/poc-goransom/</guid>
+      <description>This is a blog post about my last project: &lt;a href=&#34;https://github.com/andpalmier/goransom&#34;&gt;goransom&lt;/a&gt;, which is a proof of concept for a simple ransowmare written in Go.</description>
+    </item>
+    
+  </channel>
+</rss>
