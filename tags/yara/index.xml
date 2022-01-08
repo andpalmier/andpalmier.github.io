@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>yara on andpalmier</title>
+    <link>/tags/yara/</link>
+    <description>Recent content in yara on andpalmier</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 26 Dec 2021 12:32:48 +0200</lastBuildDate><atom:link href="/tags/yara/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to YARA</title>
+      <link>/posts/yara-beginner/</link>
+      <pubDate>Sun, 26 Dec 2021 12:32:48 +0200</pubDate>
+      
+      <guid>/posts/yara-beginner/</guid>
+      <description>With this post, I would like to summarize the basics of YARA: a tool that helps malware analyst and researchers to identify and classify malware samples using pattern matching.</description>
+    </item>
+    
+  </channel>
+</rss>

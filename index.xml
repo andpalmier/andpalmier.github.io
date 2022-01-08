@@ -2657,21 +2657,22 @@ You can find the app on the &lt;a href=&#34;https://f-droid.org/en/&#34;&gt;f-dr
     </item>
     
     <item>
-      <title>Hey 👋🏻</title>
+      <title>Hey 👋</title>
       <link>/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>&lt;p&gt;my name is Andrea Palmieri.
-I am interested in everything cyber-security related, machine learning, and reverse engineering. I am passionate about books, movies and art in general. Also, I am a die-hard AS Roma fan.&lt;/p&gt;
+      <description>&lt;p&gt;My name is &lt;strong&gt;Andrea Palmieri&lt;/strong&gt;. I am interested in everything cyber-security related, machine learning, and reverse engineering. I am passionate about books, movies and art in general. Also, I am a die-hard AS Roma fan.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;/AndreaPalmieriCV.pdf&#34;&gt;Here&lt;/a&gt; is a &lt;strong&gt;non-updated&lt;/strong&gt; version of my resume. For a more recent version, you can send me an email at &lt;em&gt;andpalmier [at] gmail [dot] com&lt;/em&gt; or contact me on &lt;a href=&#34;https://www.linkedin.com/in/andreapalmieri95&#34;&gt;LinkedIn&lt;/a&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;projects&#34;&gt;Projects&lt;/h3&gt;
 &lt;p&gt;You can find my projects on &lt;a href=&#34;https://github.com/andpalmier/&#34;&gt;GitHub&lt;/a&gt;, here are some of the most interesting ones:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;phishflood&lt;/strong&gt;: flooding phishing kits with fake data. &lt;a href=&#34;https://andpalmier.com/posts/flooding-phishing-kits/&#34;&gt;Blog post&lt;/a&gt; and &lt;a href=&#34;https://github.com/andpalmier/phishflood&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;goransom&lt;/strong&gt;:  poc for a simple ransomware written in Go. &lt;a href=&#34;https://andpalmier.com/posts/poc-goransom/&#34;&gt;Blog post&lt;/a&gt; and &lt;a href=&#34;https://github.com/andpalmier/goransom/&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;makephish&lt;/strong&gt;: clone and patch websites to create phishing pages. &lt;a href=&#34;https://github.com/andpalmier/phishflood&#34;&gt;GitHub&lt;/a&gt; and a &lt;a href=&#34;https://esgeeks.com/makephish-clonar-sitios-web-login/&#34;&gt;spanish article about it&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;apkingo&lt;/strong&gt;: get detailed information about apk files. &lt;a href=&#34;https://github.com/andpalmier/apkingo&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;phishflood&lt;/strong&gt;: flood phishing kits with fake data. &lt;a href=&#34;https://andpalmier.com/posts/flooding-phishing-kits/&#34;&gt;Blog post&lt;/a&gt; and &lt;a href=&#34;https://github.com/andpalmier/phishflood&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;goransom&lt;/strong&gt;:  poc for a simple ransomware in Go. &lt;a href=&#34;https://andpalmier.com/posts/poc-goransom/&#34;&gt;Blog post&lt;/a&gt; and &lt;a href=&#34;https://github.com/andpalmier/goransom/&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;mlWithPhishing&lt;/strong&gt;: tuning machine learning models for phishing detection. &lt;a href=&#34;https://andpalmier.github.io/tags/machine-learning/&#34;&gt;Blog posts&lt;/a&gt; and &lt;a href=&#34;https://github.com/andpalmier/MLWithPhishing&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;MQTTSA&lt;/strong&gt;: automatically detect misconfigurations in MQTT brokers and list possible mitigations. &lt;a href=&#34;https://ieeexplore.ieee.org/document/8817102&#34;&gt;IEEEXplore&lt;/a&gt;, &lt;a href=&#34;https://github.com/andpalmier/mqttsa/blob/master/MQTTSA-slides.pdf&#34;&gt;slides&lt;/a&gt;, &lt;a href=&#34;https://github.com/stfbk/mqttsa&#34;&gt;GitHub&lt;/a&gt; and &lt;a href=&#34;https://sites.google.com/fbk.eu/mqttsa&#34;&gt;website&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MQTTSA&lt;/strong&gt;: detect misconfigurations in MQTT brokers and suggest mitigations. &lt;a href=&#34;https://ieeexplore.ieee.org/document/8817102&#34;&gt;IEEEXplore&lt;/a&gt;, &lt;a href=&#34;https://github.com/stfbk/mqttsa&#34;&gt;GitHub&lt;/a&gt; and &lt;a href=&#34;https://sites.google.com/fbk.eu/mqttsa&#34;&gt;website&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>
