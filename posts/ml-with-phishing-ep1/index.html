@@ -68,7 +68,7 @@ In this series of posts I am going to use a smaller variant of this dataset to c
 
 	
 
-	<meta name="generator" content="Hugo 0.92.2" />
+	<meta name="generator" content="Hugo 0.104.3" />
     </head>
 
     
@@ -167,188 +167,188 @@ The list of features and the code of this post in form of Jupyter notebook can b
 </ul>
 <h2 id="a-simple-but-effective-decision-tree">A simple but effective decision tree</h2>
 <p>Let&rsquo;s start with importing the libraries and the data. I used a csv version of the dataset, which you can find <a href="https://github.com/andpalmier/MLWithPhishing">here</a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
-<span style="color:#f92672">from</span> sklearn <span style="color:#f92672">import</span> tree
-
-<span style="color:#75715e"># Load the training data from a CSV file</span>
-training_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>genfromtxt(<span style="color:#e6db74">&#39;phishing_smaller.csv&#39;</span>, delimiter<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;,&#39;</span>, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>int32)
-</code></pre></div><p>The csv has 10.000 samples with 11 columns, where the last one is the label of the sample, while the other values are the features.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># inputs are in all columns except the last one</span>
-inputs <span style="color:#f92672">=</span> training_data[:,:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-
-<span style="color:#75715e"># outputs in the last column</span>
-outputs <span style="color:#f92672">=</span> training_data[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-</code></pre></div><p>We will use <code>StratifiedKFold</code> to keep the frequency of the classes constant during our K-fold cross-validation. The <code>random_state</code> parameter is used for k-fold and the classifier to reproduce the same setup for all the iterations of the model.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> StratifiedKFold
-
-<span style="color:#75715e"># use 10-fold</span>
-skf <span style="color:#f92672">=</span> StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-</code></pre></div><p>In order to evaluate how good is our classifier, I will use AUC (Area Under Curve), you can find more information about it <a href="https://www.youtube.com/watch?v=OAl6eAyP-yo">in this video</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn <span style="color:#f92672">import</span> tree
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load the training data from a CSV file</span>
+</span></span><span style="display:flex;"><span>training_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>genfromtxt(<span style="color:#e6db74">&#39;phishing_smaller.csv&#39;</span>, delimiter<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;,&#39;</span>, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>int32)
+</span></span></code></pre></div><p>The csv has 10.000 samples with 11 columns, where the last one is the label of the sample, while the other values are the features.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># inputs are in all columns except the last one</span>
+</span></span><span style="display:flex;"><span>inputs <span style="color:#f92672">=</span> training_data[:,:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># outputs in the last column</span>
+</span></span><span style="display:flex;"><span>outputs <span style="color:#f92672">=</span> training_data[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span></code></pre></div><p>We will use <code>StratifiedKFold</code> to keep the frequency of the classes constant during our K-fold cross-validation. The <code>random_state</code> parameter is used for k-fold and the classifier to reproduce the same setup for all the iterations of the model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> StratifiedKFold
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># use 10-fold</span>
+</span></span><span style="display:flex;"><span>skf <span style="color:#f92672">=</span> StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><p>In order to evaluate how good is our classifier, I will use AUC (Area Under Curve), you can find more information about it <a href="https://www.youtube.com/watch?v=OAl6eAyP-yo">in this video</a>.</p>
 <p>Here is how to create, train and evaluate our first decision tree:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># library for evaluating the classifier</span>
-<span style="color:#f92672">import</span> sklearn.metrics <span style="color:#66d9ef">as</span> metrics
-
-<span style="color:#75715e"># array to store the accuracy during k-fold cross-validation</span>
-accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-
-<span style="color:#75715e"># loop with splits</span>
-<span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-
-    <span style="color:#75715e"># 9 folds used for training</span>
-    X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-    <span style="color:#75715e"># 1 fold for testing</span>
-    y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-    <span style="color:#75715e"># Create a decision tree classifier</span>
-    classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
-
-    <span style="color:#75715e"># Train the classifier</span>
-    classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-
-    <span style="color:#75715e"># Test the classifier</span>
-    predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
-    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-        metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
-
-    <span style="color:#75715e"># calculate classifier accuracy</span>
-    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-    accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
-
-print(<span style="color:#e6db74">&#34;ROC AUC: &#34;</span><span style="color:#f92672">+</span>str(np<span style="color:#f92672">.</span>mean(accuracy)))
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">&gt; ROC AUC: 0.9182929859719439
-</code></pre></div><p>Not bad, but can we improve the accuracy of this decision tree with some tuning?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># library for evaluating the classifier</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sklearn.metrics <span style="color:#66d9ef">as</span> metrics
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># array to store the accuracy during k-fold cross-validation</span>
+</span></span><span style="display:flex;"><span>accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># loop with splits</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 9 folds used for training</span>
+</span></span><span style="display:flex;"><span>    X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1 fold for testing</span>
+</span></span><span style="display:flex;"><span>    y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Create a decision tree classifier</span>
+</span></span><span style="display:flex;"><span>    classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Train the classifier</span>
+</span></span><span style="display:flex;"><span>    classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Test the classifier</span>
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>        metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># calculate classifier accuracy</span>
+</span></span><span style="display:flex;"><span>    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>    accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;ROC AUC: &#34;</span><span style="color:#f92672">+</span>str(np<span style="color:#f92672">.</span>mean(accuracy)))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>&gt; ROC AUC: 0.9182929859719439
+</span></span></code></pre></div><p>Not bad, but can we improve the accuracy of this decision tree with some tuning?</p>
 <h2 id="tuning-criterion-and-splitter">Tuning: criterion and splitter</h2>
 <p>If we take a look at <a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html">the scikit-learn documentation for the decision tree classifiers</a>, we can see that there are many parameters available. The first two are the <code>criterion</code> and <code>splitter</code>, having both two possible values. The supported criteria are <code>gini</code> (for <a href="https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity">Gini impurity</a>) and <code>entropy</code> (for <a href="https://en.wikipedia.org/wiki/Information_gain_in_decision_trees">information gain</a>); while the supported strategies available for splitting a node are <code>best</code> and <code>random</code>.</p>
 <p>In total, we have 4 possible combinations: let&rsquo;s try them to check which one performs better.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python3" data-lang="python3"><span style="color:#75715e"># AUC scores for test</span>
-results <span style="color:#f92672">=</span> []
-
-<span style="color:#75715e"># First= gini, best: default classifier</span>
-first_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
-    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gini&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;best&#34;</span>)
-
-<span style="color:#75715e"># Second= gini, random</span>
-second_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
-    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gini&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;random&#34;</span>)
-
-<span style="color:#75715e"># Third= entropy, best</span>
-third_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
-    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;entropy&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;best&#34;</span>)
-
-<span style="color:#75715e"># Fourth= entropy, random</span>
-fourth_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
-    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;entropy&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;random&#34;</span>)
-
-<span style="color:#75715e"># use same folds</span>
-StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-<span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-
-    X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-    y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-    <span style="color:#75715e"># Train and test the first classifier</span>
-    first_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-    predictions <span style="color:#f92672">=</span> first_classifier<span style="color:#f92672">.</span>predict(X_test)
-    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
-    <span style="color:#75715e"># calculate classifier accuracy</span>
-    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-    first_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># Train and test the second classifier</span>
-    second_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-    predictions <span style="color:#f92672">=</span> second_classifier<span style="color:#f92672">.</span>predict(X_test)
-    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
-    <span style="color:#75715e"># calculate classifier accuracy</span>
-    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-    second_accuracy<span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># Train and test the third classifier</span>
-    third_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-    predictions <span style="color:#f92672">=</span> third_classifier<span style="color:#f92672">.</span>predict(X_test)
-    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
-    <span style="color:#75715e"># calculate classifier accuracy</span>
-    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-    third_accuracy<span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># Train and test the fourth classifier</span>
-    fourth_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-    predictions <span style="color:#f92672">=</span> fourth_classifier<span style="color:#f92672">.</span>predict(X_test)
-    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
-    <span style="color:#75715e"># calculate classifier accuracy</span>
-    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-    fourth_accuracy<span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
-
-print(<span style="color:#e6db74">&#34;Test AUC for &#39;gini, best&#39;:       &#34;</span>,np<span style="color:#f92672">.</span>mean(first_accuracy))
-print(<span style="color:#e6db74">&#34;Test AUC for &#39;gini, random&#39;:     &#34;</span>,np<span style="color:#f92672">.</span>mean(second_accuracy))
-print(<span style="color:#e6db74">&#34;Test AUC for &#39;entropy, best&#39;:    &#34;</span>,np<span style="color:#f92672">.</span>mean(third_accuracy))
-print(<span style="color:#e6db74">&#34;Test AUC for &#39;entropy, random&#39;:  &#34;</span>,np<span style="color:#f92672">.</span>mean(fourth_accuracy))
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">&gt; Test AUC for &#39;gini, best&#39;:        0.9186236108580798
-&gt; Test AUC for &#39;gini, random&#39;:      0.9185325195846237
-&gt; Test AUC for &#39;entropy, best&#39;:     0.9184414283111678
-&gt; Test AUC for &#39;entropy, random&#39;:   0.9190781563126251
-</code></pre></div><p>In this case, the fourth combination of criterion and splitter (<code>criterion=entropy</code> and <code>split=random</code>) seems to increase the performance of the classifier.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python3" data-lang="python3"><span style="display:flex;"><span><span style="color:#75715e"># AUC scores for test</span>
+</span></span><span style="display:flex;"><span>results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># First= gini, best: default classifier</span>
+</span></span><span style="display:flex;"><span>first_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
+</span></span><span style="display:flex;"><span>    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gini&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;best&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Second= gini, random</span>
+</span></span><span style="display:flex;"><span>second_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
+</span></span><span style="display:flex;"><span>    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gini&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;random&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Third= entropy, best</span>
+</span></span><span style="display:flex;"><span>third_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
+</span></span><span style="display:flex;"><span>    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;entropy&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;best&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Fourth= entropy, random</span>
+</span></span><span style="display:flex;"><span>fourth_classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> \
+</span></span><span style="display:flex;"><span>    ,criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;entropy&#34;</span>,splitter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;random&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># use same folds</span>
+</span></span><span style="display:flex;"><span>StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>    y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Train and test the first classifier</span>
+</span></span><span style="display:flex;"><span>    first_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> first_classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># calculate classifier accuracy</span>
+</span></span><span style="display:flex;"><span>    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>    first_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Train and test the second classifier</span>
+</span></span><span style="display:flex;"><span>    second_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> second_classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># calculate classifier accuracy</span>
+</span></span><span style="display:flex;"><span>    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>    second_accuracy<span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Train and test the third classifier</span>
+</span></span><span style="display:flex;"><span>    third_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> third_classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># calculate classifier accuracy</span>
+</span></span><span style="display:flex;"><span>    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>    third_accuracy<span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Train and test the fourth classifier</span>
+</span></span><span style="display:flex;"><span>    fourth_classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> fourth_classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>    false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>		metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># calculate classifier accuracy</span>
+</span></span><span style="display:flex;"><span>    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>    fourth_accuracy<span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Test AUC for &#39;gini, best&#39;:       &#34;</span>,np<span style="color:#f92672">.</span>mean(first_accuracy))
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Test AUC for &#39;gini, random&#39;:     &#34;</span>,np<span style="color:#f92672">.</span>mean(second_accuracy))
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Test AUC for &#39;entropy, best&#39;:    &#34;</span>,np<span style="color:#f92672">.</span>mean(third_accuracy))
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Test AUC for &#39;entropy, random&#39;:  &#34;</span>,np<span style="color:#f92672">.</span>mean(fourth_accuracy))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>&gt; Test AUC for &#39;gini, best&#39;:        0.9186236108580798
+</span></span><span style="display:flex;"><span>&gt; Test AUC for &#39;gini, random&#39;:      0.9185325195846237
+</span></span><span style="display:flex;"><span>&gt; Test AUC for &#39;entropy, best&#39;:     0.9184414283111678
+</span></span><span style="display:flex;"><span>&gt; Test AUC for &#39;entropy, random&#39;:   0.9190781563126251
+</span></span></code></pre></div><p>In this case, the fourth combination of criterion and splitter (<code>criterion=entropy</code> and <code>split=random</code>) seems to increase the performance of the classifier.</p>
 <h2 id="tuning-max-depth">Tuning: max depth</h2>
 <p>Another parameter of the decision tree that we can tune is <code>max_depth</code>, which indicates the maximum depth of the tree. By default, this is is set to <code>None</code>, which means that nodes are expanded until all leaves are pure or contain less than <code>min_sample_split</code> samples.</p>
 <p>Considering that we have 10 parameters, we will test the performances of trees having <code>max_depths</code> between 1 and 10.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># AUC scores for training and test</span>
-training_results <span style="color:#f92672">=</span> []
-test_results <span style="color:#f92672">=</span> []
-
-<span style="color:#75715e"># use same folds</span>
-StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#75715e"># from 1 to 10</span>
-max_depths <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">11</span>)
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> max_depths:
-
-    <span style="color:#75715e"># loop with splits</span>
-    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-
-        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-        <span style="color:#75715e"># Create a decision tree classifier</span>
-        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,max_depth<span style="color:#f92672">=</span>i)
-
-        <span style="color:#75715e"># Train the classifier</span>
-        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-
-        <span style="color:#75715e"># Accuracy of the classifier during training</span>
-        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
-
-        <span style="color:#75715e"># Test the classifier</span>
-        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
-
-        <span style="color:#75715e"># Accuracy of the classifier during test</span>
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># append results for line chart</span>
-    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
-    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
-</code></pre></div><p>In order to visualize the results, let&rsquo;s use <code>matplotlib</code> to draw a line chart.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># training results in blue</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_depths, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
-<span style="color:#75715e"># test results in red</span>
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_depths, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Tree depth&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/maxdepth.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># AUC scores for training and test</span>
+</span></span><span style="display:flex;"><span>training_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># use same folds</span>
+</span></span><span style="display:flex;"><span>StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># from 1 to 10</span>
+</span></span><span style="display:flex;"><span>max_depths <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">11</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> max_depths:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># loop with splits</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Create a decision tree classifier</span>
+</span></span><span style="display:flex;"><span>        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,max_depth<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Train the classifier</span>
+</span></span><span style="display:flex;"><span>        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during training</span>
+</span></span><span style="display:flex;"><span>        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Test the classifier</span>
+</span></span><span style="display:flex;"><span>        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during test</span>
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># append results for line chart</span>
+</span></span><span style="display:flex;"><span>    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
+</span></span><span style="display:flex;"><span>    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
+</span></span></code></pre></div><p>In order to visualize the results, let&rsquo;s use <code>matplotlib</code> to draw a line chart.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># training results in blue</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_depths, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># test results in red</span>
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_depths, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Tree depth&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/maxdepth.png"
          alt="Performance of the model while tuning max_depth"/><figcaption>
             <p>Performance of the model while tuning max_depth</p>
         </figcaption>
@@ -362,59 +362,59 @@ plt<span style="color:#f92672">.</span>show()
 <li>If <code>float</code>, it is considered a fraction and <code>ceil(min_samples_split * len(samples))</code> are the minimum number of samples for each split.</li>
 </ul>
 <p>While the default value is 2, we will test the performance of our classifier having <code>min_samples_split</code> between 0.05 and 1.0.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># AUC scores for training and test</span>
-training_results <span style="color:#f92672">=</span> []
-test_results <span style="color:#f92672">=</span> []
-
-<span style="color:#75715e"># use same folds</span>
-StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#75715e"># from 5% to 100%</span>
-min_samples_splits <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.05</span>, <span style="color:#ae81ff">1.0</span>,<span style="color:#ae81ff">20</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> min_samples_splits:
-
-    <span style="color:#75715e"># loop with splits</span>
-    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-        <span style="color:#75715e"># Create a decision tree classifier</span>
-        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,min_samples_split<span style="color:#f92672">=</span>i)
-
-        <span style="color:#75715e"># Train the classifier</span>
-        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-
-        <span style="color:#75715e"># Accuracy of the classifier during training</span>
-        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
-
-        <span style="color:#75715e"># Test the classifier</span>
-        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
-
-        <span style="color:#75715e"># Accuracy of the classifier during test</span>
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># append results for line chart</span>
-    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
-    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
-</code></pre></div><p>Let&rsquo;s use another line chart to visualize the results:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># plot line chart</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_splits, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_splits, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples split&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/minsamplessplit.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># AUC scores for training and test</span>
+</span></span><span style="display:flex;"><span>training_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># use same folds</span>
+</span></span><span style="display:flex;"><span>StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># from 5% to 100%</span>
+</span></span><span style="display:flex;"><span>min_samples_splits <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.05</span>, <span style="color:#ae81ff">1.0</span>,<span style="color:#ae81ff">20</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> min_samples_splits:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># loop with splits</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Create a decision tree classifier</span>
+</span></span><span style="display:flex;"><span>        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,min_samples_split<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Train the classifier</span>
+</span></span><span style="display:flex;"><span>        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during training</span>
+</span></span><span style="display:flex;"><span>        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Test the classifier</span>
+</span></span><span style="display:flex;"><span>        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during test</span>
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># append results for line chart</span>
+</span></span><span style="display:flex;"><span>    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
+</span></span><span style="display:flex;"><span>    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
+</span></span></code></pre></div><p>Let&rsquo;s use another line chart to visualize the results:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># plot line chart</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_splits, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_splits, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples split&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/minsamplessplit.png"
          alt="Performance of the model while tuning min_samples_split"/><figcaption>
             <p>Performance of the model while tuning min_samples_split</p>
         </figcaption>
@@ -428,58 +428,58 @@ plt<span style="color:#f92672">.</span>show()
 <li>if <code>float</code>, it represents a fraction and <code>ceil(min_samples_leaf * n_samples)</code> are the minimum number of samples for each node</li>
 </ul>
 <p>By default, the value is set to 1, but we will consider the cases where it goes from 0.05 to 0.5.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># AUC scores for training and test</span>
-training_results <span style="color:#f92672">=</span> []
-test_results <span style="color:#f92672">=</span> []
-
-<span style="color:#75715e"># from 5% to 50%</span>
-min_samples_leaves <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.05</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">10</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> min_samples_leaves:
-
-    StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-    <span style="color:#75715e"># loop with splits</span>
-    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-        <span style="color:#75715e"># Create a decision tree classifier</span>
-        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, min_samples_leaf<span style="color:#f92672">=</span>i)
-
-        <span style="color:#75715e"># Train the classifier</span>
-        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-
-        <span style="color:#75715e"># Accuracy of the classifier during training</span>
-        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
-
-        <span style="color:#75715e"># Test the classifier</span>
-        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
-
-        <span style="color:#75715e"># Accuracy of the classifier during test</span>
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># append results for line chart</span>
-    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
-    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
-
-<span style="color:#75715e"># plot line chart</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_leaves, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_leaves, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples leaf&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/minsamplesleaf.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># AUC scores for training and test</span>
+</span></span><span style="display:flex;"><span>training_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># from 5% to 50%</span>
+</span></span><span style="display:flex;"><span>min_samples_leaves <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.05</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">10</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> min_samples_leaves:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># loop with splits</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Create a decision tree classifier</span>
+</span></span><span style="display:flex;"><span>        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, min_samples_leaf<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Train the classifier</span>
+</span></span><span style="display:flex;"><span>        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during training</span>
+</span></span><span style="display:flex;"><span>        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Test the classifier</span>
+</span></span><span style="display:flex;"><span>        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during test</span>
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># append results for line chart</span>
+</span></span><span style="display:flex;"><span>    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
+</span></span><span style="display:flex;"><span>    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># plot line chart</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_leaves, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(min_samples_leaves, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples leaf&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/minsamplesleaf.png"
          alt="Performance of the model while tuning min_samples_leaf"/><figcaption>
             <p>Performance of the model while tuning min_samples_leaf</p>
         </figcaption>
@@ -494,58 +494,58 @@ plt<span style="color:#f92672">.</span>show()
 <li>By default it is <code>None</code>, and <code>max_features=n_features</code></li>
 </ul>
 <p>Considering the number of features of our dataset, we will test measure the precision of classifiers having <code>max_features</code> between 1 and 10.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># AUC scores for training and test</span>
-training_results <span style="color:#f92672">=</span> []
-test_results <span style="color:#f92672">=</span> []
-
-<span style="color:#75715e"># from 1 to 10 features</span>
-max_features <span style="color:#f92672">=</span> list(range(<span style="color:#ae81ff">1</span>,len(inputs[<span style="color:#ae81ff">0</span>])<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> max_features:
-
-    StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-    <span style="color:#75715e"># loop with splits</span>
-    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-        <span style="color:#75715e"># Create a decision tree classifier</span>
-        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,max_features<span style="color:#f92672">=</span>i)
-
-        <span style="color:#75715e"># Train the classifier</span>
-        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
-
-        <span style="color:#75715e"># Accuracy of the classifier during training</span>
-        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
-
-        <span style="color:#75715e"># Accuracy of the classifier during test</span>
-        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
-        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
-            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
-
-        <span style="color:#75715e"># calculate classifier accuracy for test</span>
-        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
-        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
-
-    <span style="color:#75715e"># append results for line chart</span>
-    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
-    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
-
-<span style="color:#75715e"># plot line chart</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_features, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_features, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;max features&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/maxfeatures.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># AUC scores for training and test</span>
+</span></span><span style="display:flex;"><span>training_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># from 1 to 10 features</span>
+</span></span><span style="display:flex;"><span>max_features <span style="color:#f92672">=</span> list(range(<span style="color:#ae81ff">1</span>,len(inputs[<span style="color:#ae81ff">0</span>])<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> max_features:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># loop with splits</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span><span style="display:flex;"><span>        X_train, X_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>        y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Create a decision tree classifier</span>
+</span></span><span style="display:flex;"><span>        classifier <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>DecisionTreeClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,max_features<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Train the classifier</span>
+</span></span><span style="display:flex;"><span>        classifier<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during training</span>
+</span></span><span style="display:flex;"><span>        training_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_train)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_train, training_predictions)
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        training_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(training_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accuracy of the classifier during test</span>
+</span></span><span style="display:flex;"><span>        testing_predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>        false_positive_rate, true_positive_rate, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>            metrics<span style="color:#f92672">.</span>roc_curve(y_test, testing_predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># calculate classifier accuracy for test</span>
+</span></span><span style="display:flex;"><span>        ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positive_rate, true_positive_rate)
+</span></span><span style="display:flex;"><span>        test_accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(test_accuracy,ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># append results for line chart</span>
+</span></span><span style="display:flex;"><span>    training_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(training_accuracy))
+</span></span><span style="display:flex;"><span>    test_results<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_accuracy))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># plot line chart</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_features, training_results, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Train AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(max_features, test_results, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Test AUC&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;max features&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep1/maxfeatures.png"
          alt="Performance of the model while tuning max_features"/><figcaption>
             <p>Performance of the model while tuning max_features</p>
         </figcaption>
@@ -649,7 +649,7 @@ plt<span style="color:#f92672">.</span>show()
     
       
         
-        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
       
     
 

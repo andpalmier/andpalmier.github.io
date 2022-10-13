@@ -65,7 +65,7 @@
 
 	
 
-	<meta name="generator" content="Hugo 0.92.2" />
+	<meta name="generator" content="Hugo 0.104.3" />
     </head>
 
     
@@ -186,121 +186,121 @@ Emotet is currently considered one of the most costly threats, affecting not onl
 
 <h3 id="basic-string-obfuscation">Basic string obfuscation</h3>
 <p>The first function that should be discussed in this analysis is called <code>d5f44d5a7878a4()</code>. Indeed, <code>index.php</code> contains some obfuscated strings to avoid being detected as malicious, and this function is used to de-obfuscate these strings. Here is the content of the function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">d5f44d5a7878a4</span>($s) {
-    $string <span style="color:#f92672">=</span> <span style="color:#a6e22e">base64_decode</span>($s);
-    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#39;::&#39;</span>, $string, <span style="color:#ae81ff">2</span>)[<span style="color:#ae81ff">1</span>];
-}
-</code></pre></div><p>We can see that it was used a very basic obfuscation technique. The de-obfuscation function decodes the given string with Base64 and proceed to create an array of strings by splitting the decoded string on the following sequence of characters <em>&quot;::&quot;</em>. The return value of <code>d5f44d5a7878a4()</code> is contained in the second element of the array obtained after the split.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">d5f44d5a7878a4</span>($s) {
+</span></span><span style="display:flex;"><span>    $string <span style="color:#f92672">=</span> <span style="color:#a6e22e">base64_decode</span>($s);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#39;::&#39;</span>, $string, <span style="color:#ae81ff">2</span>)[<span style="color:#ae81ff">1</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We can see that it was used a very basic obfuscation technique. The de-obfuscation function decodes the given string with Base64 and proceed to create an array of strings by splitting the decoded string on the following sequence of characters <em>&quot;::&quot;</em>. The return value of <code>d5f44d5a7878a4()</code> is contained in the second element of the array obtained after the split.</p>
 <p>For instance, <code>d5f44d5a7878a4()</code> is called later in the file in this way:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$qString <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&#34;</span>);
-</code></pre></div><p>Decoding <em>&ldquo;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&quot;</em> with Base64 we obtain <em>&ldquo;LhCcUWtCLQ==::QUERY_STRING&rdquo;</em>, thus the variable <code>$qString1</code> will contain <em>&ldquo;QUERY_STRING&rdquo;</em>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$qString <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&#34;</span>);
+</span></span></code></pre></div><p>Decoding <em>&ldquo;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&rdquo;</em> with Base64 we obtain <em>&ldquo;LhCcUWtCLQ==::QUERY_STRING&rdquo;</em>, thus the variable <code>$qString1</code> will contain <em>&ldquo;QUERY_STRING&rdquo;</em>.</p>
 <h3 id="entry-point">Entry point</h3>
 <p>The entry point of <code>index.php</code> is represented by the <code>p5f44d5a786a7c()</code> function. Here are the very first lines:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">p5f44d5a786a7c</span>()
-{
-    $qString <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&#34;</span>);
-    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_SERVER[$qString])) {
-        <span style="color:#66d9ef">return</span> $_SERVER[$qString];
-    }
-</code></pre></div><p>As we already saw it before, we know that the function will just return the full query string if its not empty. If we go on, we will find:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">sha1</span>(<span style="color:#a6e22e">basename</span>(<span style="color:#a6e22e">dirname</span>(<span style="color:#66d9ef">__FILE__</span>)));
-
-<span style="color:#66d9ef">if</span> (($fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>($path, <span style="color:#e6db74">&#39;c+&#39;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">flock</span>($fp, <span style="color:#a6e22e">LOCK_EX</span>)) {
-	$stat <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>();
-        $fileSize <span style="color:#f92672">=</span> <span style="color:#a6e22e">filesize</span>($path);
-
-        <span style="color:#66d9ef">if</span> ($fileSize <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
-	    $stat <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>(<span style="color:#a6e22e">fread</span>($fp, $fileSize), <span style="color:#66d9ef">true</span>);
-        }
-</code></pre></div><p>The function will now create a hidden JSON file (it has a <em>&rdquo;.&quot;</em> at the beginning) having as a filename the SHA-1 hash of the name of the current directory.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">	$platform <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPlatform</span>();
-        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($stat[$platform]) <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">is_int</span>($stat[$platform])) {
-	    $stat[$platform] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-        } <span style="color:#66d9ef">else</span> {
-            $stat[$platform]<span style="color:#f92672">++</span>;
-        }
-
-	<span style="color:#a6e22e">fseek</span>($fp, <span style="color:#ae81ff">0</span>);
-	<span style="color:#a6e22e">fwrite</span>($fp, <span style="color:#a6e22e">json_encode</span>($stat));
-	<span style="color:#a6e22e">fflush</span>($fp);
-	<span style="color:#a6e22e">flock</span>($fp, <span style="color:#a6e22e">LOCK_UN</span>);
-    }
-
-    <span style="color:#a6e22e">fclose</span>($fp);
-}
-</code></pre></div><p>As we can see from the code above, the previously created JSON file is used to count how many instances of different platforms visited the page. The <code>getPlatform()</code> function contains the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getPlatform</span>() {
-    <span style="color:#75715e">// $userAgent = HTTP_USER_AGENT
-</span><span style="color:#75715e"></span>    $userAgent <span style="color:#f92672">=</span> ( <span style="color:#a6e22e">isset</span>($_SERVER[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;YWV6ejFFekE5TE5NbVE9PTo6SFRUUF9VU0VSX0FHRU5U&#34;</span>)]) <span style="color:#f92672">?</span>
-	    $_SERVER[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;YWV6ejFFekE5TE5NbVE9PTo6SFRUUF9VU0VSX0FHRU5U&#34;</span>)] <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span> );
-    $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// PLATFORM_UNKNOWN
-</span><span style="color:#75715e"></span>
-    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N3VFR0dla2xiZz09Ojp3aW5kb3dz&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-    $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// PLATFORM_WINDOWS -&gt; windows
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;QlFuRXdiZlRKZz09OjppUGFk&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; BQnEwbfTJg==::iPad
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;V1hMdTYyTUw6OmlQb2Q=&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iPod
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N1c3WjVYeld1c0lQZmNnPTo6aVBob25l&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iPhone
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;NllXNWhXMk43RzR4UURFPTo6bWFj&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; mac
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;V0RvWnVPZE5CZnpiZFdVZU93PT06OmFuZHJvaWQ=&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// PLATFORM_ANDROID -&gt; android
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;eVhldjU2RFlYUT09OjpsaW51eA==&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#75715e">// PLATFORM_LINUX -&gt; linux
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TUU0ZmFKekdiRGFPaU42WDo6d2lu&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// PLATFORM_WINDOWS -&gt; win
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;cHJoVk9kN291L3FFN0ZxdTo6aU9T&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
-        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iOS
-</span><span style="color:#75715e"></span>    }
-
-    <span style="color:#66d9ef">return</span> $platform;
-}
-</code></pre></div><p>I have inserted some comments to make it easier to read, but the piece of code above is used to check the <em>Navigator.platform</em> attribute which every browser expose to the visited pages. Since we have different options, here is a quick recap of what we will get after the execution of <code>getPlatform()</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Unkown 	-&gt; 0
-Android -&gt; 1
-Apple 	-&gt; 2
-Linux	-&gt; 3
-Windows	-&gt; 4
-</code></pre></div><p>Unfortunately I was not able to access the original log file in the first screenshot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">p5f44d5a786a7c</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    $qString <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TGhDY1VXdENMUT09OjpRVUVSWV9TVFJJTkc=&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_SERVER[$qString])) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $_SERVER[$qString];
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>As we already saw it before, we know that the function will just return the full query string if its not empty. If we go on, we will find:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">sha1</span>(<span style="color:#a6e22e">basename</span>(<span style="color:#a6e22e">dirname</span>(<span style="color:#66d9ef">__FILE__</span>)));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (($fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>($path, <span style="color:#e6db74">&#39;c+&#39;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">flock</span>($fp, <span style="color:#a6e22e">LOCK_EX</span>)) {
+</span></span><span style="display:flex;"><span>	$stat <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>();
+</span></span><span style="display:flex;"><span>        $fileSize <span style="color:#f92672">=</span> <span style="color:#a6e22e">filesize</span>($path);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($fileSize <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>	    $stat <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>(<span style="color:#a6e22e">fread</span>($fp, $fileSize), <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span></code></pre></div><p>The function will now create a hidden JSON file (it has a <em>&quot;.&quot;</em> at the beginning) having as a filename the SHA-1 hash of the name of the current directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>	$platform <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPlatform</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($stat[$platform]) <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">is_int</span>($stat[$platform])) {
+</span></span><span style="display:flex;"><span>	    $stat[$platform] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            $stat[$platform]<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fseek</span>($fp, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fwrite</span>($fp, <span style="color:#a6e22e">json_encode</span>($stat));
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fflush</span>($fp);
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">flock</span>($fp, <span style="color:#a6e22e">LOCK_UN</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>($fp);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>As we can see from the code above, the previously created JSON file is used to count how many instances of different platforms visited the page. The <code>getPlatform()</code> function contains the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getPlatform</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// $userAgent = HTTP_USER_AGENT
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $userAgent <span style="color:#f92672">=</span> ( <span style="color:#a6e22e">isset</span>($_SERVER[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;YWV6ejFFekE5TE5NbVE9PTo6SFRUUF9VU0VSX0FHRU5U&#34;</span>)]) <span style="color:#f92672">?</span>
+</span></span><span style="display:flex;"><span>	    $_SERVER[$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;YWV6ejFFekE5TE5NbVE9PTo6SFRUUF9VU0VSX0FHRU5U&#34;</span>)] <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span> );
+</span></span><span style="display:flex;"><span>    $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// PLATFORM_UNKNOWN
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N3VFR0dla2xiZz09Ojp3aW5kb3dz&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>    $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// PLATFORM_WINDOWS -&gt; windows
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;QlFuRXdiZlRKZz09OjppUGFk&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; BQnEwbfTJg==::iPad
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;V1hMdTYyTUw6OmlQb2Q=&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iPod
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N1c3WjVYeld1c0lQZmNnPTo6aVBob25l&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iPhone
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;NllXNWhXMk43RzR4UURFPTo6bWFj&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; mac
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;V0RvWnVPZE5CZnpiZFdVZU93PT06OmFuZHJvaWQ=&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// PLATFORM_ANDROID -&gt; android
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;eVhldjU2RFlYUT09OjpsaW51eA==&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#75715e">// PLATFORM_LINUX -&gt; linux
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;TUU0ZmFKekdiRGFPaU42WDo6d2lu&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// PLATFORM_WINDOWS -&gt; win
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">elseif</span> (<span style="color:#a6e22e">stripos</span>($userAgent, $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;cHJoVk9kN291L3FFN0ZxdTo6aU9T&#34;</span>)) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>        $platform <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// PLATFORM_APPLE -&gt; iOS
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> $platform;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>I have inserted some comments to make it easier to read, but the piece of code above is used to check the <em>Navigator.platform</em> attribute which every browser expose to the visited pages. Since we have different options, here is a quick recap of what we will get after the execution of <code>getPlatform()</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Unkown 	-&gt; 0
+</span></span><span style="display:flex;"><span>Android -&gt; 1
+</span></span><span style="display:flex;"><span>Apple 	-&gt; 2
+</span></span><span style="display:flex;"><span>Linux	-&gt; 3
+</span></span><span style="display:flex;"><span>Windows	-&gt; 4
+</span></span></code></pre></div><p>Unfortunately I was not able to access the original log file in the first screenshot.</p>
 <h3 id="the-malicious-document">The malicious document</h3>
 <p>The following steps of <code>index.php</code> include a long list of headers being set. I have added again some comments to make it easier to read the code below, since the function <code>d5f44d5a7878a4()</code> is used to de-obfuscate strings while setting almost all the headers.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">// Resist Varnish-cache
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">setcookie</span>(<span style="color:#a6e22e">uniqid</span>(), <span style="color:#a6e22e">time</span>(), <span style="color:#a6e22e">time</span>() <span style="color:#f92672">+</span> <span style="color:#ae81ff">60</span>, <span style="color:#e6db74">&#39;/&#39;</span>);
-
-<span style="color:#75715e">// Send cache headers
-</span><span style="color:#75715e">// gmdate(&#34;D, d M Y H:i:s&#34; . &#34;GMT&#34;)
-</span><span style="color:#75715e"></span>$timestamp <span style="color:#f92672">=</span> <span style="color:#a6e22e">gmdate</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N0s4eFRuRTBZMkNlenRiemlpWT06OkQsIGQgTSBZIEg6aTpz&#34;</span>))
-    <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;SUZYQlBrOFJ6d20zNFl4cmNFVlY6OiBHTVQ=&#34;</span>);
-
-<span style="color:#75715e">// header(&#34;Cache-Control: no-cache, must-revalidate&#34;)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;b0taWDZCUDRleW0veVh4WWtXNGQ6OkNhY2hlLUNvbnRyb2w6IG5vLWNhY2hlLCBtdXN0LXJldmFsaWRhdGU=&#34;</span>));
-
-<span style="color:#75715e">// header(&#34;Pragma: no-cache&#34;)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;U29wSEl0YnRiMEU9OjpQcmFnbWE6IG5vLWNhY2hl&#34;</span>));
-
-<span style="color:#75715e">// header(&#34;Last-Modified:&#34; . $timestamp)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;L1VvdkIxND06Okxhc3QtTW9kaWZpZWQ6IA==&#34;</span>) <span style="color:#f92672">.</span> $timestamp);
-
-<span style="color:#75715e">// header(&#34;Expires:&#34; . $timestamp)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;ZU44eGw1T2N2azlUZ1RUTVhNTU86OkV4cGlyZXM6IA==&#34;</span>) <span style="color:#f92672">.</span> $timestamp);
-
-<span style="color:#75715e">// Send content headers
-</span><span style="color:#75715e"></span>$contentName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;INV_O2GT57A7QBKNN7.doc&#39;</span>;
-$contentType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;application/msword&#39;</span>;
-
-<span style="color:#75715e">// header(&#34;Content-Type:&#34; . $contentType)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;RVpCZ041ZW5TWCtYeE00WGhSRlQ6OkNvbnRlbnQtVHlwZTog&#34;</span>) <span style="color:#f92672">.</span> $contentType);
-
-<span style="color:#75715e">// header(&#34;Content-Disposition: attachment; filename=&#34; . $contentName&#34;)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;NUl6QUhHZ2VPcmpnTzJ0VkpZUTQ6OkNvbnRlbnQtRGlzcG9zaXRpb246IGF0dGFjaG1lbnQ7IGZpbGVuYW1lPSI=&#34;</span>)
-    <span style="color:#f92672">.</span> $contentName <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;&#34;&#39;</span>);
-
-<span style="color:#75715e">// header(&#34;Content-Transfer-Encoding: binary&#34;)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;ekFUS003Szl3Zz09OjpDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiBiaW5hcnk=&#34;</span>));
-</code></pre></div><p>It&rsquo;s also worth noting that the <code>contentName</code> and <code>contentType</code> (respectively the filename and the file type) are also specified.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// Resist Varnish-cache
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">setcookie</span>(<span style="color:#a6e22e">uniqid</span>(), <span style="color:#a6e22e">time</span>(), <span style="color:#a6e22e">time</span>() <span style="color:#f92672">+</span> <span style="color:#ae81ff">60</span>, <span style="color:#e6db74">&#39;/&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Send cache headers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// gmdate(&#34;D, d M Y H:i:s&#34; . &#34;GMT&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$timestamp <span style="color:#f92672">=</span> <span style="color:#a6e22e">gmdate</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;N0s4eFRuRTBZMkNlenRiemlpWT06OkQsIGQgTSBZIEg6aTpz&#34;</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;SUZYQlBrOFJ6d20zNFl4cmNFVlY6OiBHTVQ=&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Cache-Control: no-cache, must-revalidate&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;b0taWDZCUDRleW0veVh4WWtXNGQ6OkNhY2hlLUNvbnRyb2w6IG5vLWNhY2hlLCBtdXN0LXJldmFsaWRhdGU=&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Pragma: no-cache&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;U29wSEl0YnRiMEU9OjpQcmFnbWE6IG5vLWNhY2hl&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Last-Modified:&#34; . $timestamp)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;L1VvdkIxND06Okxhc3QtTW9kaWZpZWQ6IA==&#34;</span>) <span style="color:#f92672">.</span> $timestamp);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Expires:&#34; . $timestamp)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;ZU44eGw1T2N2azlUZ1RUTVhNTU86OkV4cGlyZXM6IA==&#34;</span>) <span style="color:#f92672">.</span> $timestamp);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Send content headers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$contentName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;INV_O2GT57A7QBKNN7.doc&#39;</span>;
+</span></span><span style="display:flex;"><span>$contentType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;application/msword&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Content-Type:&#34; . $contentType)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;RVpCZ041ZW5TWCtYeE00WGhSRlQ6OkNvbnRlbnQtVHlwZTog&#34;</span>) <span style="color:#f92672">.</span> $contentType);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Content-Disposition: attachment; filename=&#34; . $contentName&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;NUl6QUhHZ2VPcmpnTzJ0VkpZUTQ6OkNvbnRlbnQtRGlzcG9zaXRpb246IGF0dGFjaG1lbnQ7IGZpbGVuYW1lPSI=&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span> $contentName <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;&#34;&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// header(&#34;Content-Transfer-Encoding: binary&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">d5f44d5a7878a4</span>(<span style="color:#e6db74">&#34;ekFUS003Szl3Zz09OjpDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiBiaW5hcnk=&#34;</span>));
+</span></span></code></pre></div><p>It&rsquo;s also worth noting that the <code>contentName</code> and <code>contentType</code> (respectively the filename and the file type) are also specified.</p>
 <p>The only remaining step is to set the actual content of the malicious document file. This content is hardcoded in the <code>$contentData</code> variable; unfortunately the string is too long to be reported here, but here is a screenshot:</p>
 <figure><img src="/images/posts/emotet/maliciouscontent.png"
          alt="Just few lines of the encoded malicious document"/><figcaption>
@@ -309,12 +309,12 @@ $contentType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#
 </figure>
 
 <p>The string in <code>$contentData</code> is then used to create the document as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gzinflate</span>(<span style="color:#a6e22e">base64_decode</span>($contentData));
-</code></pre></div><p>After decoding it with Base64 and inflating the result, the malicious document is ready and the browser used by the victim will prompt the download of a file called <code>INV_O2GT57A7QBKNN7.doc</code>. I have created the following CyberChef<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> recipe to replicate this last step from <code>index.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">From_Base64(&#39;A-Za-z0-9+/=&#39;,true)
-Raw_Inflate(0,0,&#39;Block&#39;,false,false)
-SHA2(&#39;256&#39;)
-</code></pre></div><p>I have included in the recipe an additional step which creates the hash of the file, that can be used to detect if it&rsquo;s malicious.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gzinflate</span>(<span style="color:#a6e22e">base64_decode</span>($contentData));
+</span></span></code></pre></div><p>After decoding it with Base64 and inflating the result, the malicious document is ready and the browser used by the victim will prompt the download of a file called <code>INV_O2GT57A7QBKNN7.doc</code>. I have created the following CyberChef<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> recipe to replicate this last step from <code>index.php</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>From_Base64(&#39;A-Za-z0-9+/=&#39;,true)
+</span></span><span style="display:flex;"><span>Raw_Inflate(0,0,&#39;Block&#39;,false,false)
+</span></span><span style="display:flex;"><span>SHA2(&#39;256&#39;)
+</span></span></code></pre></div><p>I have included in the recipe an additional step which creates the hash of the file, that can be used to detect if it&rsquo;s malicious.</p>
 <p>You can also see the CyberChef recipe by clicking <a href="https://gchq.github.io/CyberChef/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true)Raw_Inflate(0,0,'Block',false,false)SHA2('256')">here</a>.</p>
 <p>The document file obtained at the end of the execution of <code>index.php</code> is obviously malicious, being detected by multiple engines in VirusTotal, as you can see from the screenshot below:</p>
 <figure><img src="/images/posts/emotet/vtdoc.png"
@@ -326,28 +326,28 @@ SHA2(&#39;256&#39;)
 <p>If you want a sample of the file, you can find it in the MalwareBazaar database following <a href="https://bazaar.abuse.ch/browse.php?search=a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b574854fbc0c8">this link</a>.</p>
 <h2 id="iocs">IOCs</h2>
 <p>Here is a list of the hashes of files which were analyzed in the post:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">malware.zip				db1617dc4a09fe856aea8041b90e73467e8d51ad4bdc1fd9a7e0a3197e66339c
-index.php				a48791d0e22ba693529285555ebb559bac1786bd703406deb5e1ef9ee8616cc4
-INV_O2GT57A7QBKNN7.doc	a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b574854fbc0c8
-</code></pre></div><p>If you want to take a look at the original PHP file, you can find it <a href="https://gist.github.com/andpalmier/e9a5cdd40fd2db751c07da641bc33bea">here</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>malware.zip				db1617dc4a09fe856aea8041b90e73467e8d51ad4bdc1fd9a7e0a3197e66339c
+</span></span><span style="display:flex;"><span>index.php				a48791d0e22ba693529285555ebb559bac1786bd703406deb5e1ef9ee8616cc4
+</span></span><span style="display:flex;"><span>INV_O2GT57A7QBKNN7.doc	a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b574854fbc0c8
+</span></span></code></pre></div><p>If you want to take a look at the original PHP file, you can find it <a href="https://gist.github.com/andpalmier/e9a5cdd40fd2db751c07da641bc33bea">here</a>.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this post we analyzed a PHP file used to distribute Emotet, a Trojan that has been active since 2014. We saw how <code>index.php</code> uses some basic obfuscation, especially when setting the headers; it also logs which types of OSs are accessing the page in a JSON file.</p>
 <p>At the end of the execution, a malicious document called <code>INV_O2GT57A7QBKNN7.doc</code> is ready for the download.</p>
 <p>If you are interested in Emotet, follow <a href="https://twitter.com/Cryptolaemus1">@Cryptolaemus1</a> on Twitter and the people in the <a href="https://paste.cryptolaemus.com/about/">Cryptolaemus team</a>.</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p><a href="https://www.proofpoint.com/us/blog/threat-insight/comprehensive-look-emotets-summer-2020-return">A Comprehensive Look at Emotet’s Summer 2020 Return</a> on ProofPoint&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><a href="https://www.zdnet.com/article/emotet-botnet-returns-after-a-five-month-absence/">Emotet botnet returns after a five-month absence</a> on ZDNet&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p><a href="https://gchq.github.io/CyberChef/">CyberChef</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
       </div>
 
@@ -442,7 +442,7 @@ INV_O2GT57A7QBKNN7.doc	a302a49cafa48ab0b8d686124f89eb0517a014f31fcb5dc4eb8b57485
     
       
         
-        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
       
     
 

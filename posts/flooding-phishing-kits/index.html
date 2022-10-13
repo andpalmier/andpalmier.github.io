@@ -65,7 +65,7 @@
 
 	
 
-	<meta name="generator" content="Hugo 0.92.2" />
+	<meta name="generator" content="Hugo 0.104.3" />
     </head>
 
     
@@ -176,38 +176,38 @@ In order to maximize their effectiveness in few hours, these campaigns are distr
 <h2 id="the-phishing-page">The phishing page</h2>
 <p>In this case, we don&rsquo;t have access to the PHP code of the kit, because I couldn&rsquo;t find the zip in these domains. However I would be interested in analyzing it, so if you have it, please let me know!</p>
 <p>Even if we don&rsquo;t have access to the PHP, we have everything we need in the HTML of the phishing page. Here is the form for entering the credentials:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">div</span>&gt;
-    &lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;command&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-group&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/core/login.php&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span>
-	    <span style="color:#a6e22e">autocomplete</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;off&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
-	    &lt;<span style="color:#f92672">p</span>&gt;
-	        &lt;<span style="color:#f92672">h2</span>&gt;&lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp1&#34;</span>&gt;Codice Titolare&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">h2</span>&gt;
-	    &lt;/<span style="color:#f92672">p</span>&gt;
-	    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class </span><span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;codice&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp1&#34;</span>
-	        <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">minlength</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;4&#34;</span> <span style="color:#a6e22e">maxlength</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
-	    &lt;<span style="color:#f92672">p</span>&gt;
-	        &lt;<span style="color:#f92672">strong</span>&gt;&lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp2&#34;</span>&gt;PIN&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">strong</span>&gt;
-	    &lt;/<span style="color:#f92672">p</span>&gt;
-	    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span>
-	        <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp2&#34;</span> <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
-	    &lt;<span style="color:#f92672">p</span>&gt;
-	        &lt;<span style="color:#f92672">strong</span>&gt; &lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp3&#34;</span>&gt;Numero di telefono&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">strong</span>&gt;
-	    &lt;/<span style="color:#f92672">p</span>&gt;
-	    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cellulare&#34;</span>
-	        <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp3&#34;</span> <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;3&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
-	    &lt;<span style="color:#f92672">p</span>&gt;
-	        &lt;<span style="color:#f92672">strong</span>&gt;&lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp4&#34;</span>&gt;Se sei cliente Fideuram seleziona
-	    	    la casella in basso&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">strong</span>&gt;
-	        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-check-label&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;checkbox&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;fideuram&#34;</span>
-	    	    <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp4&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Si&#34;</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;5&#34;</span>&gt;
-	    &lt;/<span style="color:#f92672">p</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;&lt;<span style="color:#f92672">br</span> /&gt;
-	    &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;background-color: green;font-size : 20px;&#34;</span>  <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;submit&#34;</span>
-	    	<span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;btn btn-primary btn-lg btn-block&#34;</span>&gt;ENTRA&lt;/<span style="color:#f92672">button</span>&gt;
-    &lt;/<span style="color:#f92672">form</span>&gt;
-&lt;/<span style="color:#f92672">div</span>&gt;
-</code></pre></div><p>The <code>action</code> attribute of the form specifies where the POST request is sent, in this case to <code>/core/login.php</code>. Using this address and the attributes <code>name</code> and <code>type</code> of the input fields, we can easily make a post with cURL:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ curl -d <span style="color:#e6db74">&#34;codice=123&amp;password=123&amp;cellulare=12345678&#34;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    -X POST https://www.riscontrotitolare.com/core/login.php
-</code></pre></div><p>Please note that this kit is also logging the IP address of these requests, so be sure to run the line above behind a proxy or a VPN.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;command&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-group&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/core/login.php&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">autocomplete</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;off&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	        &lt;<span style="color:#f92672">h2</span>&gt;&lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp1&#34;</span>&gt;Codice Titolare&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">h2</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class </span><span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;codice&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp1&#34;</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">minlength</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;4&#34;</span> <span style="color:#a6e22e">maxlength</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	        &lt;<span style="color:#f92672">strong</span>&gt;&lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp2&#34;</span>&gt;PIN&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">strong</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp2&#34;</span> <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	        &lt;<span style="color:#f92672">strong</span>&gt; &lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp3&#34;</span>&gt;Numero di telefono&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">strong</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cellulare&#34;</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp3&#34;</span> <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;3&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	        &lt;<span style="color:#f92672">strong</span>&gt;&lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;camp4&#34;</span>&gt;Se sei cliente Fideuram seleziona
+</span></span><span style="display:flex;"><span>	    	    la casella in basso&lt;/<span style="color:#f92672">label</span>&gt;&lt;/<span style="color:#f92672">strong</span>&gt;
+</span></span><span style="display:flex;"><span>	        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-check-label&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;checkbox&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;fideuram&#34;</span>
+</span></span><span style="display:flex;"><span>	    	    <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_camp4&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Si&#34;</span> <span style="color:#a6e22e">tabindex</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;5&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;/<span style="color:#f92672">p</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;&lt;<span style="color:#f92672">br</span> /&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;background-color: green;font-size : 20px;&#34;</span>  <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;submit&#34;</span>
+</span></span><span style="display:flex;"><span>	    	<span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;btn btn-primary btn-lg btn-block&#34;</span>&gt;ENTRA&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">form</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><p>The <code>action</code> attribute of the form specifies where the POST request is sent, in this case to <code>/core/login.php</code>. Using this address and the attributes <code>name</code> and <code>type</code> of the input fields, we can easily make a post with cURL:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl -d <span style="color:#e6db74">&#34;codice=123&amp;password=123&amp;cellulare=12345678&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -X POST https://www.riscontrotitolare.com/core/login.php
+</span></span></code></pre></div><p>Please note that this kit is also logging the IP address of these requests, so be sure to run the line above behind a proxy or a VPN.</p>
 <figure><img src="/images/posts/phishflood/logs-curl.png"
          alt="The POST made with cURL worked!"/><figcaption>
             <p>The POST made with cURL worked!</p>
@@ -226,152 +226,152 @@ In order to maximize their effectiveness in few hours, these campaigns are distr
 </ul>
 <p>For the first point, I decided to use <a href="https://godoc.org/github.com/PuerkitoBio/goquery">goquery</a> to detect the <code>form</code>, get the content of the <code>action</code> attribute, and the <code>name</code> and <code>type</code> attributes of the other input parameters.</p>
 <p>For brevity reasons, I excluded from the code below all the lines for handling possible errors.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">getPostData</span>(<span style="color:#a6e22e">phishingUrl</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">parsedProxies</span> []<span style="color:#66d9ef">string</span>)
-	(<span style="color:#66d9ef">string</span>, []<span style="color:#66d9ef">string</span>, []<span style="color:#66d9ef">string</span>) {
-
-    <span style="color:#a6e22e">postAction</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;&#34;</span>
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">inputNames</span> []<span style="color:#66d9ef">string</span>
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">inputTypes</span> []<span style="color:#66d9ef">string</span>
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">myClient</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>
-
-    <span style="color:#75715e">// make post request using proxy
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">parsedProxies</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-	    <span style="color:#a6e22e">proxyURL</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">parsedProxies</span>[<span style="color:#ae81ff">0</span>])
-	    <span style="color:#75715e">// be sure to handle the err..
-</span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">myClient</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Timeout</span>: <span style="color:#ae81ff">15</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>, <span style="color:#a6e22e">Transport</span>:
-		    <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>{<span style="color:#a6e22e">Proxy</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ProxyURL</span>(<span style="color:#a6e22e">proxyURL</span>)}}
-	} <span style="color:#66d9ef">else</span> { <span style="color:#a6e22e">myClient</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Timeout</span>: <span style="color:#ae81ff">15</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> }
-
-	<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">phishingUrl</span>, <span style="color:#66d9ef">nil</span>)
-	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">myClient</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">req</span>)
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">200</span> {
-	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;status code error: %d %s \n&#34;</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Status</span>)
-	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
-	}
-
-	<span style="color:#75715e">// Load the HTML document and find the form with goquery
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">doc</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">goquery</span>.<span style="color:#a6e22e">NewDocumentFromReader</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
-	<span style="color:#a6e22e">doc</span>.<span style="color:#a6e22e">Find</span>(<span style="color:#e6db74">&#34;form&#34;</span>).<span style="color:#a6e22e">Each</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">form</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">goquery</span>.<span style="color:#a6e22e">Selection</span>) {
-	    <span style="color:#a6e22e">action</span>, <span style="color:#a6e22e">actionOk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">form</span>.<span style="color:#a6e22e">Attr</span>(<span style="color:#e6db74">&#34;action&#34;</span>)
-	    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">actionOk</span> {
-		    <span style="color:#a6e22e">form</span>.<span style="color:#a6e22e">Find</span>(<span style="color:#e6db74">&#34;input&#34;</span>).<span style="color:#a6e22e">Each</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">input</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">goquery</span>.<span style="color:#a6e22e">Selection</span>) {
-			    <span style="color:#a6e22e">nameattr</span>, <span style="color:#a6e22e">nameOk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">Attr</span>(<span style="color:#e6db74">&#34;name&#34;</span>)
-			    <span style="color:#a6e22e">typeattr</span>, <span style="color:#a6e22e">typeOk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">Attr</span>(<span style="color:#e6db74">&#34;type&#34;</span>)
-			    <span style="color:#75715e">// find input with name and attributes
-</span><span style="color:#75715e"></span>			    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">actionOk</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">nameOk</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">typeOk</span> {
-				    <span style="color:#a6e22e">inputNames</span> = append(<span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">nameattr</span>)
-				    <span style="color:#a6e22e">inputTypes</span> = append(<span style="color:#a6e22e">inputTypes</span>, <span style="color:#a6e22e">typeattr</span>)
-				    <span style="color:#a6e22e">u</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">phishingUrl</span>)
-				    <span style="color:#75715e">// create full url for path where to submit the form
-</span><span style="color:#75715e"></span>				    <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Path</span> = <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Path</span>, <span style="color:#a6e22e">action</span>)
-				    <span style="color:#a6e22e">postAction</span> = <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">String</span>()
-				}
-		    })
-	}})
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span>
-}
-</code></pre></div><p>The beginning of the <code>main</code> function of our code takes the URL of the phishing page in input, calls the function <code>getPostData</code> (mentioned above) and prints the results:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-
-    <span style="color:#75715e">// check we have one input provided
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span> {
-	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>, <span style="color:#e6db74">&#34;Please specify one URL: ./phishflood *URL* \n&#34;</span>)
-	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
-    }
-
-    <span style="color:#75715e">// take a url from input
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">phishingUrl</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>[<span style="color:#ae81ff">1</span>]
-
-    <span style="color:#75715e">// validate url provided
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">ParseRequestURI</span>(<span style="color:#a6e22e">phishingUrl</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>, <span style="color:#e6db74">&#34;It was not possible to parse the URL\n&#34;</span>)
-	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
-    }
-
-    <span style="color:#75715e">// navigate to it and print findings
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">getPostData</span>(<span style="color:#a6e22e">phishingUrl</span>)
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;[!] Found a form with action: %s \n[!] Input fields names found: %v&#34;</span> <span style="color:#f92672">+</span>
-	    <span style="color:#e6db74">&#34;\n[!] Input fields types found: %v\n\n&#34;</span>, <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span>)
-</code></pre></div><p>The rest of the <code>main</code> uses 10 goroutines to make the requests concurrently (<em>well, almost concurrently because we have a random delay</em>), and a channel ( <code>ch</code> ) to communicate when a goroutine finished.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// set random seed
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Seed</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">UnixNano</span>())
-
-    <span style="color:#75715e">// create channel used for goroutines
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
-
-    <span style="color:#75715e">// specify the number of routines to use
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">routines</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">10</span>
-
-    <span style="color:#75715e">// start goroutines
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">routines</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-
-	    <span style="color:#75715e">// create wait for a random number of seconds between 2 and 10
-</span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">10000</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2000</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">2000</span>)
-	    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>(<span style="color:#a6e22e">w</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>)
-
-	    <span style="color:#75715e">// send requests with fake data
-</span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">flood</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span>, <span style="color:#a6e22e">ch</span>)
-    }
-
-    <span style="color:#75715e">// when POST request is completed, print the status code from the channel
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">routines</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>)
-    }
-}
-</code></pre></div><p>A small delay between 10 and 2 seconds is introduced in the for loop. Ideally, this delay should be higher, to not make it obvious that these POST requests were automated.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">getPostData</span>(<span style="color:#a6e22e">phishingUrl</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">parsedProxies</span> []<span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>	(<span style="color:#66d9ef">string</span>, []<span style="color:#66d9ef">string</span>, []<span style="color:#66d9ef">string</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">postAction</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">inputNames</span> []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">inputTypes</span> []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">myClient</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// make post request using proxy
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">parsedProxies</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">proxyURL</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">parsedProxies</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// be sure to handle the err..
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">myClient</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Timeout</span>: <span style="color:#ae81ff">15</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>, <span style="color:#a6e22e">Transport</span>:
+</span></span><span style="display:flex;"><span>		    <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>{<span style="color:#a6e22e">Proxy</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ProxyURL</span>(<span style="color:#a6e22e">proxyURL</span>)}}
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> { <span style="color:#a6e22e">myClient</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Timeout</span>: <span style="color:#ae81ff">15</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">phishingUrl</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">myClient</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">200</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;status code error: %d %s \n&#34;</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Status</span>)
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Load the HTML document and find the form with goquery
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">doc</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">goquery</span>.<span style="color:#a6e22e">NewDocumentFromReader</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">doc</span>.<span style="color:#a6e22e">Find</span>(<span style="color:#e6db74">&#34;form&#34;</span>).<span style="color:#a6e22e">Each</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">form</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">goquery</span>.<span style="color:#a6e22e">Selection</span>) {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">action</span>, <span style="color:#a6e22e">actionOk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">form</span>.<span style="color:#a6e22e">Attr</span>(<span style="color:#e6db74">&#34;action&#34;</span>)
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">actionOk</span> {
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">form</span>.<span style="color:#a6e22e">Find</span>(<span style="color:#e6db74">&#34;input&#34;</span>).<span style="color:#a6e22e">Each</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">input</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">goquery</span>.<span style="color:#a6e22e">Selection</span>) {
+</span></span><span style="display:flex;"><span>			    <span style="color:#a6e22e">nameattr</span>, <span style="color:#a6e22e">nameOk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">Attr</span>(<span style="color:#e6db74">&#34;name&#34;</span>)
+</span></span><span style="display:flex;"><span>			    <span style="color:#a6e22e">typeattr</span>, <span style="color:#a6e22e">typeOk</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">Attr</span>(<span style="color:#e6db74">&#34;type&#34;</span>)
+</span></span><span style="display:flex;"><span>			    <span style="color:#75715e">// find input with name and attributes
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">actionOk</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">nameOk</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">typeOk</span> {
+</span></span><span style="display:flex;"><span>				    <span style="color:#a6e22e">inputNames</span> = append(<span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">nameattr</span>)
+</span></span><span style="display:flex;"><span>				    <span style="color:#a6e22e">inputTypes</span> = append(<span style="color:#a6e22e">inputTypes</span>, <span style="color:#a6e22e">typeattr</span>)
+</span></span><span style="display:flex;"><span>				    <span style="color:#a6e22e">u</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">phishingUrl</span>)
+</span></span><span style="display:flex;"><span>				    <span style="color:#75715e">// create full url for path where to submit the form
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>				    <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Path</span> = <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Path</span>, <span style="color:#a6e22e">action</span>)
+</span></span><span style="display:flex;"><span>				    <span style="color:#a6e22e">postAction</span> = <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">String</span>()
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>		    })
+</span></span><span style="display:flex;"><span>	}})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The beginning of the <code>main</code> function of our code takes the URL of the phishing page in input, calls the function <code>getPostData</code> (mentioned above) and prints the results:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// check we have one input provided
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>, <span style="color:#e6db74">&#34;Please specify one URL: ./phishflood *URL* \n&#34;</span>)
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// take a url from input
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">phishingUrl</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// validate url provided
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">ParseRequestURI</span>(<span style="color:#a6e22e">phishingUrl</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>, <span style="color:#e6db74">&#34;It was not possible to parse the URL\n&#34;</span>)
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// navigate to it and print findings
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">getPostData</span>(<span style="color:#a6e22e">phishingUrl</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;[!] Found a form with action: %s \n[!] Input fields names found: %v&#34;</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;\n[!] Input fields types found: %v\n\n&#34;</span>, <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span>)
+</span></span></code></pre></div><p>The rest of the <code>main</code> uses 10 goroutines to make the requests concurrently (<em>well, almost concurrently because we have a random delay</em>), and a channel ( <code>ch</code> ) to communicate when a goroutine finished.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#75715e">// set random seed
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Seed</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">UnixNano</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// create channel used for goroutines
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// specify the number of routines to use
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">routines</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// start goroutines
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">routines</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// create wait for a random number of seconds between 2 and 10
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">10000</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2000</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">2000</span>)
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>(<span style="color:#a6e22e">w</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// send requests with fake data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">flood</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">inputNames</span>, <span style="color:#a6e22e">inputTypes</span>, <span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// when POST request is completed, print the status code from the channel
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">routines</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>A small delay between 10 and 2 seconds is introduced in the for loop. Ideally, this delay should be higher, to not make it obvious that these POST requests were automated.</p>
 <p>The <code>flood</code> function needs a list of proxy addresses (<code>px</code> in the code below), which are used to make the requests without showing our IP address in the kit.
 The fake data which are going to be submitted are contained in <code>vals</code> and populated in a not sophisticated way: since all the input types are <code>number</code> for this kit, it is sufficient to create random numbers between a sufficiently long interval.</p>
 <p>In Go, it is possible to create random number between an interval in the following way:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">randomnumber</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>( <span style="color:#a6e22e">max</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">min</span> ) <span style="color:#f92672">+</span> <span style="color:#a6e22e">min</span>
-</code></pre></div><p>The input field with the name <code>cellulare</code> needed particular attention: <em>&ldquo;cellulare</em>&rdquo; stands for <em>&ldquo;mobile phone&rdquo;</em> in italian, so the interval for the random generation is a bit more complicated.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">randomnumber</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>( <span style="color:#a6e22e">max</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">min</span> ) <span style="color:#f92672">+</span> <span style="color:#a6e22e">min</span>
+</span></span></code></pre></div><p>The input field with the name <code>cellulare</code> needed particular attention: <em>&ldquo;cellulare</em>&rdquo; stands for <em>&ldquo;mobile phone&rdquo;</em> in italian, so the interval for the random generation is a bit more complicated.</p>
 <p>After the POST request, the status code is sent to the channel, and the goroutine terminate its execution.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">flood</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">postAction</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">inputNames</span> []<span style="color:#66d9ef">string</span>,
-    <span style="color:#a6e22e">inputTypes</span> []<span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">ch</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">string</span>) {
-
-    <span style="color:#75715e">// make post request using proxy
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">proxyURL</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">px</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span>len(<span style="color:#a6e22e">px</span>)])
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>, <span style="color:#e6db74">&#34;Error parsing the proxy address\n&#34;</span>)
-	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
-    }
-
-    <span style="color:#a6e22e">myClient</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Timeout</span>: <span style="color:#ae81ff">15</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>, <span style="color:#a6e22e">Transport</span>:
-	    <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>{<span style="color:#a6e22e">Proxy</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ProxyURL</span>(<span style="color:#a6e22e">proxyURL</span>)}}
-
-    <span style="color:#75715e">// generate fake data
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">vals</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{}
-    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">valName</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">inputNames</span> {
-
-	    <span style="color:#75715e">// &#34;cellulare&#34; is &#34;mobile phone&#34; in italian, so we
-</span><span style="color:#75715e"></span>	    <span style="color:#75715e">// have a particular interval to make it realistic
-</span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">valName</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;cellulare&#34;</span> {
-		    <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">3499999999</span><span style="color:#f92672">-</span><span style="color:#ae81ff">3200000000</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">3200000000</span>
-		    <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">valName</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">val</span>))
-
-	    <span style="color:#75715e">// these are generic numbers
-</span><span style="color:#75715e"></span>	    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">inputTypes</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;number&#34;</span> {
-		    <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">99999999</span><span style="color:#f92672">-</span><span style="color:#ae81ff">10000000</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">10000000</span>
-		    <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">valName</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>,<span style="color:#a6e22e">val</span>))
-	    }
-    }
-
-    <span style="color:#75715e">// make the POST request
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">PostForm</span>(<span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">vals</span>)
-
-    <span style="color:#75715e">// print error
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
-    } <span style="color:#66d9ef">else</span> {
-
-	    <span style="color:#75715e">// send to the channel the status code of the POST
-</span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;Request #%d with these parameters {codice: %s,&#34;</span>,
-		    <span style="color:#e6db74">&#34;cellulare: %s, password: %s} returned the following status code:&#34;</span>,
-		    <span style="color:#e6db74">&#34;%d %s.&#34;</span>, <span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;codice&#34;</span>), <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;cellulare&#34;</span>),
-		    <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;password&#34;</span>), <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusText</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span>))
-	    }
-}
-</code></pre></div><h2 id="results-and-possible-improvements">Results and possible improvements</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">flood</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">postAction</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">inputNames</span> []<span style="color:#66d9ef">string</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">inputTypes</span> []<span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">ch</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">string</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// make post request using proxy
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">proxyURL</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">px</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span>len(<span style="color:#a6e22e">px</span>)])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>, <span style="color:#e6db74">&#34;Error parsing the proxy address\n&#34;</span>)
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">myClient</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Timeout</span>: <span style="color:#ae81ff">15</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>, <span style="color:#a6e22e">Transport</span>:
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>{<span style="color:#a6e22e">Proxy</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ProxyURL</span>(<span style="color:#a6e22e">proxyURL</span>)}}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// generate fake data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">vals</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">valName</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">inputNames</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// &#34;cellulare&#34; is &#34;mobile phone&#34; in italian, so we
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#75715e">// have a particular interval to make it realistic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">valName</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;cellulare&#34;</span> {
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">3499999999</span><span style="color:#f92672">-</span><span style="color:#ae81ff">3200000000</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">3200000000</span>
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">valName</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">val</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// these are generic numbers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">inputTypes</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;number&#34;</span> {
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">99999999</span><span style="color:#f92672">-</span><span style="color:#ae81ff">10000000</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">10000000</span>
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">valName</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>,<span style="color:#a6e22e">val</span>))
+</span></span><span style="display:flex;"><span>	    }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// make the POST request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">PostForm</span>(<span style="color:#a6e22e">postAction</span>, <span style="color:#a6e22e">vals</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// print error
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// send to the channel the status code of the POST
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;Request #%d with these parameters {codice: %s,&#34;</span>,
+</span></span><span style="display:flex;"><span>		    <span style="color:#e6db74">&#34;cellulare: %s, password: %s} returned the following status code:&#34;</span>,
+</span></span><span style="display:flex;"><span>		    <span style="color:#e6db74">&#34;%d %s.&#34;</span>, <span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;codice&#34;</span>), <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;cellulare&#34;</span>),
+</span></span><span style="display:flex;"><span>		    <span style="color:#a6e22e">vals</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;password&#34;</span>), <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusText</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span>))
+</span></span><span style="display:flex;"><span>	    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="results-and-possible-improvements">Results and possible improvements</h2>
 <p>If we run the code above specifying a URL, we should see something like this:</p>
 <figure><img src="/images/posts/phishflood/phishflood.png"
          alt="Output of phishflood"/><figcaption>
@@ -489,7 +489,7 @@ There is a lot of space for improvements, but, after checking the logs of the ki
     
       
         
-        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
       
     
 

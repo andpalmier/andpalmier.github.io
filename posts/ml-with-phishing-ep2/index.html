@@ -68,7 +68,7 @@ Introduction In the last post of this series, we analyzed how some of the parame
 
 	
 
-	<meta name="generator" content="Hugo 0.92.2" />
+	<meta name="generator" content="Hugo 0.104.3" />
     </head>
 
     
@@ -168,170 +168,170 @@ Introduction In the last post of this series, we analyzed how some of the parame
 
 <h2 id="random-forest-against-phishing">Random forest against phishing</h2>
 <p>We will start the analysis by importing the libraries and the dataset which are going to be used in this post:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
-<span style="color:#f92672">from</span> matplotlib.legend_handler <span style="color:#f92672">import</span> HandlerLine2D
-<span style="color:#f92672">from</span> sklearn.ensemble <span style="color:#f92672">import</span> RandomForestClassifier
-<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
-
-<span style="color:#75715e"># Load the data from a CSV file</span>
-train_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>genfromtxt(<span style="color:#e6db74">&#39;phishing_smaller.csv&#39;</span>, delimiter<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;,&#39;</span>, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>int32)
-</code></pre></div><p>Our dataset contains 10.000 samples and 11 columns, where 10 represent the features and the last one is the label of the sample.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> matplotlib.legend_handler <span style="color:#f92672">import</span> HandlerLine2D
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.ensemble <span style="color:#f92672">import</span> RandomForestClassifier
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load the data from a CSV file</span>
+</span></span><span style="display:flex;"><span>train_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>genfromtxt(<span style="color:#e6db74">&#39;phishing_smaller.csv&#39;</span>, delimiter<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;,&#39;</span>, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>int32)
+</span></span></code></pre></div><p>Our dataset contains 10.000 samples and 11 columns, where 10 represent the features and the last one is the label of the sample.</p>
 <p>As for the previous episode, I used a smaller version of a dataset which was created for <a href="https://www.sciencedirect.com/science/article/pii/S0020025519300763">this study</a>. You can find the version of the dataset used in this post <a href="https://github.com/andpalmier/MLWithPhishing">in this GitHub repository</a>, which contains also information about the features selected and the code of this post in form of a Jupyter notebook.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># inputs are in all columns except the last one</span>
-inputs <span style="color:#f92672">=</span> train_data[:,:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-
-<span style="color:#75715e"># outputs in the last column</span>
-outputs <span style="color:#f92672">=</span> train_data[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-</code></pre></div><p><code>StratifiedKFold</code> will be used in order to keep the frequency of the classes constant during our k-fold cross-validation. It is important to note that <code>random_state</code> is set not only for the k-fold validation, but also in the random forest classifier: this will ensure a reproducible setup for all iterations of the model.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> StratifiedKFold
-
-<span style="color:#75715e"># use 10-fold with random_state set to 0</span>
-skf <span style="color:#f92672">=</span> StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-</code></pre></div><p>As in the other post, we will use AUC (Area Under Curve) to evaluate the accuracy of our classifier; so let&rsquo;s import the required library and define the array to store the accuracy during the iterations with the different folds:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># library for evaluating the classifier</span>
-<span style="color:#f92672">import</span> sklearn.metrics <span style="color:#66d9ef">as</span> metrics
-
-<span style="color:#75715e"># list to store the accuracy during k-fold cross-validation</span>
-accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
-</code></pre></div><p>We will now loop through the 10 splits and use them to train and evaluate 10 different models. The accuracy of these models will be stored in the <code>accuracy</code> list.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># loop with splits</span>
-<span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-
-    <span style="color:#75715e"># 9 folds used for training</span>
-    x_train, x_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-    <span style="color:#75715e"># 1 fold for testing</span>
-    y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-    <span style="color:#75715e"># Creates the classifier</span>
-    <span style="color:#75715e"># random_state is to keep same setup</span>
-    <span style="color:#75715e"># n_jobs is -1 to use all the processors</span>
-    rf <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
-
-    <span style="color:#75715e"># Train the classifier</span>
-    rf<span style="color:#f92672">.</span>fit(x_train, y_train)
-
-    <span style="color:#75715e"># Test the classifier</span>
-    predictions <span style="color:#f92672">=</span> rf<span style="color:#f92672">.</span>predict(x_test)
-    false_positives, true_positives, thresholds <span style="color:#f92672">=</span> \
-        metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
-
-    <span style="color:#75715e"># calculate classifier accuracy</span>
-    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positives, true_positives)
-    accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
-</code></pre></div><p>The <code>n_jobs</code> parameter of the classifier defines the number of jobs to run in parallel over the trees. If set to <code>None</code> (which is the case by default) it means 1, while if set to -1 it will use all processors.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># inputs are in all columns except the last one</span>
+</span></span><span style="display:flex;"><span>inputs <span style="color:#f92672">=</span> train_data[:,:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># outputs in the last column</span>
+</span></span><span style="display:flex;"><span>outputs <span style="color:#f92672">=</span> train_data[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span></code></pre></div><p><code>StratifiedKFold</code> will be used in order to keep the frequency of the classes constant during our k-fold cross-validation. It is important to note that <code>random_state</code> is set not only for the k-fold validation, but also in the random forest classifier: this will ensure a reproducible setup for all iterations of the model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> StratifiedKFold
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># use 10-fold with random_state set to 0</span>
+</span></span><span style="display:flex;"><span>skf <span style="color:#f92672">=</span> StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><p>As in the other post, we will use AUC (Area Under Curve) to evaluate the accuracy of our classifier; so let&rsquo;s import the required library and define the array to store the accuracy during the iterations with the different folds:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># library for evaluating the classifier</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sklearn.metrics <span style="color:#66d9ef">as</span> metrics
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># list to store the accuracy during k-fold cross-validation</span>
+</span></span><span style="display:flex;"><span>accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([])
+</span></span></code></pre></div><p>We will now loop through the 10 splits and use them to train and evaluate 10 different models. The accuracy of these models will be stored in the <code>accuracy</code> list.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># loop with splits</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 9 folds used for training</span>
+</span></span><span style="display:flex;"><span>    x_train, x_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1 fold for testing</span>
+</span></span><span style="display:flex;"><span>    y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Creates the classifier</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># random_state is to keep same setup</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># n_jobs is -1 to use all the processors</span>
+</span></span><span style="display:flex;"><span>    rf <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Train the classifier</span>
+</span></span><span style="display:flex;"><span>    rf<span style="color:#f92672">.</span>fit(x_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Test the classifier</span>
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> rf<span style="color:#f92672">.</span>predict(x_test)
+</span></span><span style="display:flex;"><span>    false_positives, true_positives, thresholds <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>        metrics<span style="color:#f92672">.</span>roc_curve(y_test, predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># calculate classifier accuracy</span>
+</span></span><span style="display:flex;"><span>    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positives, true_positives)
+</span></span><span style="display:flex;"><span>    accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(accuracy,ROC_AUC)
+</span></span></code></pre></div><p>The <code>n_jobs</code> parameter of the classifier defines the number of jobs to run in parallel over the trees. If set to <code>None</code> (which is the case by default) it means 1, while if set to -1 it will use all processors.</p>
 <p>In order to evaluate our model trained with k-folds, we will take the mean of the accuracy of the 10 values generated in the previous steps:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;ROC AUC: </span><span style="color:#e6db74">{</span>(np<span style="color:#f92672">.</span>mean(accuracy)}<span style="color:#e6db74">&#34;)</span>
-
-<span style="color:#f92672">&gt;</span> ROC AUC: <span style="color:#ae81ff">0.922092384769539</span>
-</code></pre></div><p>The accuracy obtained is already quite good. In fact, it is better than the one obtained with the &lsquo;vanilla&rsquo; decision tree. Let&rsquo;s see which parameters could be used to improve the performance of our random forest.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;ROC AUC: </span><span style="color:#e6db74">{</span>(np<span style="color:#f92672">.</span>mean(accuracy)}<span style="color:#e6db74">&#34;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> ROC AUC: <span style="color:#ae81ff">0.922092384769539</span>
+</span></span></code></pre></div><p>The accuracy obtained is already quite good. In fact, it is better than the one obtained with the &lsquo;vanilla&rsquo; decision tree. Let&rsquo;s see which parameters could be used to improve the performance of our random forest.</p>
 <h2 id="getting-ready">Getting ready</h2>
 <p>Before continuing with the analysis, considering that some actions are going to be repeated (training, testing and evaluate the classifiers) let&rsquo;s wrap them in a function which will be called in the next paragraphs.</p>
 <p>Our <code>magic</code> function will take in input a list of classifiers and two lists for the results of the training and testing. The lists for the results will be filled with the values of the AUC during the k-fold iterations and will be returned at the end of the function.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># function which takes as input a list of classifiers</span>
-<span style="color:#75715e"># and two lists for the accuracy of the classifiers</span>
-<span style="color:#75715e"># these 2 lists will be returned in the end</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">magic</span>(list_classifiers, list_train_accuracy, list_test_accuracy):
-
-    <span style="color:#75715e"># create the folds (always the same with random_state = 0)</span>
-    StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
-
-	x_train, x_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
-	y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
-
-	<span style="color:#75715e"># iterate through the classifiers</span>
-	<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(list_classifiers)):
-
-	    classifier <span style="color:#f92672">=</span> list_classifiers[i]
-
-	    classifier<span style="color:#f92672">.</span>fit(x_train, y_train)
-
-	    <span style="color:#75715e"># get train accuracy</span>
-	    predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(x_train)
-
-	    false_positives, true_positives, threshold <span style="color:#f92672">=</span> \
-		metrics<span style="color:#f92672">.</span>roc_curve(y_train,predictions)
-	    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positives,true_positives)
-	    list_train_accuracy[i] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(list_train_accuracy[i],ROC_AUC)
-
-	    <span style="color:#75715e"># get test accuracy</span>
-	    predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(x_test)
-
-	    false_positives, true_positives, threshold <span style="color:#f92672">=</span> \
-		metrics<span style="color:#f92672">.</span>roc_curve(y_test,predictions)
-	    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positives,true_positives)
-	    list_test_accuracy[i] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(list_test_accuracy[i],ROC_AUC)
-
-    <span style="color:#75715e"># return the array of accuracy of the classifiers</span>
-    <span style="color:#66d9ef">return</span> list_train_accuracy,list_test_accuracy
-</code></pre></div><h2 id="choose-the-best-criterion">Choose the best criterion</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># function which takes as input a list of classifiers</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and two lists for the accuracy of the classifiers</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># these 2 lists will be returned in the end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">magic</span>(list_classifiers, list_train_accuracy, list_test_accuracy):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># create the folds (always the same with random_state = 0)</span>
+</span></span><span style="display:flex;"><span>    StratifiedKFold(n_splits<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> train_index, test_index <span style="color:#f92672">in</span> skf<span style="color:#f92672">.</span>split(inputs, outputs):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	x_train, x_test <span style="color:#f92672">=</span> inputs[train_index], inputs[test_index]
+</span></span><span style="display:flex;"><span>	y_train, y_test <span style="color:#f92672">=</span> outputs[train_index], outputs[test_index]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># iterate through the classifiers</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(list_classifiers)):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    classifier <span style="color:#f92672">=</span> list_classifiers[i]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    classifier<span style="color:#f92672">.</span>fit(x_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e"># get train accuracy</span>
+</span></span><span style="display:flex;"><span>	    predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(x_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    false_positives, true_positives, threshold <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>		metrics<span style="color:#f92672">.</span>roc_curve(y_train,predictions)
+</span></span><span style="display:flex;"><span>	    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positives,true_positives)
+</span></span><span style="display:flex;"><span>	    list_train_accuracy[i] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(list_train_accuracy[i],ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e"># get test accuracy</span>
+</span></span><span style="display:flex;"><span>	    predictions <span style="color:#f92672">=</span> classifier<span style="color:#f92672">.</span>predict(x_test)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    false_positives, true_positives, threshold <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>		metrics<span style="color:#f92672">.</span>roc_curve(y_test,predictions)
+</span></span><span style="display:flex;"><span>	    ROC_AUC <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>auc(false_positives,true_positives)
+</span></span><span style="display:flex;"><span>	    list_test_accuracy[i] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(list_test_accuracy[i],ROC_AUC)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># return the array of accuracy of the classifiers</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> list_train_accuracy,list_test_accuracy
+</span></span></code></pre></div><h2 id="choose-the-best-criterion">Choose the best criterion</h2>
 <p>If you want to see the full list of parameters available to tune the random forest classifier, please refer to <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">the scikit-learn documentation for random forest</a>.</p>
 <p>We will start our analysis with the <code>criterion</code> parameter, which represents the function that will be used to measure the quality of a split. The supported criteria are <code>gini</code> (for <a href="https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity">Gini impurity</a>) and <code>entropy</code> (for <a href="https://en.wikipedia.org/wiki/Information_gain_in_decision_trees">information gain</a>).</p>
 <p>We will now create two classifiers having different <code>criterion</code>, to see which one has the best accuracy with our dataset.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># create the two classifiers</span>
-gini_classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gini&#34;</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
-entropy_classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;entropy&#34;</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
-
-<span style="color:#75715e"># lists to store variables to pass to the &#34;magic&#34; function</span>
-classifiers <span style="color:#f92672">=</span> [gini_classifier,entropy_classifier]
-train_accuracies <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>array([]),np<span style="color:#f92672">.</span>array([])]
-test_accuracies <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>array([]),np<span style="color:#f92672">.</span>array([])]
-
-<span style="color:#75715e"># in this iteration we are interested only in the test results</span>
-_,test_results <span style="color:#f92672">=</span> magic(classifiers,train_accuracies,test_accuracies)
-print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Accuracy of gini classifier: </span><span style="color:#e6db74">{</span>(np<span style="color:#f92672">.</span>mean(test_results[<span style="color:#ae81ff">0</span>]))<span style="color:#e6db74">}</span><span style="color:#e6db74">)</span>
-print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Accuracy of entropy classifier: </span><span style="color:#e6db74">{</span>(np<span style="color:#f92672">.</span>mean(test_results[<span style="color:#ae81ff">1</span>]))<span style="color:#e6db74">}</span><span style="color:#e6db74">)</span>
-
-<span style="color:#f92672">&gt;</span> Accuracy of gini classifier: <span style="color:#ae81ff">0.922092384769539</span>
-<span style="color:#f92672">&gt;</span> Accuracy of entropy classifier: <span style="color:#ae81ff">0.9227925851703407</span>
-</code></pre></div><p>The results listed above shows that, even if the difference is not much (0.07%), the classifier using the entropy function as a criterion for the split outperforms the one using the gini function. It is interesting to note that the gini criterion is the one used by default for decision trees in sklearn.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># create the two classifiers</span>
+</span></span><span style="display:flex;"><span>gini_classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gini&#34;</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>entropy_classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, criterion<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;entropy&#34;</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># lists to store variables to pass to the &#34;magic&#34; function</span>
+</span></span><span style="display:flex;"><span>classifiers <span style="color:#f92672">=</span> [gini_classifier,entropy_classifier]
+</span></span><span style="display:flex;"><span>train_accuracies <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>array([]),np<span style="color:#f92672">.</span>array([])]
+</span></span><span style="display:flex;"><span>test_accuracies <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>array([]),np<span style="color:#f92672">.</span>array([])]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># in this iteration we are interested only in the test results</span>
+</span></span><span style="display:flex;"><span>_,test_results <span style="color:#f92672">=</span> magic(classifiers,train_accuracies,test_accuracies)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Accuracy of gini classifier: </span><span style="color:#e6db74">{</span>(np<span style="color:#f92672">.</span>mean(test_results[<span style="color:#ae81ff">0</span>]))<span style="color:#e6db74">}</span><span style="color:#e6db74">)</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Accuracy of entropy classifier: </span><span style="color:#e6db74">{</span>(np<span style="color:#f92672">.</span>mean(test_results[<span style="color:#ae81ff">1</span>]))<span style="color:#e6db74">}</span><span style="color:#e6db74">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> Accuracy of gini classifier: <span style="color:#ae81ff">0.922092384769539</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> Accuracy of entropy classifier: <span style="color:#ae81ff">0.9227925851703407</span>
+</span></span></code></pre></div><p>The results listed above shows that, even if the difference is not much (0.07%), the classifier using the entropy function as a criterion for the split outperforms the one using the gini function. It is interesting to note that the gini criterion is the one used by default for decision trees in sklearn.</p>
 <h2 id="tuning-n_estimators">Tuning: n_estimators</h2>
 <p>Now we are going to tune <code>n_estimators</code>, which represents the total number of trees in the forest. Having a high number of trees usually has the advantage of increasing the overall accuracy of the model, however it will make the training phase slower due to the fact that a higher number of trees needs to be trained.
 By default, <code>n_estimators</code> is set to 100 (before version 0.22 of sklearn it was 10).</p>
 <p>In the following example, we will create and evaluate 8 different classifiers having <code>n_estimators</code> set to 1, 3, 6, 10, 25, 50, 75, 100, 125 and 150.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># number of estimators to use in the 10 classifiers</span>
-n_estimators <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">75</span>,<span style="color:#ae81ff">100</span>,<span style="color:#ae81ff">125</span>,<span style="color:#ae81ff">150</span>]
-
-<span style="color:#75715e"># lists to use for the &#34;magic&#34; function</span>
-classifiers <span style="color:#f92672">=</span> []
-train_accuracies <span style="color:#f92672">=</span> []
-test_accuracies <span style="color:#f92672">=</span> []
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> n_estimators:
-
-    <span style="color:#75715e"># create classifier with appropriate n_estimators</span>
-    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, n_estimators<span style="color:#f92672">=</span>i)
-    classifiers<span style="color:#f92672">.</span>append(classifier)
-
-    <span style="color:#75715e"># metrics to evaluate the classifier</span>
-    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-
-<span style="color:#75715e"># let the magic happen</span>
-train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
-</code></pre></div><p>The <code>magic</code> function returned two lists containing the accuracy for every iteration of k-fold for every classifier; now the average of the accuracy for each random forest will be taken, in order to show the results in a chart using <a href="https://matplotlib.org/">matplotlib</a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
-avg_train<span style="color:#f92672">=</span>[]
-avg_test<span style="color:#f92672">=</span>[]
-
-<span style="color:#75715e"># loop for every classifier we created</span>
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
-
-    <span style="color:#75715e"># average the results for every classifier</span>
-    avg_train<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
-    avg_test<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
-
-<span style="color:#75715e"># blue line for train AUC</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(n_estimators, avg_train, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
-<span style="color:#75715e"># red line for test A=UC</span>
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(n_estimators, avg_test, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
-
-<span style="color:#75715e"># print chart</span>
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;n_estimators&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/nestimators.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># number of estimators to use in the 10 classifiers</span>
+</span></span><span style="display:flex;"><span>n_estimators <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">75</span>,<span style="color:#ae81ff">100</span>,<span style="color:#ae81ff">125</span>,<span style="color:#ae81ff">150</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># lists to use for the &#34;magic&#34; function</span>
+</span></span><span style="display:flex;"><span>classifiers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>train_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> n_estimators:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># create classifier with appropriate n_estimators</span>
+</span></span><span style="display:flex;"><span>    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, n_estimators<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>    classifiers<span style="color:#f92672">.</span>append(classifier)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># metrics to evaluate the classifier</span>
+</span></span><span style="display:flex;"><span>    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># let the magic happen</span>
+</span></span><span style="display:flex;"><span>train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
+</span></span></code></pre></div><p>The <code>magic</code> function returned two lists containing the accuracy for every iteration of k-fold for every classifier; now the average of the accuracy for each random forest will be taken, in order to show the results in a chart using <a href="https://matplotlib.org/">matplotlib</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
+</span></span><span style="display:flex;"><span>avg_train<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>avg_test<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># loop for every classifier we created</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># average the results for every classifier</span>
+</span></span><span style="display:flex;"><span>    avg_train<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
+</span></span><span style="display:flex;"><span>    avg_test<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># blue line for train AUC</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(n_estimators, avg_train, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># red line for test A=UC</span>
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(n_estimators, avg_test, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># print chart</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;n_estimators&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/nestimators.png"
          alt="Performance of the model when tuning n_estimators"/><figcaption>
             <p>Performance of the model when tuning n_estimators</p>
         </figcaption>
@@ -341,48 +341,48 @@ plt<span style="color:#f92672">.</span>show()
 <h2 id="tuning-max_depth">Tuning: max_depth</h2>
 <p><code>max_depth</code> is used to specify the maximum depth of each tree in the forest. As we saw in our previous analysis, the deeper the tree, the more splits it has; thus it will be able to capure more information about the data.</p>
 <p>The ranges of the <code>max_depth</code> for our analysis will be between 1 and 32. As in the previous paragraph, a line chart will be used to show the results.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># max depths to use in the classifiers</span>
-list_max_depth <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#75715e"># lists to use in the magic function</span>
-classifiers <span style="color:#f92672">=</span> []
-train_accuracies <span style="color:#f92672">=</span> []
-test_accuracies <span style="color:#f92672">=</span> []
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_max_depth:
-
-    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
-    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, max_depth<span style="color:#f92672">=</span>i)
-    classifiers<span style="color:#f92672">.</span>append(classifier)
-
-    <span style="color:#75715e"># metrics to evaluate the classifier</span>
-    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-
-<span style="color:#75715e"># let the magic happen</span>
-train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
-
-<span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
-avg_training<span style="color:#f92672">=</span>[]
-avg_testing<span style="color:#f92672">=</span>[]
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
-
-    <span style="color:#75715e"># average the results for every classifier</span>
-    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
-    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
-
-<span style="color:#75715e"># blue line for train AUC</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_depth, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
-<span style="color:#75715e"># red line for test AUC</span>
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_depth, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
-
-<span style="color:#75715e"># print chart</span>
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;max_depths&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/maxdepth.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># max depths to use in the classifiers</span>
+</span></span><span style="display:flex;"><span>list_max_depth <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># lists to use in the magic function</span>
+</span></span><span style="display:flex;"><span>classifiers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>train_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_max_depth:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
+</span></span><span style="display:flex;"><span>    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, max_depth<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>    classifiers<span style="color:#f92672">.</span>append(classifier)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># metrics to evaluate the classifier</span>
+</span></span><span style="display:flex;"><span>    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># let the magic happen</span>
+</span></span><span style="display:flex;"><span>train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
+</span></span><span style="display:flex;"><span>avg_training<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>avg_testing<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># average the results for every classifier</span>
+</span></span><span style="display:flex;"><span>    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
+</span></span><span style="display:flex;"><span>    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># blue line for train AUC</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_depth, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># red line for test AUC</span>
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_depth, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># print chart</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;max_depths&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/maxdepth.png"
          alt="Performance of the model when tuning max_depth"/><figcaption>
             <p>Performance of the model when tuning max_depth</p>
         </figcaption>
@@ -393,45 +393,45 @@ plt<span style="color:#f92672">.</span>show()
 <h2 id="tuning-min_samples_split">Tuning: min_samples_split</h2>
 <p>The next parameter to be tuned is <code>min_samples_split</code>: it represents the minimum number of samples required to split a node in the trees of the forest. This parameter can be an integer (its default value is 2), but also a float: so that <code>ceil(min_samples_split * n_samples)</code> are the minimum number of samples for each split.</p>
 <p>In this experiment will train and evaluate 10 classifiers having <code>min_samples_split</code> between 0.1 and 1.0.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># min samples splits from 10% to 100%</span>
-list_min_samples_splits <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.1</span>,<span style="color:#ae81ff">1.0</span>,<span style="color:#ae81ff">10</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#75715e"># lists to use in the magic function</span>
-classifiers <span style="color:#f92672">=</span> []
-train_accuracies <span style="color:#f92672">=</span> []
-test_accuracies <span style="color:#f92672">=</span> []
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_min_samples_splits:
-
-    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
-    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, min_samples_split<span style="color:#f92672">=</span>i)
-    classifiers<span style="color:#f92672">.</span>append(classifier)
-
-    <span style="color:#75715e"># metrics to evaluate the classifier</span>
-    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-
-<span style="color:#75715e"># let the magic happen</span>
-train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
-
-<span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
-avg_training<span style="color:#f92672">=</span>[]
-avg_testing<span style="color:#f92672">=</span>[]
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
-
-    <span style="color:#75715e"># average the results for every classifier</span>
-    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
-    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
-
-<span style="color:#75715e"># print chart</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_splits, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_splits, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples splits&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/minsamplesplits.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># min samples splits from 10% to 100%</span>
+</span></span><span style="display:flex;"><span>list_min_samples_splits <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.1</span>,<span style="color:#ae81ff">1.0</span>,<span style="color:#ae81ff">10</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># lists to use in the magic function</span>
+</span></span><span style="display:flex;"><span>classifiers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>train_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_min_samples_splits:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
+</span></span><span style="display:flex;"><span>    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, min_samples_split<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>    classifiers<span style="color:#f92672">.</span>append(classifier)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># metrics to evaluate the classifier</span>
+</span></span><span style="display:flex;"><span>    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># let the magic happen</span>
+</span></span><span style="display:flex;"><span>train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
+</span></span><span style="display:flex;"><span>avg_training<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>avg_testing<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># average the results for every classifier</span>
+</span></span><span style="display:flex;"><span>    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
+</span></span><span style="display:flex;"><span>    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># print chart</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_splits, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_splits, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples splits&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/minsamplesplits.png"
          alt="Performance of the model when tuning min_samples_split"/><figcaption>
             <p>Performance of the model when tuning min_samples_split</p>
         </figcaption>
@@ -441,45 +441,45 @@ plt<span style="color:#f92672">.</span>show()
 <h2 id="tuning-min_samples_leaf">Tuning: min_samples_leaf</h2>
 <p>Similarly to the previous parameter, <code>min_samples_leaf</code> it is used to specify the minimum number of samples which are required to be in a leaf of the trees in our forest. Again, this parameter can be an integer (also in this case its default value is 2) and a float, so that <code>ceil(min_samples_leaf * n_samples)</code> are the minimum number of samples for each node.</p>
 <p>The classifiers which are defined in the following lines have <code>min_samples_split</code> between 0.05 and 0.5 (maximum number allowed).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># min samples leaf from 5% to 50%</span>
-list_min_samples_leaf <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.05</span>,<span style="color:#ae81ff">0.5</span>,<span style="color:#ae81ff">10</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-
-<span style="color:#75715e"># lists to use in the magic function</span>
-classifiers <span style="color:#f92672">=</span> []
-train_accuracies <span style="color:#f92672">=</span> []
-test_accuracies <span style="color:#f92672">=</span> []
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_min_samples_leaf:
-
-    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
-    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, min_samples_leaf<span style="color:#f92672">=</span>i)
-    classifiers<span style="color:#f92672">.</span>append(classifier)
-
-    <span style="color:#75715e"># metrics to evaluate the classifier</span>
-    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-
-<span style="color:#75715e"># let the magic happen</span>
-train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
-
-<span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
-avg_training<span style="color:#f92672">=</span>[]
-avg_testing<span style="color:#f92672">=</span>[]
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
-
-    <span style="color:#75715e"># average the results for every classifier</span>
-    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
-    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
-
-<span style="color:#75715e"># print chart</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_leaf, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_leaf, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples leaf&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/minsamplesleaf.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># min samples leaf from 5% to 50%</span>
+</span></span><span style="display:flex;"><span>list_min_samples_leaf <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0.05</span>,<span style="color:#ae81ff">0.5</span>,<span style="color:#ae81ff">10</span>,endpoint<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># lists to use in the magic function</span>
+</span></span><span style="display:flex;"><span>classifiers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>train_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_min_samples_leaf:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
+</span></span><span style="display:flex;"><span>    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, min_samples_leaf<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>    classifiers<span style="color:#f92672">.</span>append(classifier)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># metrics to evaluate the classifier</span>
+</span></span><span style="display:flex;"><span>    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># let the magic happen</span>
+</span></span><span style="display:flex;"><span>train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
+</span></span><span style="display:flex;"><span>avg_training<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>avg_testing<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># average the results for every classifier</span>
+</span></span><span style="display:flex;"><span>    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
+</span></span><span style="display:flex;"><span>    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># print chart</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_leaf, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_min_samples_leaf, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples leaf&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/minsamplesleaf.png"
          alt="Performance of the model when tuning min_samples_leaf"/><figcaption>
             <p>Performance of the model when tuning min_samples_leaf</p>
         </figcaption>
@@ -489,52 +489,52 @@ plt<span style="color:#f92672">.</span>show()
 <h2 id="tuning-max_features">Tuning: max_features</h2>
 <p>We will conclude this analysis of the random forest classifier with <code>max_features</code>. This parameter represents the number of features which are going to be considered when looking for the best possible split.</p>
 <p>Its default value is <em>None</em>, so that <code>max_features</code> is set to the total number of features. Considering that our dataset has 10 features for every sample, we will train and test 10 classifiers having <code>max_features</code> between 1 and 10.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># max features from 1 to 10</span>
-list_max_features <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">11</span>)
-
-<span style="color:#75715e"># lists to use in the magic function</span>
-classifiers <span style="color:#f92672">=</span> []
-train_accuracies <span style="color:#f92672">=</span> []
-test_accuracies <span style="color:#f92672">=</span> []
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_max_features:
-
-    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
-    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, max_features<span style="color:#f92672">=</span>i)
-    classifiers<span style="color:#f92672">.</span>append(classifier)
-
-    <span style="color:#75715e"># metrics to evaluate the classifier</span>
-    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
-
-<span style="color:#75715e"># let the magic happen</span>
-train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
-
-<span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
-avg_training<span style="color:#f92672">=</span>[]
-avg_testing<span style="color:#f92672">=</span>[]
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
-
-    <span style="color:#75715e"># average the results for every classifier</span>
-    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
-    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
-
-<span style="color:#75715e"># print chart</span>
-line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_features, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
-line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_features, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
-plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
-plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
-plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples leaf&#39;</span>)
-plt<span style="color:#f92672">.</span>show()
-</code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/maxfeatures.png"
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># max features from 1 to 10</span>
+</span></span><span style="display:flex;"><span>list_max_features <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">11</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># lists to use in the magic function</span>
+</span></span><span style="display:flex;"><span>classifiers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>train_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>test_accuracies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list_max_features:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># create classifier with appropriate max_depth</span>
+</span></span><span style="display:flex;"><span>    classifier <span style="color:#f92672">=</span> RandomForestClassifier(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, max_features<span style="color:#f92672">=</span>i)
+</span></span><span style="display:flex;"><span>    classifiers<span style="color:#f92672">.</span>append(classifier)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># metrics to evaluate the classifier</span>
+</span></span><span style="display:flex;"><span>    train_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>    test_accuracies<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>array([]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># let the magic happen</span>
+</span></span><span style="display:flex;"><span>train_results,test_results <span style="color:#f92672">=</span> magic(classifiers,test_accuracies,train_accuracies)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># store the averages of the classifiers for training and testing</span>
+</span></span><span style="display:flex;"><span>avg_training<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>avg_testing<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,len(train_results)):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># average the results for every classifier</span>
+</span></span><span style="display:flex;"><span>    avg_training<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_results[i]))
+</span></span><span style="display:flex;"><span>    avg_testing<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_results[i]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># print chart</span>
+</span></span><span style="display:flex;"><span>line1, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_features, avg_training, <span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Train AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>line2, <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>plot(list_max_features, avg_testing, <span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Test AUC&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(handler_map<span style="color:#f92672">=</span>{line1: HandlerLine2D(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)})
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;AUC score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;min samples leaf&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure><img src="/images/posts/ml-with-phishing/ep2/maxfeatures.png"
          alt="Performance of the model when tuning max_features"/><figcaption>
             <p>Performance of the model when tuning max_features</p>
         </figcaption>
 </figure>
 
 <p>The resulting chart shows that the accuracy of the model does not improve when increasing <code>max_features</code> and it causes an overfitting for all the values in the experiment.</p>
-<p>A similar result was obtained when tuning the same parameter for the decision tree. As stated in the sklearn documentation of random forest classifiers: <em>&lsquo;the search for a split does not stop until at least one valid partition of the node samples is found, even if it requires to effectively inspect more than max_features features&rsquo;</em>.</p>
+<p>A similar result was obtained when tuning the same parameter for the decision tree. As stated in the sklearn documentation of random forest classifiers: <em>&rsquo;the search for a split does not stop until at least one valid partition of the node samples is found, even if it requires to effectively inspect more than max_features features&rsquo;</em>.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this post we conducted an experiment to evaluate how some of the parameters available to tune random forest classifiers affect the performance of the model when trying to detect a phishing page. The parameters explored were: <code>criterion</code>, <code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code> and <code>max_features</code>.</p>
 <p>I will mention again that this is not the proper way of tuning the parameters for a random forest: the best approach would be to extend parameters search using <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html">RandomizedSearchCV</a> provided by sklearn.</p>
@@ -632,7 +632,7 @@ plt<span style="color:#f92672">.</span>show()
     
       
         
-        <script src="/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
+        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
       
     
 
