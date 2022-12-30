@@ -2,116 +2,119 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/</loc>
+    <loc>https://andpalmier.com/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/android/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/categories/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/posts/stalkerware-analysis/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/malware/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/categories/malware/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/posts/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/stalkerware/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/</loc>
+    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/ingbank/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/bank/</loc>
+    <loc>https://andpalmier.com/tags/phishing/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/</loc>
+    <loc>https://andpalmier.com/categories/phishing/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/phishing/</loc>
+    <loc>https://andpalmier.com/posts/phishing-findings-3/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/phishing/</loc>
+    <loc>https://andpalmier.com/tags/phishingkit/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/phishing-findings-3/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/phishingkit/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/go/</loc>
+    <loc>https://andpalmier.com/tags/go/</loc>
     <lastmod>2021-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/flooding-phishing-kits/</loc>
+    <loc>https://andpalmier.com/posts/flooding-phishing-kits/</loc>
     <lastmod>2021-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/emotet/</loc>
+    <loc>https://andpalmier.com/tags/emotet/</loc>
     <lastmod>2020-10-12T10:33:45+02:00</lastmod>
   </url><url>
-    <loc>/posts/emotet-php-maldoc/</loc>
+    <loc>https://andpalmier.com/posts/emotet-php-maldoc/</loc>
     <lastmod>2020-10-12T10:33:45+02:00</lastmod>
   </url><url>
-    <loc>/tags/malware/</loc>
+    <loc>https://andpalmier.com/tags/threat-analysis/</loc>
     <lastmod>2020-10-12T10:33:45+02:00</lastmod>
   </url><url>
-    <loc>/categories/malware/</loc>
-    <lastmod>2020-10-12T10:33:45+02:00</lastmod>
-  </url><url>
-    <loc>/tags/threat-analysis/</loc>
-    <lastmod>2020-10-12T10:33:45+02:00</lastmod>
-  </url><url>
-    <loc>/categories/go/</loc>
+    <loc>https://andpalmier.com/posts/poc-goransom/</loc>
     <lastmod>2020-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/poc-goransom/</loc>
-    <lastmod>2020-07-29T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/ransomware/</loc>
-    <lastmod>2020-07-29T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/linkedin/</loc>
+    <loc>https://andpalmier.com/tags/linkedin/</loc>
     <lastmod>2020-07-08T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/phishing-findings-2/</loc>
+    <loc>https://andpalmier.com/posts/phishing-findings-2/</loc>
     <lastmod>2020-07-08T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/machine-learning/</loc>
+    <loc>https://andpalmier.com/tags/machine-learning/</loc>
     <lastmod>2020-06-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/ml-with-phishing-ep2/</loc>
+    <loc>https://andpalmier.com/posts/ml-with-phishing-ep2/</loc>
     <lastmod>2020-06-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/random-forest/</loc>
+    <loc>https://andpalmier.com/tags/random-forest/</loc>
     <lastmod>2020-06-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/office365/</loc>
+    <loc>https://andpalmier.com/tags/office365/</loc>
     <lastmod>2020-05-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/phishing-findings-1/</loc>
+    <loc>https://andpalmier.com/tags/outlook/</loc>
     <lastmod>2020-05-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/decision-tree/</loc>
+    <loc>https://andpalmier.com/posts/phishing-findings-1/</loc>
+    <lastmod>2020-05-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/decision-tree/</loc>
     <lastmod>2020-05-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/ml-with-phishing-ep1/</loc>
+    <loc>https://andpalmier.com/posts/ml-with-phishing-ep1/</loc>
     <lastmod>2020-05-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/analysis/</loc>
+    <loc>https://andpalmier.com/tags/exercises/</loc>
     <lastmod>2020-04-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/lab/</loc>
+    <loc>https://andpalmier.com/tags/malware-analysis/</loc>
     <lastmod>2020-04-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/practical-malware-lab1/</loc>
+    <loc>https://andpalmier.com/posts/practical-malware-lab1/</loc>
     <lastmod>2020-04-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/android/</loc>
+    <loc>https://andpalmier.com/posts/fdroid-apps/</loc>
     <lastmod>2020-04-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/fdroid/</loc>
+    <loc>https://andpalmier.com/tags/fdroid/</loc>
     <lastmod>2020-04-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/foss/</loc>
+    <loc>https://andpalmier.com/tags/foss/</loc>
     <lastmod>2020-04-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/fdroid-apps/</loc>
+    <loc>https://andpalmier.com/categories/recommendations/</loc>
     <lastmod>2020-04-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/recommendations/</loc>
-    <lastmod>2020-04-05T00:00:00+00:00</lastmod>
+    <loc>https://andpalmier.com/about/</loc>
   </url><url>
-    <loc>/about/</loc>
-  </url><url>
-    <loc>/series/</loc>
+    <loc>https://andpalmier.com/series/</loc>
   </url>
 </urlset>

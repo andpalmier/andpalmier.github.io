@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on andpalmier</title>
-    <link>/posts/</link>
+    <link>https://andpalmier.com/posts/</link>
     <description>Recent content in Posts on andpalmier</description>
+    <image>
+      <url>https://andpalmier.com/papermod-cover.png</url>
+      <link>https://andpalmier.com/papermod-cover.png</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dissecting an Android stalkerware</title>
+      <link>https://andpalmier.com/posts/stalkerware-analysis/</link>
+      <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/posts/stalkerware-analysis/</guid>
+      <description>Analysis of an Italian stalkerware for Android</description>
+    </item>
+    
     <item>
       <title>Phishing findings, campaign #3: ING bank</title>
-      <link>/posts/phishing-findings-3/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-3/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-3/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning I found this kit while analyzing the phishing sites reported by @illegalfawn. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-3/</guid>
+      <description>Analysis of a phishing kit targeting ING Bank</description>
     </item>
     
     <item>
       <title>PhishFlood: a poc for flooding phishing kits</title>
-      <link>/posts/flooding-phishing-kits/</link>
+      <link>https://andpalmier.com/posts/flooding-phishing-kits/</link>
       <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>/posts/flooding-phishing-kits/</guid>
-      <description>In this a blog post we are going to see how to flood a phishing kit with fake data.</description>
+      <guid>https://andpalmier.com/posts/flooding-phishing-kits/</guid>
+      <description>Flooding a phishing kit with fake data to make it harder for threat actors</description>
     </item>
     
     <item>
       <title>Emotet infection from PHP: generation of a malicious doc</title>
-      <link>/posts/emotet-php-maldoc/</link>
+      <link>https://andpalmier.com/posts/emotet-php-maldoc/</link>
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
       
-      <guid>/posts/emotet-php-maldoc/</guid>
+      <guid>https://andpalmier.com/posts/emotet-php-maldoc/</guid>
       <description>Analysis of a PHP file used to generate a document containing malicious macros for Emotet infection</description>
     </item>
     
     <item>
       <title>Proof of concept of a ransowmare in Go</title>
-      <link>/posts/poc-goransom/</link>
+      <link>https://andpalmier.com/posts/poc-goransom/</link>
       <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/poc-goransom/</guid>
-      <description>This is a blog post about my last project: &lt;a href=&#34;https://github.com/andpalmier/goransom&#34;&gt;goransom&lt;/a&gt;, which is a proof of concept for a simple ransowmare written in Go.</description>
+      <guid>https://andpalmier.com/posts/poc-goransom/</guid>
+      <description>Writing a super simple proof of concept for a ransowmare in Go</description>
     </item>
     
     <item>
       <title>Phishing findings, campaign #2: content.zip (LinkedIn)</title>
-      <link>/posts/phishing-findings-2/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-2/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-2/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning The kit was created to steal LinkedIn credentials:
-How this phishing kit looks like when deployed
-At a first look, we can notice some characteristics of this page which makes it different from the usual fake login:</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-2/</guid>
+      <description>Analysis of a phishing kit targeting LinkedIn users</description>
     </item>
     
     <item>
-      <title>Machine Learning and phishing, pt.2: random forest</title>
-      <link>/posts/ml-with-phishing-ep2/</link>
+      <title>Machine Learning and phishing, pt. 2: Random Forest</title>
+      <link>https://andpalmier.com/posts/ml-with-phishing-ep2/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/ml-with-phishing-ep2/</guid>
-      <description>I started hunting and reporting phishing pages on Twitter, follow me here if you are interested! After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
-Introduction In the last post of this series, we analyzed how some of the parameters of a decision tree could improve the accuracy of the model when classifying phishing sites.</description>
+      <guid>https://andpalmier.com/posts/ml-with-phishing-ep2/</guid>
+      <description>Tuning the Random Forest algorithm to detect phishing pages</description>
     </item>
     
     <item>
       <title>Phishing findings, campaign #1: u.zip (Office365/Outlook)</title>
-      <link>/posts/phishing-findings-1/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-1/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-1/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning Here is my tweet containing some information about this instance of the kit:
-#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/
-exf: macdon161@gmail
-reg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)
-🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic.</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-1/</guid>
+      <description>Analysis of a phishing kit targeting Outlook and Office365 users</description>
     </item>
     
     <item>
-      <title>Machine Learning and phishing, pt.1: decision tree</title>
-      <link>/posts/ml-with-phishing-ep1/</link>
+      <title>Machine Learning and phishing, pt. 1: Decision Trees</title>
+      <link>https://andpalmier.com/posts/ml-with-phishing-ep1/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/ml-with-phishing-ep1/</guid>
-      <description>Last week I started hunting and reporting phishing websites on Twitter (follow me here if you are interested). After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
-In this series of posts I am going to use a smaller variant of this dataset to create machine learning models which (hopefully) will be able to identify a phishing website.</description>
+      <guid>https://andpalmier.com/posts/ml-with-phishing-ep1/</guid>
+      <description>Tuning the Decision Trees algorithm to detect phishing pages</description>
     </item>
     
     <item>
       <title>Practical malware analysis: solutions for Lab 1</title>
-      <link>/posts/practical-malware-lab1/</link>
+      <link>https://andpalmier.com/posts/practical-malware-lab1/</link>
       <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/practical-malware-lab1/</guid>
-      <description>I am trying to acquire some knowledge on malware analysis by using &amp;lsquo;Practical Malware Analysis&amp;rsquo; (by Sikorski, Michael, and Andrew Honig, 2012). I will publish my solutions of the exercises as soon as I complete them; here you can find all the executables for the labs.
-NOTE: I will try to use Linux utilities (such as pev, wrestool and Detect It Easy) instead of the Windows tools which are mentioned in the book.</description>
+      <guid>https://andpalmier.com/posts/practical-malware-lab1/</guid>
+      <description>Solutions for the first lab of &amp;lsquo;Practical malware analysis&amp;rsquo;</description>
     </item>
     
     <item>
-      <title>My F-Droid apps recommendations</title>
-      <link>/posts/fdroid-apps/</link>
+      <title>F-Droid apps you will find useful</title>
+      <link>https://andpalmier.com/posts/fdroid-apps/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/fdroid-apps/</guid>
-      <description>List of my favourite f-droid apps</description>
+      <guid>https://andpalmier.com/posts/fdroid-apps/</guid>
+      <description>Discussing the F-Droid apps I use everyday</description>
     </item>
     
   </channel>

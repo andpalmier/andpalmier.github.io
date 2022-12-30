@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Dissecting an Android stalkerware | andpalmier</title>
+<meta name="keywords" content="malware, android, stalkerware">
+<meta name="description" content="Analysis of an Italian stalkerware for Android">
+<meta name="author" content="">
+<link rel="canonical" href="https://andpalmier.com/posts/stalkerware-analysis/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3f372934d1c1362b71cc19fea0df71fd2f6c0538b2e002dcd947350384804cad.css" integrity="sha256-PzcpNNHBNitxzBn&#43;oN9x/S9sBTiy4ALc2Uc1A4SATK0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://andpalmier.com/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://andpalmier.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://andpalmier.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://andpalmier.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://andpalmier.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Dissecting an Android stalkerware" />
+<meta property="og:description" content="Analysis of an Italian stalkerware for Android" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://andpalmier.com/posts/stalkerware-analysis/" /><meta property="og:image" content="https://andpalmier.com/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-12-20T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Dissecting an Android stalkerware"/>
+<meta name="twitter:description" content="Analysis of an Italian stalkerware for Android"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://andpalmier.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Dissecting an Android stalkerware",
+      "item": "https://andpalmier.com/posts/stalkerware-analysis/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Dissecting an Android stalkerware",
+  "name": "Dissecting an Android stalkerware",
+  "description": "Analysis of an Italian stalkerware for Android",
+  "keywords": [
+    "malware", "android", "stalkerware"
+  ],
+  "articleBody": " Picture from the Hacker News\nWhat is stalkerware? Stalkerware is a type of malicious software that is designed to track and monitor someone’s digital activity without their knowledge or consent. This type of software is often used by individuals who want to spy on their partners or children, or by employers who want to monitor the activity of their employees. Stalkerware can be used to track a wide range of digital activity, including web searches, geolocation, text messages and chats, photos, voice calls, and more. The use of stalkerware is generally considered unethical and may also be illegal, as it violates the privacy of the targeted individual.\nThese apps are often distributed as paid services outside of the Google Play Store, as Google’s Developer Program Policy prohibits the distribution of apps that collect and transmit personal or sensitive data from a device without adequate notice or consent (Developer Program Policy: September 16, 2020 announcement).\nIn this post, we will be focusing on a specific Android sample which was developed for the Italian market, as it was advertised in a website in Italian and the code of the sample contains numerous Italian expressions.\nThe website The app is described on the website as a tool for “secretly spying Android phones without being noticed by the owner of the smartphone”. The company behind the app claims to be active in 24 countries around the world, with headquarters in Europe, New Zealand, Brazil, and Canada.\nThe website of the app includes an End-User License Agreement (EULA) stating that the app should only be installed on devices owned by the user, and it also requires the user to notify any person using a device with the software installed, or any other person with the right to access a monitored account, of the presence of the software.\n‘End-User License Agreement’ from the website of the app. The highlighted section roughly translates to ‘you also agree to notify on the presence of the software any person using a device with the software installed, or any other person with the right to access a monitored account’.\nHowever, according to the company’s website, the most common reason that clients use their stalkerware service is for “relationship cheating” with 40% of respondents citing this as their motivation; 32% of respondents said that they were using the service to monitor their minor children, and 11% cited “personal curiosity, no real reason”.\n‘Reasons for using the spy app’ from the website of the app\nThe licensing model for this stalkerware app includes a free trial of 3 days, during which users have access to all of the features of the app and the online panel for viewing the data captured from the device. After the free trial expires, users must pay a fee of €22 per month to continue using the service. This fee can be paid via PayPal or credit card, after registering in the admin panel of the website.\nFeatures The list of features advertised include the ability to extract WhatsApp audios, pictures, and videos, access all media files on the phone, record calls and ambient audio, record the screen, report on notifications received, list installed apps, and track the phone’s location. The website of the app also claims that it is “invisible” to the user of the phone and to many antivirus solutions.\nTo use this stalkerware app, the user must have physical access to the victim’s phone and enable the installation of “unknown apps” from the Android settings. This process can be a bit tedious for non-experienced users, so the website provides various guides and short videos to help users download and install the app on different Android devices and access the panel to view the stolen information.\nAnalysis of the sample The apk sample can be downloaded directly from the website. At time of writing, the sample is not listed in VirusTotal, but we can use a small tool I wrote called apkingo to gather some information on the app:\nApp name:\tX Android Antivirus * General info PackageName:\tcom.vitefa.fosupevilucugo Version:\t1.0 MainActivity:\tcom.vitefa.fosupevilucugo.MainActivity MinimumSdk:\t22 (Android 5.1) TargetSdk:\t31 (Android 12) * Hash values Md5:\t67f5f3b3c858453fdc0c901d3f09f985 Sha1:\t86504d29d3d5a852e8e37c951c049917a9b11907 Sha256:\t5ab4ff9f8028c02cbb0886922142227732cfe3aaec99af1a5af2ddb43b0fb5a8 * Permissions android.permission.ACCESS_NETWORK_STATE android.permission.READ_SYNC_STATS android.permission.WRITE_SYNC_SETTINGS android.permission.AUTHENTICATE_ACCOUNTS android.permission.READ_SYNC_SETTINGS android.permission.ACCESS_COARSE_LOCATION android.permission.ACCESS_FINE_LOCATION android.permission.ACCESS_LOCATION_EXTRA_COMMANDS android.permission.ACCESS_NOTIFICATION_POLICY android.permission.ACCESS_WIFI_STATE android.permission.ACCESS_WIMAX_STATE android.permission.ACTION_MANAGE_OVERLAY_PERMISSION android.permission.BODY_SENSORS android.permission.BROADCAST_STICKY android.permission.CALL_PHONE android.permission.CAMERA android.permission.CHANGE_NETWORK_STATE android.permission.CHANGE_WIFI_MULTICAST_STATE android.permission.CHANGE_WIFI_STATE android.permission.CHANGE_WIMAX_STATE android.permission.DISABLE_KEYGUARD android.permission.GET_ACCOUNTS android.permission.INTERNET android.permission.MANAGE_ACCOUNTS android.permission.MODIFY_AUDIO_SETTINGS android.permission.PERSISTENT_ACTIVITY android.permission.PROCESS_OUTGOING_CALLS android.permission.PACKAGE_USAGE_STATS android.permission.READ_CELL_BROADCASTS android.permission.READ_CONTACTS android.permission.READ_EXTERNAL_STORAGE android.permission.READ_PHONE_STATE android.permission.READ_INSTALL_SESSIONS android.permission.READ_PROFILE android.permission.READ_SMS android.permission.RECEIVE_MMS android.permission.RECEIVE_SMS android.permission.RECORD_AUDIO android.permission.CAPTURE_AUDIO_OUTPUT android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS android.permission.RESTART_PACKAGES android.permission.SEND_SMS android.permission.SET_ALARM com.android.alarm.permission.SET_ALARM android.permission.USE_SIP android.permission.WAKE_LOCK android.permission.WRITE_CALENDAR android.permission.WRITE_CALL_LOG android.permission.WRITE_CONTACTS android.permission.WRITE_EXTERNAL_STORAGE android.permission.MANAGE_EXTERNAL_STORAGE android.permission.FOREGROUND_SERVICE com.donnemartin.android.fieldreporter.permission.MAPS_RECEIVE com.google.android.providers.gsf.permission.READ_GSERVICES android.permission.sec.MDM_APP_MGMT android.permission.ACCESS_BACKGROUND_LOCATION android.permission.MANAGE_OWN_CALLS android.permission.READ_CALL_LOG android.permission.ANSWER_PHONE_CALLS android.permission.USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER android.permission.READ_PRIVILEGED_PHONE_STATE android.permission.SYSTEM_ALERT_WINDOW android.permission.SCHEDULE_EXACT_ALARM android.permission.MANAGE_MEDIA android.permission.VIBRATE * Metadata no metadata found * Certificate Serial:\t2126353726 Sha1:\tf3e17dfdb98b1f7774a16967fd1d84d3d9d59389 Subject:\tC=US, O=corudagiruducodi, CN=corudagiruducodi Issuer:\tC=US, O=corudagiruducodi, CN=corudagiruducodi ValidFrom:\t09 Dec 22 13:04 UTC ValidTo:\t23 Sep 96 13:04 UTC * Play Store app not found in Play Store This sample was named like an antivirus app, in order to make the victim think it is safe.\nIcon of this sample\nOne tactic commonly used by stalkerware apps is to request a large number of permissions from the user, including access to call logs, contacts, camera, messages, and microphone. This is often done without the user’s knowledge or consent, as stalkerware apps are designed to be installed behind the user’s back.\nRandomly generated package name The package name of an Android app is used to uniquely identifies the app on the device and in the stores; usually developers choose a package name with a reference to the company developing the app or the product, but in this sample the package name is a bit odd. Downloading multiple samples of the app from the website, it is possible to note that every apk has a different package name and different certificate issuer, and both appear to be randomly generated.\nThis approach could be used for evading antivirus detections based on the package name and the hash of the apk, as well as for distinguishing between different licenses. The randomly generated package name is specified in the strings.xml file, and here are these sections for two different samples:\n",
+  "wordCount" : "2249",
+  "inLanguage": "en",
+  "datePublished": "2022-12-20T00:00:00Z",
+  "dateModified": "2022-12-20T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://andpalmier.com/posts/stalkerware-analysis/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "andpalmier",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://andpalmier.com/images/favicon-32x32.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://andpalmier.com" accesskey="h" title="andpalmier (Alt + H)">andpalmier</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://andpalmier.com/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://andpalmier.com/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Dissecting an Android stalkerware
+    </h1>
+    <div class="post-meta"><span title='2022-12-20 00:00:00 +0000 UTC'>December 20, 2022</span>&nbsp;·&nbsp;11 min
+
+</div>
+  </header> 
+  <div class="post-content"><figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/stalkerware.jpg#center"
+         alt="stalkerware"/> <figcaption>
+            <p>Picture from <a href="https://thehackernews.com/2021/05/experts-reveal-over-150-ways-to-steal.html" target="_blank" rel="noopener">the Hacker News</a></p>
+        </figcaption>
+</figure>
+
+<h2 id="what-is-stalkerware">What is stalkerware?<a hidden class="anchor" aria-hidden="true" href="#what-is-stalkerware">#</a></h2>
+<p>Stalkerware is a type of malicious software that is designed to track and monitor someone&rsquo;s digital activity without their knowledge or consent. This type of software is often used by individuals who want to spy on their partners or children, or by employers who want to monitor the activity of their employees. Stalkerware can be used to track a wide range of digital activity, including web searches, geolocation, text messages and chats, photos, voice calls, and more. The use of stalkerware is generally considered unethical and may also be illegal, as it violates the privacy of the targeted individual.</p>
+<p>These apps are often distributed as paid services outside of the Google Play Store, as Google&rsquo;s Developer Program Policy prohibits the distribution of apps that collect and transmit personal or sensitive data from a device without adequate notice or consent (<a href="https://support.google.com/googleplay/android-developer/answer/10065487" target="_blank" rel="noopener">Developer Program Policy: September 16, 2020 announcement</a>).</p>
+<p>In this post, we will be focusing on a specific Android sample which was developed for the Italian market, as it was advertised in a website in Italian and the code of the sample contains numerous Italian expressions.</p>
+<h2 id="the-website">The website<a hidden class="anchor" aria-hidden="true" href="#the-website">#</a></h2>
+<p>The app is described on the website as a tool for &ldquo;secretly spying Android phones without being noticed by the owner of the smartphone&rdquo;. The company behind the app claims to be active in 24 countries around the world, with headquarters in Europe, New Zealand, Brazil, and Canada.</p>
+<p>The website of the app includes an End-User License Agreement (EULA) stating that the app should only be installed on devices owned by the user, and it also requires the user to notify any person using a device with the software installed, or any other person with the right to access a monitored account, of the presence of the software.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/eula.png#center"
+         alt="&#39;End-User License agreement&#39; from the website of the app"/> <figcaption>
+            <p>&lsquo;End-User License Agreement&rsquo; from the website of the app. The highlighted section roughly translates to &lsquo;<em>you also agree to notify on the presence of the software any person using a device with the software installed, or any other person with the right to access a monitored account</em>&rsquo;.</p>
+        </figcaption>
+</figure>
+
+<p>However, according to the company&rsquo;s website, the most common reason that clients use their stalkerware service is for &ldquo;relationship cheating&rdquo; with 40% of respondents citing this as their motivation; 32% of respondents said that they were using the service to monitor their minor children, and 11% cited &ldquo;personal curiosity, no real reason&rdquo;.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/reasons.png#center"
+         alt="&#39;Reasons for using the spy app&#39; from the website of the app"/> <figcaption>
+            <p>&lsquo;Reasons for using the spy app&rsquo; from the website of the app</p>
+        </figcaption>
+</figure>
+
+<p>The licensing model for this stalkerware app includes a free trial of 3 days, during which users have access to all of the features of the app and the online panel for viewing the data captured from the device. After the free trial expires, users must pay a fee of €22 per month to continue using the service. This fee can be paid via PayPal or credit card, after registering in the admin panel of the website.</p>
+<h2 id="features">Features<a hidden class="anchor" aria-hidden="true" href="#features">#</a></h2>
+<p>The list of features advertised include the ability to extract WhatsApp audios, pictures, and videos, access all media files on the phone, record calls and ambient audio, record the screen, report on notifications received, list installed apps, and track the phone&rsquo;s location. The website of the app also claims that it is &ldquo;invisible&rdquo; to the user of the phone and to many antivirus solutions.</p>
+<p>To use this stalkerware app, the user must have physical access to the victim&rsquo;s phone and enable the installation of &ldquo;unknown apps&rdquo; from the Android settings. This process can be a bit tedious for non-experienced users, so the website provides various guides and short videos to help users download and install the app on different Android devices and access the panel to view the stolen information.</p>
+<h2 id="analysis-of-the-sample">Analysis of the sample<a hidden class="anchor" aria-hidden="true" href="#analysis-of-the-sample">#</a></h2>
+<p>The apk sample can be downloaded directly from the website. At time of writing, the sample is not listed in VirusTotal, but we can use a small tool I wrote called <a href="https://github.com/andpalmier/apkingo" target="_blank" rel="noopener">apkingo</a> to gather some information on the app:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">App name:	X Android Antivirus
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* General info
+</span></span><span class="line"><span class="cl">PackageName:	com.vitefa.fosupevilucugo
+</span></span><span class="line"><span class="cl">Version:	1.0
+</span></span><span class="line"><span class="cl">MainActivity:	com.vitefa.fosupevilucugo.MainActivity
+</span></span><span class="line"><span class="cl">MinimumSdk:	22 (Android 5.1)
+</span></span><span class="line"><span class="cl">TargetSdk:	31 (Android 12)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* Hash values
+</span></span><span class="line"><span class="cl">Md5:		67f5f3b3c858453fdc0c901d3f09f985
+</span></span><span class="line"><span class="cl">Sha1:		86504d29d3d5a852e8e37c951c049917a9b11907
+</span></span><span class="line"><span class="cl">Sha256:		5ab4ff9f8028c02cbb0886922142227732cfe3aaec99af1a5af2ddb43b0fb5a8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* Permissions
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_NETWORK_STATE
+</span></span><span class="line"><span class="cl">android.permission.READ_SYNC_STATS
+</span></span><span class="line"><span class="cl">android.permission.WRITE_SYNC_SETTINGS
+</span></span><span class="line"><span class="cl">android.permission.AUTHENTICATE_ACCOUNTS
+</span></span><span class="line"><span class="cl">android.permission.READ_SYNC_SETTINGS
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_COARSE_LOCATION
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_FINE_LOCATION
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_LOCATION_EXTRA_COMMANDS
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_NOTIFICATION_POLICY
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_WIFI_STATE
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_WIMAX_STATE
+</span></span><span class="line"><span class="cl">android.permission.ACTION_MANAGE_OVERLAY_PERMISSION
+</span></span><span class="line"><span class="cl">android.permission.BODY_SENSORS
+</span></span><span class="line"><span class="cl">android.permission.BROADCAST_STICKY
+</span></span><span class="line"><span class="cl">android.permission.CALL_PHONE
+</span></span><span class="line"><span class="cl">android.permission.CAMERA
+</span></span><span class="line"><span class="cl">android.permission.CHANGE_NETWORK_STATE
+</span></span><span class="line"><span class="cl">android.permission.CHANGE_WIFI_MULTICAST_STATE
+</span></span><span class="line"><span class="cl">android.permission.CHANGE_WIFI_STATE
+</span></span><span class="line"><span class="cl">android.permission.CHANGE_WIMAX_STATE
+</span></span><span class="line"><span class="cl">android.permission.DISABLE_KEYGUARD
+</span></span><span class="line"><span class="cl">android.permission.GET_ACCOUNTS
+</span></span><span class="line"><span class="cl">android.permission.INTERNET
+</span></span><span class="line"><span class="cl">android.permission.MANAGE_ACCOUNTS
+</span></span><span class="line"><span class="cl">android.permission.MODIFY_AUDIO_SETTINGS
+</span></span><span class="line"><span class="cl">android.permission.PERSISTENT_ACTIVITY
+</span></span><span class="line"><span class="cl">android.permission.PROCESS_OUTGOING_CALLS
+</span></span><span class="line"><span class="cl">android.permission.PACKAGE_USAGE_STATS
+</span></span><span class="line"><span class="cl">android.permission.READ_CELL_BROADCASTS
+</span></span><span class="line"><span class="cl">android.permission.READ_CONTACTS
+</span></span><span class="line"><span class="cl">android.permission.READ_EXTERNAL_STORAGE
+</span></span><span class="line"><span class="cl">android.permission.READ_PHONE_STATE
+</span></span><span class="line"><span class="cl">android.permission.READ_INSTALL_SESSIONS
+</span></span><span class="line"><span class="cl">android.permission.READ_PROFILE
+</span></span><span class="line"><span class="cl">android.permission.READ_SMS
+</span></span><span class="line"><span class="cl">android.permission.RECEIVE_MMS
+</span></span><span class="line"><span class="cl">android.permission.RECEIVE_SMS
+</span></span><span class="line"><span class="cl">android.permission.RECORD_AUDIO
+</span></span><span class="line"><span class="cl">android.permission.CAPTURE_AUDIO_OUTPUT
+</span></span><span class="line"><span class="cl">android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+</span></span><span class="line"><span class="cl">android.permission.RESTART_PACKAGES
+</span></span><span class="line"><span class="cl">android.permission.SEND_SMS
+</span></span><span class="line"><span class="cl">android.permission.SET_ALARM
+</span></span><span class="line"><span class="cl">com.android.alarm.permission.SET_ALARM
+</span></span><span class="line"><span class="cl">android.permission.USE_SIP
+</span></span><span class="line"><span class="cl">android.permission.WAKE_LOCK
+</span></span><span class="line"><span class="cl">android.permission.WRITE_CALENDAR
+</span></span><span class="line"><span class="cl">android.permission.WRITE_CALL_LOG
+</span></span><span class="line"><span class="cl">android.permission.WRITE_CONTACTS
+</span></span><span class="line"><span class="cl">android.permission.WRITE_EXTERNAL_STORAGE
+</span></span><span class="line"><span class="cl">android.permission.MANAGE_EXTERNAL_STORAGE
+</span></span><span class="line"><span class="cl">android.permission.FOREGROUND_SERVICE
+</span></span><span class="line"><span class="cl">com.donnemartin.android.fieldreporter.permission.MAPS_RECEIVE
+</span></span><span class="line"><span class="cl">com.google.android.providers.gsf.permission.READ_GSERVICES
+</span></span><span class="line"><span class="cl">android.permission.sec.MDM_APP_MGMT
+</span></span><span class="line"><span class="cl">android.permission.ACCESS_BACKGROUND_LOCATION
+</span></span><span class="line"><span class="cl">android.permission.MANAGE_OWN_CALLS
+</span></span><span class="line"><span class="cl">android.permission.READ_CALL_LOG
+</span></span><span class="line"><span class="cl">android.permission.ANSWER_PHONE_CALLS
+</span></span><span class="line"><span class="cl">android.permission.USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER
+</span></span><span class="line"><span class="cl">android.permission.READ_PRIVILEGED_PHONE_STATE
+</span></span><span class="line"><span class="cl">android.permission.SYSTEM_ALERT_WINDOW
+</span></span><span class="line"><span class="cl">android.permission.SCHEDULE_EXACT_ALARM
+</span></span><span class="line"><span class="cl">android.permission.MANAGE_MEDIA
+</span></span><span class="line"><span class="cl">android.permission.VIBRATE
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* Metadata
+</span></span><span class="line"><span class="cl">no metadata found
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* Certificate
+</span></span><span class="line"><span class="cl">Serial:		2126353726
+</span></span><span class="line"><span class="cl">Sha1:		f3e17dfdb98b1f7774a16967fd1d84d3d9d59389
+</span></span><span class="line"><span class="cl">Subject:	C=US, O=corudagiruducodi, CN=corudagiruducodi
+</span></span><span class="line"><span class="cl">Issuer:		C=US, O=corudagiruducodi, CN=corudagiruducodi
+</span></span><span class="line"><span class="cl">ValidFrom:	09 Dec 22 13:04 UTC
+</span></span><span class="line"><span class="cl">ValidTo:	23 Sep 96 13:04 UTC
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* Play Store
+</span></span><span class="line"><span class="cl">app not found in Play Store
+</span></span></code></pre></div><p>This sample was named like an antivirus app, in order to make the victim think it is safe.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/icon.png#center"
+         alt="app icon"/> <figcaption>
+            <p>Icon of this sample</p>
+        </figcaption>
+</figure>
+
+<p>One tactic commonly used by stalkerware apps is to request a large number of permissions from the user, including access to call logs, contacts, camera, messages, and microphone. This is often done without the user&rsquo;s knowledge or consent, as stalkerware apps are designed to be installed behind the user&rsquo;s back.</p>
+<h3 id="randomly-generated-package-name">Randomly generated package name<a hidden class="anchor" aria-hidden="true" href="#randomly-generated-package-name">#</a></h3>
+<p>The package name of an Android app is used to uniquely identifies the app on the device and in the stores; usually developers choose a package name with a reference to the company developing the app or the product, but in this sample the package name is a bit odd. Downloading multiple samples of the app from the website, it is possible to note that every apk has a different package name and different certificate issuer, and both appear to be randomly generated.</p>
+<p>This approach could be used for evading antivirus detections based on the package name and the hash of the apk, as well as for distinguishing between different licenses. The randomly generated package name is specified in the <code>strings.xml</code> file, and here are these sections for two different samples:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&#34;ACCOUNT_TYPE&#34;</span><span class="nt">&gt;</span>com.vitefa.fosupevilucugo.sync<span class="nt">&lt;/string&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&#34;AUTORITY&#34;</span><span class="nt">&gt;</span>com.vitefa.fosupevilucugo.sync.StubProvider<span class="nt">&lt;/string&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&#34;ACCOUNT_TYPE&#34;</span><span class="nt">&gt;</span>com.babili.ribisosisubugu.sync<span class="nt">&lt;/string&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&#34;AUTORITY&#34;</span><span class="nt">&gt;</span>com.babili.ribisosisubugu.sync.StubProvider<span class="nt">&lt;/string&gt;</span>
+</span></span></code></pre></div><p>The strings <code>ACCOUNT_TYPE</code> and <code>AUTORITY</code> are referenced in the code while setting app the account of the service used to send the data to the online panel:</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/account.png#center"
+         alt="account class definition"/> <figcaption>
+            <p>Definition of the &lsquo;account&rsquo; class using <code>AUTORITY</code> and <code>ACCOUNT_TYPE</code></p>
+        </figcaption>
+</figure>
+
+<h3 id="getting-the-pin">Getting the PIN<a hidden class="anchor" aria-hidden="true" href="#getting-the-pin">#</a></h3>
+<p>Right after installing the app, the following message will be shown: <em>&ldquo;Wait 5 seconds. Some windows may appear asking for authorization, accept and confirm everything. Below is a continuous button. After clicking on it, a numeric PIN will appear. You must enter the numeric PIN in our control panel, see the installation and license activation guides on our site. By clicking the continue button below you declare that you have read and accepted all the conditions on the site.&rdquo;</em></p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/postinstallation.png#center"
+         alt="post installation message"/> <figcaption>
+            <p>A screenshot showing part of the post-installation message</p>
+        </figcaption>
+</figure>
+
+<p>The PIN appearing after this prompt must be entered in the control panel to access the data stolen from the device. To retrieve this PIN, the app first attempts to generate a fingerprint of the device by gathering hardware and software information about it, like IMEI number, manufacturer and model, screen resolution, SDK version and build ID:</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/getpinfromserver.png#center"
+         alt="gathering info on the device"/> <figcaption>
+            <p>The function <code>getPinFromServer</code> is used to gather information about the device</p>
+        </figcaption>
+</figure>
+
+<p>The information obtained are then used to call the <code>getPin</code> function, which connects to the server, submits all the details gathered, and parses the response from the server to get the PIN associated with the license:</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/getpin.png#center"
+         alt="getting the pin"/> <figcaption>
+            <p>The function <code>getPin</code> is used to retrieve the PIN from the server</p>
+        </figcaption>
+</figure>
+
+<h3 id="extracting-and-sending-media-files">Extracting and sending media files<a hidden class="anchor" aria-hidden="true" href="#extracting-and-sending-media-files">#</a></h3>
+<p>One of the major feature provided by the stalkerware app is the extraction of all the media files stored in the device, including pictures and videos from WhatsApp chats. This feature is provided by the <code>extractMedia</code> function, which is designed to access the external and internal storage of the device, and it contains a call to the <code>getMedia</code> function, which searches for media files within the specified directory and its subdirectories:</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/extractmedia.png#center"
+         alt="extracting media files"/> <figcaption>
+            <p>Content of<code>extractMedia</code> and <code>getMedia</code> functions</p>
+        </figcaption>
+</figure>
+
+<p>The <code>getMedia</code> function contains a call to <code>getFile</code>, which has the purpose of storing the name of the file found either in <code>mediaWhatsapp</code> or <code>media</code> (depending on where the file was found); both of these are SQL database used to store which files are send to the server. The function is then used to call <code>FileClientNoDelete</code> on every file.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/getfile.png#center"
+         alt="getFile function"/> <figcaption>
+            <p>Content of <code>getFile</code> function</p>
+        </figcaption>
+</figure>
+
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/sendfile.png#center"
+         alt="sendfile"/> <figcaption>
+            <p>Content of <code>FileClientNoDelete</code> and <code>sendFile</code></p>
+        </figcaption>
+</figure>
+
+<p>The class <code>FileClientNoDelete</code> describes a client which can send a file to the remote server over a socket connection. When an object of <code>FileClientNoDelete</code> is created, it establishes a socket connection with the server at the specified IP address and port, and sets the timeout value of the socket to 15 minutes. Then it calls <code>sendFile</code>, which after writing the file name, the PIN number and the file lenght to the output stream of the socket, sends the specified file to the server by reading the file in 1024-byte chunks and writing them to the output stream until the end of the file is reached.</p>
+<h3 id="screen-and-audio-recording">Screen and audio recording<a hidden class="anchor" aria-hidden="true" href="#screen-and-audio-recording">#</a></h3>
+<p>This sample extends the Android class <code>MediaProjection</code> to capture screen contents and/or record system audio.</p>
+<p>The function below is responsible for initializing, preparing, and starting the screen recording: it first retrieves the screen density of the device and initializes and prepare the media recorder by creating a <code>MediaProjectionCallback</code> instance, registering it with the media projection and creating a virtual display for the screen recording using the <code>createVirtualDisplay</code> function. Finally, it starts the media recorder and leave it working for 10 seconds, before stopping it.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/videorec.png#center"
+         alt="screen recording function"/> <figcaption>
+            <p>Function used to setup recording of the screen</p>
+        </figcaption>
+</figure>
+
+<p>A second class is used to capture audio from the device and record it to a file. The code below shows how the sample does this by creating an instance of <code>AudioRecord</code> and calling its <code>startRecording()</code> method. It then creates a new thread which will run a method called <code>writeAudioDataToFile()</code>, which will be responsible for writing the recorded audio data to a file.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/audiorec.png#center"
+         alt="audio recording function"/> <figcaption>
+            <p>Function used to setup audio recording</p>
+        </figcaption>
+</figure>
+
+<p>Another functionality of the stalkerware app is the recording of WhatsApp calls. The code below is activated during a WhatsApp call, and is able to detect the name or the number connected to the account having a call with the victim. The code then checks for a view with the resource name <code>end_call_btn</code>, and if it finds it, it calls the service <code>rCallVoip</code> to actually record the call.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/whatsapprec.png#center"
+         alt="whatspp call recording"/> <figcaption>
+            <p>Function used to record WhatsApp calls</p>
+        </figcaption>
+</figure>
+
+<h3 id="gps-location">GPS location<a hidden class="anchor" aria-hidden="true" href="#gps-location">#</a></h3>
+<p>The sample is also able to get the device&rsquo;s current location by using either GPS or the device&rsquo;s mobile network.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/getpos.png#center"
+         alt="get position of the device"/> <figcaption>
+            <p>Function used to obtain the position of the device</p>
+        </figcaption>
+</figure>
+
+<p>The function above checks if either GPS or the device&rsquo;s mobile network is enabled on the device: if one of those is enabled, it starts listening for location updates from the chosen provider. When the device&rsquo;s location changes, the method <code>onLocationChanged</code> is called to write latitute and longitude coordinates in an XML document:</p>
+<figure class="align-center ">
+    <img loading="lazy" src="/images/posts/stalkerware-analysis/locchanged.png#center"
+         alt="record device movement"/> <figcaption>
+            <p>Function called when the position of the device changes</p>
+        </figcaption>
+</figure>
+
+<h2 id="closing-remarks">Closing remarks<a hidden class="anchor" aria-hidden="true" href="#closing-remarks">#</a></h2>
+<p>In conclusion, the android stalkerware app that was analyzed is a concerning and potentially dangerous tool. It has the ability to track a person&rsquo;s location, access their messaging and call logs, and even record their phone calls without their knowledge or consent. This type of app can be used to stalk and harass individuals, and it raises serious privacy and security concerns. If you read this post and you now suspect there may be stalkerware on your device, refer to <a href="https://stopstalkerware.org/information-for-survivors/" target="_blank" rel="noopener">this article</a> from the <a href="https://stopstalkerware.org/" target="_blank" rel="noopener">Coalition Against Stalkerware</a>.</p>
+<h3 id="mitre-attck-tactics-and-techniques">Mitre ATT&amp;CK Tactics And Techniques<a hidden class="anchor" aria-hidden="true" href="#mitre-attck-tactics-and-techniques">#</a></h3>
+<p><strong>TA0011 - Command and Control</strong></p>
+<ul>
+<li>T1071 - Application Layer Protocol (<em>uses HTTPS and performs DNS lookups</em>)</li>
+<li>T1095 - Non-Application Layer Protocol (<em>performs DNS lookups</em>)</li>
+<li>T1573 - Encrypted Channel (<em>uses HTTPS</em>)</li>
+</ul>
+<p><strong>TA0030 - Defense Evasion</strong></p>
+<ul>
+<li>T1418 - Software Discovery (<em>queries a list of installed applications</em>)</li>
+<li>T1447 - Delete Device Data (<em>lists and deletes files in the same context</em>)</li>
+</ul>
+<p><strong>TA0031 - Credential Access</strong></p>
+<ul>
+<li>T1409 - Stored Application Data (<em>queries stored mail and application accounts like Gmail or WhatsApp</em>)</li>
+<li>T1412 - Capture SMS Messages (<em>monitors incoming SMS</em>)</li>
+</ul>
+<p><strong>TA0032 - Discovery</strong></p>
+<ul>
+<li>T1418 - Software Discovery (<em>queries a list of installed applications</em>)</li>
+<li>T1421 - System Network Connections Discovery (<em>checks an internet connection is available</em>)</li>
+<li>T1426 - System Information Discovery (<em>queries the unqiue device ID)</em></li>
+<li>T1430 - Location Tracking (<em>queries the phones location</em>)</li>
+</ul>
+<p><strong>TA0034 - Impact</strong></p>
+<ul>
+<li>T1447 - Delete Device Data (<em>lists and deletes files in the same context</em>)</li>
+<li>T1448 - Carrier Billing Fraud (<em>has permission to send SMS in the background</em>)</li>
+</ul>
+<p><strong>TA0035 - Collection</strong></p>
+<ul>
+<li>T1409 - Stored Application Data (<em>queries stored mail and application accounts like Gmail or WhatsApp)</em></li>
+<li>T1412 - Capture SMS Messages (<em>monitors incoming SMS</em>)</li>
+<li>T1429 - Audio Capture (<em>accesses the audio/media managers and records audio/media</em>)</li>
+<li>T1430 - Location Tracking (<em>queries the phones location</em>)</li>
+<li>T1432 - Access Contact List (<em>queries phone contact information</em>)</li>
+<li>T1433 - Access Call Log (<em>monitors incoming and outgoing Phone calls</em>)</li>
+<li>T1507 - Network Information Discovery (<em>checks an internet connection is available</em>)</li>
+</ul>
+<p><strong>TA0038 - Network Effects</strong></p>
+<ul>
+<li>T1449 - Exploit SS7 to Redirect Phone Calls/SMS (<em>has permissions to perform, monitor, redirect and/or block calls and to send SMS in the background</em>)</li>
+</ul>
+<h3 id="yara">YARA<a hidden class="anchor" aria-hidden="true" href="#yara">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">rule italianstalkerware : stalkerware {
+</span></span><span class="line"><span class="cl">    meta:
+</span></span><span class="line"><span class="cl">        author = &#34;Andrea Palmieri @andpalmier&#34;
+</span></span><span class="line"><span class="cl">	ref = &#34;https://andpalmier.com/posts/stalkerware-analysis/&#34;
+</span></span><span class="line"><span class="cl">    strings:
+</span></span><span class="line"><span class="cl">        $s1 = &#34;DataMariaDbSalentoBellaSarda&#34; nocase ascii
+</span></span><span class="line"><span class="cl">        $s2 = &#34;IsScreenOnServiceMarinellaBella&#34; ascii
+</span></span><span class="line"><span class="cl">        $s3 = &#34;preInstallServiceAnacondameritocronicavolenzia&#34; nocase ascii
+</span></span><span class="line"><span class="cl">        $s4 = &#34;ScreenIsOnReceiverMarinellaBella&#34; ascii
+</span></span><span class="line"><span class="cl">    condition:
+</span></span><span class="line"><span class="cl">        uint16(0) == 0x6564 and 4 of them
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><h3 id="iocs">IOCs<a hidden class="anchor" aria-hidden="true" href="#iocs">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">u1623673571u.apk	86504d29d3d5a852e8e37c951c049917a9b11907
+</span></span><span class="line"><span class="cl">u187763837u.apk 	19d990ace5e4fd5871265485d2ec4431bba33f28
+</span></span><span class="line"><span class="cl">u555625802u.apk		8fbaa94dfdce19e5484e12bac0ce4cbe56d908d8
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://andpalmier.com/tags/malware/">malware</a></li>
+      <li><a href="https://andpalmier.com/tags/android/">android</a></li>
+      <li><a href="https://andpalmier.com/tags/stalkerware/">stalkerware</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://andpalmier.com">andpalmier</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+const images = Array.from(document.querySelectorAll(".post-content img"));
+images.forEach(img => {
+  mediumZoom(img, {
+    margin: 0,  
+    scrollOffset: 40,  
+    container: null,  
+    template: null,  
+    background: 'rgba(0, 0, 0, 0.8)'
+  });
+});
+</script>
+
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

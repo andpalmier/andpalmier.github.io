@@ -1,418 +1,512 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="auto">
 
-    <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Content-Language" content="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>F-Droid apps you will find useful | andpalmier</title>
+<meta name="keywords" content="fdroid, android, foss">
+<meta name="description" content="Discussing the F-Droid apps I use everyday">
+<meta name="author" content="">
+<link rel="canonical" href="https://andpalmier.com/posts/fdroid-apps/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3f372934d1c1362b71cc19fea0df71fd2f6c0538b2e002dcd947350384804cad.css" integrity="sha256-PzcpNNHBNitxzBn&#43;oN9x/S9sBTiy4ALc2Uc1A4SATK0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://andpalmier.com/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://andpalmier.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://andpalmier.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://andpalmier.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://andpalmier.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
-	<meta name="author" content="Andrea Palmieri">
-	<meta name="description" content="List of my favourite f-droid apps">
-	<meta name="keywords" content="blog, infosec, security, cyber security">
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
 
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="My F-Droid apps recommendations"/>
-<meta name="twitter:description" content="List of my favourite f-droid apps"/>
+            .list {
+                background: var(--theme);
+            }
 
-	<meta property="og:title" content="My F-Droid apps recommendations" />
-<meta property="og:description" content="List of my favourite f-droid apps" />
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="F-Droid apps you will find useful" />
+<meta property="og:description" content="Discussing the F-Droid apps I use everyday" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/fdroid-apps/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://andpalmier.com/posts/fdroid-apps/" /><meta property="og:image" content="https://andpalmier.com/papermod-cover.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-04-05T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-04-05T00:00:00+00:00" />
 
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png"/>
+
+<meta name="twitter:title" content="F-Droid apps you will find useful"/>
+<meta name="twitter:description" content="Discussing the F-Droid apps I use everyday"/>
 
 
-	
-	<base href="/posts/fdroid-apps/">
-	
-	<title>
-  My F-Droid apps recommendations · andpalmier
-</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://andpalmier.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "F-Droid apps you will find useful",
+      "item": "https://andpalmier.com/posts/fdroid-apps/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "F-Droid apps you will find useful",
+  "name": "F-Droid apps you will find useful",
+  "description": "Discussing the F-Droid apps I use everyday",
+  "keywords": [
+    "fdroid", "android", "foss"
+  ],
+  "articleBody": " What is F-Droid? F-Droid is a community-maintained software repository for Android devices; or - to make it simpler - an alternative store for Android apps. Similarly to the Google Play Store, F-Droid allows searching, installing and updating apps. What makes F-Droid different from the Google Play Store (and other alternative stores, such as Aptoide) is the fact that its entire list of applications is FOSS (Free and Open Source Software), meaning that the source code of the apps is available online, and can be inspected by everyone.\nWhy use F-Droid? There are different advantages of using F-Droid. On the privacy side, F-Droid allows the user to download, install and update applications without being registered to the store. In addition, every app on F-Droid has to have the so-called ‘anti-features’:\nNo user tracking systems; No advertising; No dependence on non-free software: everyone can download, run, and use all the features of the application On the security side, its open-source license allows everyone to check the source code of every app before downloading it. In addition, F-Droid sends all the information over HTTPS by default, and, if Orbot is installed on the device, it can even force the traffic to go through Tor.\nIf you are interested in the building and signing process of the apps, you can find some details in the FAQ section on f-droid.org or in the documentation about the security model.\nHow to install F-Droid? Due to its FOSS nature, F-Droid cannot be found in the Google Play store. This means that it has to be downloaded and installed manually. You can find the app on the f-droid website, but, in order to install it, you should allow your browser to ‘install apps from unknown sources’ directly from the Android settings. This should also be enabled for F-Droid itself, in order to download and install apps from it.\nA suggestion: disable this special permission for your browser as soon as the F-Droid installation is completed, because it creates a security risk for your device.\nMy favorite FOSS apps Here is a list of my favorite FOSS Android apps. Keep in mind that some of them can be found also on the Google Play store.\nName Google Play? Category Description Source code AdAway No Adblocker Lightweight adblocker for your phone. It can work without root permissions. GitHub Aegis Yes 2FA token Free, easy and secure app to manage 2-step verification tokens. GitHub AntennaPod Yes Podcast Download, stream or queue episodes with tons of features. Millions of free and paid podcasts available. GitHub Birday No Birthdays reminder A simple yet useful birthday manager. Birday is free and ad-free! GitHub Bitwarden Yes Password manager Easy password manager solution which can be self-hosted and can generate 2FA tokens. GitHub Bromite No Browser Chromium fork with ad blocking and enhanced privacy. GitHub Catima Yes Wallet For barcodes, memberships, loyalty programs, coupons and tickets. GitHub Download Navi Yes Download manager Easy to use download manager for your phone. GitHub Gadgetbridge No Wearables Communicate with wearables without giving your privacy away. Many features available depending on the device. Codeberg Infinity Yes Reddit Beautiful, feature-rich app that offers a smooth Reddit browsing experience. GitHub KISS Yes Launcher Easy to use and extremely lightweight Android launcher. GitHub Loop Habit Tracker Yes Habit tracker Helps you create and maintain good habits, allowing you to achieve your long-term goals. GitHub Material Files Yes File manager A Material Design file manager, for Android 5.0+. GitHub Medito Yes Meditation Meditation app that includes guided meditations, breathing exercises, mindfulness practices, relaxing sounds, and more. GitHub Mull No Browser This is a fork of Firefox without proprietary blobs. Addons available. GitLab NewPipe No YouTube (\u0026 more) Youtube client that allows audio only playback in background and download. No Google account needed. GitHub Tusky Yes Mastodon Lightweight and feature-rich client for Mastodon. GitHub Voice Yes Audiobooks Audiobook player which remembers last position, has bookmarks, Android Auto compatibility and Sleep-timer. GitHub WireGuard Yes VPN The official app for managing WireGuard VPN tunnels. Git Conclusion This is only a brief introduction to the F-Droid world. Next time you are looking for an app, remember to check first if a FOSS alternative exists. Even if you don’t want to install the F-Droid client, maybe you could find it on the Play Store: you will receive in return less ads on your phone and a more privacy friendly experience.\nBefore installing the app, always check when was the last update. Outdated apps may expose you to security issues (this is a suggestion that applies also when installing apps from the Play Store).\nSources If you are interested in this topic, you can check:\nfdroid.org r/fdroid on Reddit r/fossdroid on Reddit fossdroid.com ",
+  "wordCount" : "783",
+  "inLanguage": "en",
+  "datePublished": "2020-04-05T00:00:00Z",
+  "dateModified": "2020-04-05T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://andpalmier.com/posts/fdroid-apps/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "andpalmier",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://andpalmier.com/images/favicon-32x32.png"
+    }
+  }
+}
+</script>
+</head>
 
-	
-	<link rel="canonical" href="/posts/fdroid-apps/">
-	
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
 
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+</script>
 
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder.min.d5c572a4dda2996f45f4bd9e584d43751439ce2134c33701e8d32920cc8e7d92.css" integrity="sha256-1cVypN2imW9F9L2eWE1DdRQ5ziE0wzcB6NMpIMyOfZI=" crossorigin="anonymous" media="screen" />
-	
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://andpalmier.com" accesskey="h" title="andpalmier (Alt + H)">andpalmier</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://andpalmier.com/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://andpalmier.com/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-	
-
-	
-	
-	
-	
-	<link rel="stylesheet" href="/css/coder-dark.min.58ba09b2c45d36fcfc1a96c8ad83bbbc03a9de4bce8463f3c30a896134febfb3.css" integrity="sha256-WLoJssRdNvz8GpbIrYO7vAOp3kvOhGPzwwqJYTT&#43;v7M=" crossorigin="anonymous" media="screen" />
-	
-	
-
-	
-	<link rel="stylesheet" href="/css/extra-style.css" />
-	
-
-	
-
-	<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
-
-	
-
-	<meta name="generator" content="Hugo 0.106.0">
-    </head>
-
+<article class="post-single">
+  <header class="post-header">
     
-    
-    
-    
-    <body class="colorscheme-dark"
+    <h1 class="post-title">
+      F-Droid apps you will find useful
+    </h1>
+    <div class="post-meta"><span title='2020-04-05 00:00:00 +0000 UTC'>April 5, 2020</span>&nbsp;·&nbsp;4 min
 
-	  onload=""
-	  >
-	  
-<div class="float-container">
-    <a id="dark-mode-toggle" class="colorscheme-toggle">
-        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-    </a>
 </div>
-
-
-	  <main class="wrapper">
-	      <nav class="navigation">
-  <section class="container">
-    <a class="navigation-title" href="/">
-      andpalmier
-    </a>
-    
-    <input type="checkbox" id="menu-toggle" />
-    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
-    <ul class="navigation-list">
-      
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/">Home</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="/about/">About</a>
-          </li>
-        
-      
-      
-    </ul>
-    
-  </section>
-</nav>
-
-
-	      <div class="content">
-		  
-  <section class="container post">
-    <article>
-      <header>
-        <div class="post-title">
-          <h1 class="title">My F-Droid apps recommendations</h1>
-        </div>
-        <div class="post-meta">
-          <div class="date">
-            <span class="posted-on">
-              <i class="fas fa-calendar"></i>
-              <time datetime='2020-04-05T00:00:00Z'>
-                April 5, 2020
-              </time>
-            </span>
-            <span class="reading-time">
-              <i class="fas fa-clock"></i>
-              4-minute read
-            </span>
-          </div>
-          <div class="categories">
-  <i class="fas fa-folder"></i>
-    <a href="/categories/recommendations/">recommendations</a></div>
-
-          <div class="tags">
-  <i class="fas fa-tag"></i>
-    <a href="/tags/fdroid/">fdroid</a>
-      <span class="separator">•</span>
-    <a href="/tags/android/">android</a>
-      <span class="separator">•</span>
-    <a href="/tags/foss/">foss</a></div>
-
-        </div>
-      </header>
-
-      <div>
-        
-        <figure><img src="/images/posts/fdroid-apps/fdroid.png" width="300"/>
+  </header> 
+  <div class="post-content"><figure class="align-center ">
+    <img loading="lazy" src="/images/posts/fdroid-apps/fdroid.png#center"
+         alt="F-Droid icon"/> 
 </figure>
 
-<h2 id="what-is-f-droid">What is F-Droid?</h2>
+<h2 id="what-is-f-droid">What is F-Droid?<a hidden class="anchor" aria-hidden="true" href="#what-is-f-droid">#</a></h2>
 <p>F-Droid is a community-maintained software repository for Android devices; or - to make it simpler - an alternative store for Android apps.
 Similarly to the Google Play Store, F-Droid allows searching, installing and updating apps. What makes F-Droid different from the Google Play Store (and other alternative stores, such as Aptoide) is the fact that its entire list of applications is FOSS (<em>Free and Open Source Software</em>), meaning that the source code of the apps is available online, and can be inspected by everyone.</p>
-<h2 id="why-use-f-droid">Why use F-Droid?</h2>
+<h2 id="why-use-f-droid">Why use F-Droid?<a hidden class="anchor" aria-hidden="true" href="#why-use-f-droid">#</a></h2>
 <p>There are different advantages of using F-Droid. On the privacy side, F-Droid allows the user to download, install and update applications without being registered to the store. In addition, every app on F-Droid has to have the so-called ‘<em>anti-features</em>’:</p>
 <ul>
 <li>No user tracking systems;</li>
 <li>No advertising;</li>
 <li>No dependence on non-free software: everyone can download, run, and use all the features of the application</li>
 </ul>
-<p>On the security side, its open-source license allows everyone to check the source code of every app before downloading it. In addition, F-Droid sends all the information over HTTPS by default, and, if <a href="https://guardianproject.info/apps/orbot/">Orbot</a> is installed on the device, it can even force the traffic to go through Tor.</p>
-<p>If you are interested in the building and signing process of the apps, you can find some details in the <a href="https://f-droid.org/en/docs/FAQ_-_General">FAQ section on f-droid.org</a> or in the documentation about the <a href="https://f-droid.org/en/docs/Security_Model/">security model</a>.</p>
-<h2 id="how-to-install-f-droid">How to install F-Droid?</h2>
+<p>On the security side, its open-source license allows everyone to check the source code of every app before downloading it. In addition, F-Droid sends all the information over HTTPS by default, and, if <a href="https://guardianproject.info/apps/orbot/" target="_blank" rel="noopener">Orbot</a> is installed on the device, it can even force the traffic to go through Tor.</p>
+<p>If you are interested in the building and signing process of the apps, you can find some details in the <a href="https://f-droid.org/en/docs/FAQ_-_General" target="_blank" rel="noopener">FAQ section on f-droid.org</a> or in the documentation about the <a href="https://f-droid.org/en/docs/Security_Model/" target="_blank" rel="noopener">security model</a>.</p>
+<h2 id="how-to-install-f-droid">How to install F-Droid?<a hidden class="anchor" aria-hidden="true" href="#how-to-install-f-droid">#</a></h2>
 <p>Due to its FOSS nature, F-Droid cannot be found in the Google Play store. This means that it has to be downloaded and installed manually.
-You can find the app on the <a href="https://f-droid.org/en/">f-droid website</a>, but, in order to install it, you should allow your browser to &lsquo;<em>install apps from unknown sources</em>&rsquo; directly from the Android settings. This should also be enabled for F-Droid itself, in order to download and install apps from it.</p>
+You can find the app on the <a href="https://f-droid.org/en/" target="_blank" rel="noopener">f-droid website</a>, but, in order to install it, you should allow your browser to &lsquo;<em>install apps from unknown sources</em>&rsquo; directly from the Android settings. This should also be enabled for F-Droid itself, in order to download and install apps from it.</p>
 <p>A suggestion: disable this special permission for your browser as soon as the F-Droid installation is completed, because it creates a security risk for your device.</p>
-<h2 id="my-favorite-foss-apps">My favorite FOSS apps</h2>
+<h2 id="my-favorite-foss-apps">My favorite FOSS apps<a hidden class="anchor" aria-hidden="true" href="#my-favorite-foss-apps">#</a></h2>
 <p>Here is a list of my favorite <em>FOSS</em> Android apps. Keep in mind that some of them can be found also on the Google Play store.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center"><strong>Name</strong></th>
-<th style="text-align:center"><strong>On Google Play?</strong></th>
-<th style="text-align:center"><strong>Category</strong></th>
-<th style="text-align:center"><strong>Description</strong></th>
-<th style="text-align:center"><strong>Code</strong></th>
+<th style="text-align:center">Name</th>
+<th style="text-align:center">Google Play?</th>
+<th style="text-align:center">Category</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Source code</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><strong>AdAway</strong></td>
+<td style="text-align:center">AdAway</td>
 <td style="text-align:center">No</td>
-<td style="text-align:center">AdBlocking</td>
-<td style="text-align:center">Ad blocker that uses the hosts file. It requires root privileges, if you don&rsquo;t have it, check <a href="blokada.org">Blokada</a> instead.</td>
-<td style="text-align:center"><a href="https://github.com/AdAway/AdAway">GitHub</a></td>
+<td style="text-align:center">Adblocker</td>
+<td style="text-align:center">Lightweight adblocker for your phone. It can work without root permissions.</td>
+<td style="text-align:center"><a href="https://github.com/AdAway/AdAway" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Aegis</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.beemdevelopment.aegis">Yes</a></td>
+<td style="text-align:center">Aegis</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.beemdevelopment.aegis" target="_blank" rel="noopener">Yes</a></td>
 <td style="text-align:center">2FA token</td>
-<td style="text-align:center">Free, secure and open source app to manage your 2-step verification tokens.</td>
-<td style="text-align:center"><a href="https://github.com/beemdevelopment/Aegis">GitHub</a></td>
+<td style="text-align:center">Free, easy and secure app to manage 2-step verification tokens.</td>
+<td style="text-align:center"><a href="https://github.com/beemdevelopment/Aegis" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>AntennaPod</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=de.danoeh.antennapod">Yes</a></td>
+<td style="text-align:center">AntennaPod</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=de.danoeh.antennapod" target="_blank" rel="noopener">Yes</a></td>
 <td style="text-align:center">Podcast</td>
 <td style="text-align:center">Download, stream or queue episodes with tons of features. Millions of free and paid podcasts available.</td>
-<td style="text-align:center"><a href="https://github.com/antennapod/AntennaPod">GitHub</a></td>
+<td style="text-align:center"><a href="https://github.com/antennapod/AntennaPod" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Flym</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=net.frju.flym">Yes</a></td>
-<td style="text-align:center">RSS</td>
-<td style="text-align:center">Simple and modern RSS reader; fetches your websites/blogs and displaying them in a mobile-optimized way.</td>
-<td style="text-align:center"><a href="https://github.com/FredJul/Flym">GitHub</a></td>
+<td style="text-align:center">Birday</td>
+<td style="text-align:center">No</td>
+<td style="text-align:center">Birthdays reminder</td>
+<td style="text-align:center">A simple yet useful birthday manager. Birday is free and ad-free!</td>
+<td style="text-align:center"><a href="https://github.com/m-i-n-a-r/birday" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Gadgetbridge</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.kunzisoft.keepass.free">Yes (early access)</a></td>
-<td style="text-align:center">Wearables</td>
-<td style="text-align:center">Communicate with wearables (MiBand/Pebble/Amazfit) without creating an account. Many features available depending on the device.</td>
-<td style="text-align:center"><a href="https://codeberg.org/Freeyourgadget/Gadgetbridge/">Codeberg</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>KeepassDX</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=ee.aegrel.gadgetbridge">Yes (early access)</a></td>
+<td style="text-align:center">Bitwarden</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.x8bit.bitwarden" target="_blank" rel="noopener">Yes</a></td>
 <td style="text-align:center">Password manager</td>
-<td style="text-align:center">Keepass compatible password manager. If you don&rsquo;t use a password manager, make yourself a favor and start using it.</td>
-<td style="text-align:center"><a href="https://github.com/Kunzisoft/KeePassDX">GitHub</a></td>
+<td style="text-align:center">Easy password manager solution which can be self-hosted and can generate 2FA tokens.</td>
+<td style="text-align:center"><a href="https://github.com/bitwarden/mobile" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Kore</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=org.xbmc.kore">Yes</a></td>
-<td style="text-align:center">Kodi remote</td>
-<td style="text-align:center">A simple, easy to use and beautiful remote that lets you control your Kodi/XBMC media center from your Android device.</td>
-<td style="text-align:center"><a href="https://github.com/xbmc/Kore">GitHub</a></td>
+<td style="text-align:center">Bromite</td>
+<td style="text-align:center">No</td>
+<td style="text-align:center">Browser</td>
+<td style="text-align:center">Chromium fork with ad blocking and enhanced privacy.</td>
+<td style="text-align:center"><a href="https://github.com/bromite/bromite" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>KISS launcher</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=fr.neamar.kiss">Yes</a></td>
+<td style="text-align:center">Catima</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=me.hackerchick.catima" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">Wallet</td>
+<td style="text-align:center">For barcodes, memberships, loyalty programs, coupons and tickets.</td>
+<td style="text-align:center"><a href="https://github.com/CatimaLoyalty/Android" target="_blank" rel="noopener">GitHub</a></td>
+</tr>
+<tr>
+<td style="text-align:center">Download Navi</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.tachibana.downloader" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">Download manager</td>
+<td style="text-align:center">Easy to use download manager for your phone.</td>
+<td style="text-align:center"><a href="https://github.com/TachibanaGeneralLaboratories/download-navi" target="_blank" rel="noopener">GitHub</a></td>
+</tr>
+<tr>
+<td style="text-align:center">Gadgetbridge</td>
+<td style="text-align:center">No</td>
+<td style="text-align:center">Wearables</td>
+<td style="text-align:center">Communicate with wearables without giving your privacy away. Many features available depending on the device.</td>
+<td style="text-align:center"><a href="https://codeberg.org/Freeyourgadget/Gadgetbridge/" target="_blank" rel="noopener">Codeberg</a></td>
+</tr>
+<tr>
+<td style="text-align:center">Infinity</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">Reddit</td>
+<td style="text-align:center">Beautiful, feature-rich app that offers a smooth Reddit browsing experience.</td>
+<td style="text-align:center"><a href="https://github.com/Docile-Alligator/Infinity-For-Reddit" target="_blank" rel="noopener">GitHub</a></td>
+</tr>
+<tr>
+<td style="text-align:center">KISS</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=fr.neamar.kiss" target="_blank" rel="noopener">Yes</a></td>
 <td style="text-align:center">Launcher</td>
 <td style="text-align:center">Easy to use and extremely lightweight Android launcher.</td>
-<td style="text-align:center"><a href="https://github.com/Neamar/KISS">GitHub</a></td>
+<td style="text-align:center"><a href="https://github.com/Neamar/KISS" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Material Files</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=me.zhanghai.android.files">Yes</a></td>
+<td style="text-align:center">Loop Habit Tracker</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=org.isoron.uhabits" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">Habit tracker</td>
+<td style="text-align:center">Helps you create and maintain good habits, allowing you to achieve your long-term goals.</td>
+<td style="text-align:center"><a href="https://github.com/iSoron/uhabits" target="_blank" rel="noopener">GitHub</a></td>
+</tr>
+<tr>
+<td style="text-align:center">Material Files</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=me.zhanghai.android.files" target="_blank" rel="noopener">Yes</a></td>
 <td style="text-align:center">File manager</td>
-<td style="text-align:center">An open source Material Design file manager, for Android 5.0+.</td>
-<td style="text-align:center"><a href="https://github.com/zhanghai/MaterialFiles">GitHub</a></td>
+<td style="text-align:center">A Material Design file manager, for Android 5.0+.</td>
+<td style="text-align:center"><a href="https://github.com/zhanghai/MaterialFiles" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>NewPipe</strong></td>
+<td style="text-align:center">Medito</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=meditofoundation.medito" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">Meditation</td>
+<td style="text-align:center">Meditation app that includes guided meditations, breathing exercises, mindfulness practices, relaxing sounds, and more.</td>
+<td style="text-align:center"><a href="https://github.com/meditohq/medito-app" target="_blank" rel="noopener">GitHub</a></td>
+</tr>
+<tr>
+<td style="text-align:center">Mull</td>
+<td style="text-align:center">No</td>
+<td style="text-align:center">Browser</td>
+<td style="text-align:center">This is a fork of Firefox without proprietary blobs. Addons available.</td>
+<td style="text-align:center"><a href="https://gitlab.com/divested-mobile/mull-fenix" target="_blank" rel="noopener">GitLab</a></td>
+</tr>
+<tr>
+<td style="text-align:center">NewPipe</td>
 <td style="text-align:center">No</td>
 <td style="text-align:center">YouTube (&amp; more)</td>
 <td style="text-align:center">Youtube client that allows audio only playback in background and download. No Google account needed.</td>
-<td style="text-align:center"><a href="https://github.com/TeamNewPipe/NewPipe">GitHub</a></td>
+<td style="text-align:center"><a href="https://github.com/TeamNewPipe/NewPipe" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Scarlet Notes</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.bijoysingh.quicknote">Yes</a></td>
-<td style="text-align:center">Notes</td>
-<td style="text-align:center">Simple and no hassle interface for adding notes in a beautiful material design.</td>
-<td style="text-align:center"><a href="https://github.com/BijoySingh/Material-Notes-Android-App">GitHub</a></td>
+<td style="text-align:center">Tusky</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.keylesspalace.tusky" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">Mastodon</td>
+<td style="text-align:center">Lightweight and feature-rich client for Mastodon.</td>
+<td style="text-align:center"><a href="https://github.com/tuskyapp/Tusky" target="_blank" rel="noopener">GitHub</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>Slide</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=me.ccrama.redditslide">Yes</a></td>
-<td style="text-align:center">Reddit</td>
-<td style="text-align:center">Fully feature unofficial Reddit browser. Ad-free, easy to use, multiple account support and TONS of customizations.</td>
-<td style="text-align:center"><a href="https://github.com/ccrama/Slide">GitHub</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>Termux</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.termux">Yes</a></td>
-<td style="text-align:center">Terminal emulator</td>
-<td style="text-align:center">Terminal emulator with Linux package collection: bash and zsh, nano and vim, ssh, python, gdb and more.. on your phone!</td>
-<td style="text-align:center"><a href="https://github.com/tmux/tmux">GitHub</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>Vanilla Music</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=ch.blinkenlights.android.vanilla">Yes</a></td>
-<td style="text-align:center">Music</td>
-<td style="text-align:center">Clean and simple music player. Support for all common audio formats, tag based and folder based navigation.</td>
-<td style="text-align:center"><a href="https://github.com/vanilla-music/vanilla">GitHub</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>Voice</strong></td>
-<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook">Yes</a></td>
+<td style="text-align:center">Voice</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook" target="_blank" rel="noopener">Yes</a></td>
 <td style="text-align:center">Audiobooks</td>
 <td style="text-align:center">Audiobook player which remembers last position, has bookmarks, Android Auto compatibility and Sleep-timer.</td>
-<td style="text-align:center"><a href="https://github.com/PaulWoitaschek/Voice">GitHub</a></td>
+<td style="text-align:center"><a href="https://github.com/PaulWoitaschek/Voice" target="_blank" rel="noopener">GitHub</a></td>
+</tr>
+<tr>
+<td style="text-align:center">WireGuard</td>
+<td style="text-align:center"><a href="https://play.google.com/store/apps/details?id=com.wireguard.android" target="_blank" rel="noopener">Yes</a></td>
+<td style="text-align:center">VPN</td>
+<td style="text-align:center">The official app for managing WireGuard VPN tunnels.</td>
+<td style="text-align:center"><a href="https://git.zx2c4.com/wireguard-android" target="_blank" rel="noopener">Git</a></td>
 </tr>
 </tbody>
 </table>
-<h1 id="conclusion">Conclusion</h1>
+<h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
 <p>This is only a brief introduction to the F-Droid world. Next time you are looking for an app, remember to check first if a FOSS alternative exists. Even if you don&rsquo;t want to install the F-Droid client, maybe you could find it on the Play Store: you will receive in return less ads on your phone and a more privacy friendly experience.</p>
 <p>Before installing the app, always check when was the last update. Outdated apps may expose you to security issues (this is a suggestion that applies also when installing apps from the Play Store).</p>
-<h1 id="sources">Sources</h1>
+<h1 id="sources">Sources<a hidden class="anchor" aria-hidden="true" href="#sources">#</a></h1>
 <p>If you are interested in this topic, you can check:</p>
 <ul>
-<li><a href="https://f-droid.org/en/">fdroid.org</a></li>
-<li><a href="https://www.reddit.com/r/fdroid/">r/fdroid on Reddit</a></li>
-<li><a href="https://www.reddit.com/r/fossdroid/">r/fossdroid on Reddit</a></li>
-<li><a href="https://fossdroid.com/">fossdroid.com</a></li>
+<li><a href="https://f-droid.org/en/" target="_blank" rel="noopener">fdroid.org</a></li>
+<li><a href="https://www.reddit.com/r/fdroid/" target="_blank" rel="noopener">r/fdroid on Reddit</a></li>
+<li><a href="https://www.reddit.com/r/fossdroid/" target="_blank" rel="noopener">r/fossdroid on Reddit</a></li>
+<li><a href="https://fossdroid.com/" target="_blank" rel="noopener">fossdroid.com</a></li>
 </ul>
 
-      </div>
 
+  </div>
 
-      <footer>
-        
-
-
-        
-        
-        
-      </footer>
-    </article>
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [
-          ['$', '$'], ['\\(', '\\)']
-        ],
-        processEscapes: true,
-        processEnvironments: true
-      },
-      options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-      }
-    };
-  </script>
-  </section>
-
-	      </div>
-
-	<footer class="footer">
-
-<hr>
-
-    <section class="container">
-	
-	<p>If you have comments or suggestions, feel free to ping me!</p>
-	
-	
-	
-	
-
-
-<ul>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://andpalmier.com/tags/fdroid/">fdroid</a></li>
+      <li><a href="https://andpalmier.com/tags/android/">android</a></li>
+      <li><a href="https://andpalmier.com/tags/foss/">foss</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
     
-    
-    <li>
-	<a href="https://twitter.com/andpalmier/" aria-label="Twitter"  target="_blank" >
-	    <i class="fab fa-twitter" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://infosec.exchange/@andpalmier/" aria-label="Mastodon"  target="_blank" >
-	    <i class="fab fa-mastodon" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://github.com/andpalmier/" aria-label="Github"  target="_blank" >
-	    <i class="fab fa-github" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="https://www.linkedin.com/in/andpalmier/" aria-label="LinkedIn"  target="_blank" >
-	    <i class="fab fa-linkedin" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-    <li>
-	<a href="mailto:andpalmier@gmail.com" aria-label="Mail"  target="_blank" >
-	    <i class="fas fa-envelope" aria-hidden="true"></i>
-	</a>
-    </li>
-    
-    
-    
-</ul>
-
-    </section>
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://andpalmier.com">andpalmier</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
 </footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+const images = Array.from(document.querySelectorAll(".post-content img"));
+images.forEach(img => {
+  mediumZoom(img, {
+    margin: 0,  
+    scrollOffset: 40,  
+    container: null,  
+    template: null,  
+    background: 'rgba(0, 0, 0, 0.8)'
+  });
+});
+</script>
 
 
-	  </main>
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
 
-    
-      
-        
-        <script src="/js/dark-mode.min.c2d8a1f8f2660e4a46d776277c72695a1e0ca65939d79f754441d47551604af5.js"></script>
-      
-    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
 
-	  
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
 
-	  
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
 
-	  
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
 
-    </body>
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
 
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
 
 </html>

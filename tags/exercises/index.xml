@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>exercises on andpalmier</title>
+    <link>https://andpalmier.com/tags/exercises/</link>
+    <description>Recent content in exercises on andpalmier</description>
+    <image>
+      <url>https://andpalmier.com/papermod-cover.png</url>
+      <link>https://andpalmier.com/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 21 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/exercises/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Practical malware analysis: solutions for Lab 1</title>
+      <link>https://andpalmier.com/posts/practical-malware-lab1/</link>
+      <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/posts/practical-malware-lab1/</guid>
+      <description>Solutions for the first lab of &amp;lsquo;Practical malware analysis&amp;rsquo;</description>
+    </item>
+    
+  </channel>
+</rss>

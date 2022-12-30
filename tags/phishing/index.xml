@@ -1,75 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>phishing on andpalmier</title>
-    <link>/tags/phishing/</link>
+    <link>https://andpalmier.com/tags/phishing/</link>
     <description>Recent content in phishing on andpalmier</description>
+    <image>
+      <url>https://andpalmier.com/papermod-cover.png</url>
+      <link>https://andpalmier.com/papermod-cover.png</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/phishing/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/phishing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Phishing findings, campaign #3: ING bank</title>
-      <link>/posts/phishing-findings-3/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-3/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-3/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning I found this kit while analyzing the phishing sites reported by @illegalfawn. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-3/</guid>
+      <description>Analysis of a phishing kit targeting ING Bank</description>
     </item>
     
     <item>
       <title>PhishFlood: a poc for flooding phishing kits</title>
-      <link>/posts/flooding-phishing-kits/</link>
+      <link>https://andpalmier.com/posts/flooding-phishing-kits/</link>
       <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>/posts/flooding-phishing-kits/</guid>
-      <description>In this a blog post we are going to see how to flood a phishing kit with fake data.</description>
+      <guid>https://andpalmier.com/posts/flooding-phishing-kits/</guid>
+      <description>Flooding a phishing kit with fake data to make it harder for threat actors</description>
     </item>
     
     <item>
       <title>Phishing findings, campaign #2: content.zip (LinkedIn)</title>
-      <link>/posts/phishing-findings-2/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-2/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-2/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning The kit was created to steal LinkedIn credentials:
-How this phishing kit looks like when deployed
-At a first look, we can notice some characteristics of this page which makes it different from the usual fake login:</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-2/</guid>
+      <description>Analysis of a phishing kit targeting LinkedIn users</description>
     </item>
     
     <item>
-      <title>Machine Learning and phishing, pt.2: random forest</title>
-      <link>/posts/ml-with-phishing-ep2/</link>
+      <title>Machine Learning and phishing, pt. 2: Random Forest</title>
+      <link>https://andpalmier.com/posts/ml-with-phishing-ep2/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/ml-with-phishing-ep2/</guid>
-      <description>I started hunting and reporting phishing pages on Twitter, follow me here if you are interested! After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
-Introduction In the last post of this series, we analyzed how some of the parameters of a decision tree could improve the accuracy of the model when classifying phishing sites.</description>
+      <guid>https://andpalmier.com/posts/ml-with-phishing-ep2/</guid>
+      <description>Tuning the Random Forest algorithm to detect phishing pages</description>
     </item>
     
     <item>
       <title>Phishing findings, campaign #1: u.zip (Office365/Outlook)</title>
-      <link>/posts/phishing-findings-1/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-1/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-1/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning Here is my tweet containing some information about this instance of the kit:
-#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/
-exf: macdon161@gmail
-reg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)
-🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic.</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-1/</guid>
+      <description>Analysis of a phishing kit targeting Outlook and Office365 users</description>
     </item>
     
     <item>
-      <title>Machine Learning and phishing, pt.1: decision tree</title>
-      <link>/posts/ml-with-phishing-ep1/</link>
+      <title>Machine Learning and phishing, pt. 1: Decision Trees</title>
+      <link>https://andpalmier.com/posts/ml-with-phishing-ep1/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/ml-with-phishing-ep1/</guid>
-      <description>Last week I started hunting and reporting phishing websites on Twitter (follow me here if you are interested). After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
-In this series of posts I am going to use a smaller variant of this dataset to create machine learning models which (hopefully) will be able to identify a phishing website.</description>
+      <guid>https://andpalmier.com/posts/ml-with-phishing-ep1/</guid>
+      <description>Tuning the Decision Trees algorithm to detect phishing pages</description>
     </item>
     
   </channel>

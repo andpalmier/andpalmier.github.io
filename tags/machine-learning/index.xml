@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>machine learning on andpalmier</title>
-    <link>/tags/machine-learning/</link>
+    <link>https://andpalmier.com/tags/machine-learning/</link>
     <description>Recent content in machine learning on andpalmier</description>
+    <image>
+      <url>https://andpalmier.com/papermod-cover.png</url>
+      <link>https://andpalmier.com/papermod-cover.png</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Wed, 17 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 17 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Machine Learning and phishing, pt.2: random forest</title>
-      <link>/posts/ml-with-phishing-ep2/</link>
+      <title>Machine Learning and phishing, pt. 2: Random Forest</title>
+      <link>https://andpalmier.com/posts/ml-with-phishing-ep2/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/ml-with-phishing-ep2/</guid>
-      <description>I started hunting and reporting phishing pages on Twitter, follow me here if you are interested! After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
-Introduction In the last post of this series, we analyzed how some of the parameters of a decision tree could improve the accuracy of the model when classifying phishing sites.</description>
+      <guid>https://andpalmier.com/posts/ml-with-phishing-ep2/</guid>
+      <description>Tuning the Random Forest algorithm to detect phishing pages</description>
     </item>
     
     <item>
-      <title>Machine Learning and phishing, pt.1: decision tree</title>
-      <link>/posts/ml-with-phishing-ep1/</link>
+      <title>Machine Learning and phishing, pt. 1: Decision Trees</title>
+      <link>https://andpalmier.com/posts/ml-with-phishing-ep1/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/ml-with-phishing-ep1/</guid>
-      <description>Last week I started hunting and reporting phishing websites on Twitter (follow me here if you are interested). After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.
-In this series of posts I am going to use a smaller variant of this dataset to create machine learning models which (hopefully) will be able to identify a phishing website.</description>
+      <guid>https://andpalmier.com/posts/ml-with-phishing-ep1/</guid>
+      <description>Tuning the Decision Trees algorithm to detect phishing pages</description>
     </item>
     
   </channel>

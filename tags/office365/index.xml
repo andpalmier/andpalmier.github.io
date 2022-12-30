@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>office365 on andpalmier</title>
-    <link>/tags/office365/</link>
+    <link>https://andpalmier.com/tags/office365/</link>
     <description>Recent content in office365 on andpalmier</description>
+    <image>
+      <url>https://andpalmier.com/papermod-cover.png</url>
+      <link>https://andpalmier.com/papermod-cover.png</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Tue, 26 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/office365/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 26 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/office365/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Phishing findings, campaign #1: u.zip (Office365/Outlook)</title>
-      <link>/posts/phishing-findings-1/</link>
+      <link>https://andpalmier.com/posts/phishing-findings-1/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/posts/phishing-findings-1/</guid>
-      <description>I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.
-Let&amp;rsquo;s start from the beginning Here is my tweet containing some information about this instance of the kit:
-#phishing #onedrive hxxps://www.bonatura.com/ok.co/u/
-exf: macdon161@gmail
-reg: @GoDaddy 🔐 @letsencrypt ☣️ 63.249.146.86 (AS54489)
-🎯 @onedrive @Microsoft @illegalFawn @ActorExpose @PhishKitTracker @Spam404 @malwrhunterteam @JAMESWT_MHT @ANeilan @sysgoblin @PhishStats pic.</description>
+      <guid>https://andpalmier.com/posts/phishing-findings-1/</guid>
+      <description>Analysis of a phishing kit targeting Outlook and Office365 users</description>
     </item>
     
   </channel>
