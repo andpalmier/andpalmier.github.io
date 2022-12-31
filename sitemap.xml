@@ -3,31 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://andpalmier.com/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/tags/android/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/categories/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/posts/stalkerware-analysis/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/tags/malware/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/categories/malware/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/posts/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/tags/stalkerware/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/tags/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
+    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/tags/ingbank/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
@@ -44,6 +23,12 @@
     <loc>https://andpalmier.com/tags/phishingkit/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://andpalmier.com/posts/</loc>
+    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/</loc>
+    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://andpalmier.com/tags/go/</loc>
     <lastmod>2021-01-31T00:00:00+00:00</lastmod>
   </url><url>
@@ -54,6 +39,12 @@
     <lastmod>2020-10-12T10:33:45+02:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/posts/emotet-php-maldoc/</loc>
+    <lastmod>2020-10-12T10:33:45+02:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/malware/</loc>
+    <lastmod>2020-10-12T10:33:45+02:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/categories/malware/</loc>
     <lastmod>2020-10-12T10:33:45+02:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/tags/threat-analysis/</loc>
@@ -100,6 +91,9 @@
   </url><url>
     <loc>https://andpalmier.com/posts/practical-malware-lab1/</loc>
     <lastmod>2020-04-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/android/</loc>
+    <lastmod>2020-04-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/posts/fdroid-apps/</loc>
     <lastmod>2020-04-05T00:00:00+00:00</lastmod>

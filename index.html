@@ -29,34 +29,6 @@
         }
 
     </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --hljs-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
 </noscript><meta property="og:title" content="andpalmier" />
 <meta property="og:description" content="Yet another security noob&#39;s blog" />
 <meta property="og:type" content="website" />
@@ -83,14 +55,10 @@
 </script>
 </head>
 
-<body class="list" id="top">
+<body class="list dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -136,7 +104,7 @@
         </ul>
     </nav>
 </header>
-<main class="main">
+<main class="main"> 
 <article class="first-entry home-info">
     <header class="entry-header">
         <h1>andpalmier</h1>
@@ -186,7 +154,7 @@
     </footer>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Phishing findings, campaign #3: ING bank
     </h2>
@@ -198,7 +166,7 @@
   <a class="entry-link" aria-label="post link to Phishing findings, campaign #3: ING bank" href="https://andpalmier.com/posts/phishing-findings-3/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>PhishFlood: a poc for flooding phishing kits
     </h2>
@@ -210,7 +178,7 @@
   <a class="entry-link" aria-label="post link to PhishFlood: a poc for flooding phishing kits" href="https://andpalmier.com/posts/flooding-phishing-kits/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Emotet infection from PHP: generation of a malicious doc
     </h2>
@@ -222,7 +190,7 @@
   <a class="entry-link" aria-label="post link to Emotet infection from PHP: generation of a malicious doc" href="https://andpalmier.com/posts/emotet-php-maldoc/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Proof of concept of a ransowmare in Go
     </h2>
@@ -234,7 +202,7 @@
   <a class="entry-link" aria-label="post link to Proof of concept of a ransowmare in Go" href="https://andpalmier.com/posts/poc-goransom/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Phishing findings, campaign #2: content.zip (LinkedIn)
     </h2>
@@ -246,7 +214,7 @@
   <a class="entry-link" aria-label="post link to Phishing findings, campaign #2: content.zip (LinkedIn)" href="https://andpalmier.com/posts/phishing-findings-2/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Machine Learning and phishing, pt. 2: Random Forest
     </h2>
@@ -258,7 +226,7 @@
   <a class="entry-link" aria-label="post link to Machine Learning and phishing, pt. 2: Random Forest" href="https://andpalmier.com/posts/ml-with-phishing-ep2/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Phishing findings, campaign #1: u.zip (Office365/Outlook)
     </h2>
@@ -270,7 +238,7 @@
   <a class="entry-link" aria-label="post link to Phishing findings, campaign #1: u.zip (Office365/Outlook)" href="https://andpalmier.com/posts/phishing-findings-1/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Machine Learning and phishing, pt. 1: Decision Trees
     </h2>
@@ -282,7 +250,7 @@
   <a class="entry-link" aria-label="post link to Machine Learning and phishing, pt. 1: Decision Trees" href="https://andpalmier.com/posts/ml-with-phishing-ep1/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Practical malware analysis: solutions for Lab 1
     </h2>
@@ -294,7 +262,7 @@
   <a class="entry-link" aria-label="post link to Practical malware analysis: solutions for Lab 1" href="https://andpalmier.com/posts/practical-malware-lab1/"></a>
 </article>
 
-<article class="post-entry">
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>F-Droid apps you will find useful
     </h2>
@@ -306,7 +274,7 @@
   <a class="entry-link" aria-label="post link to F-Droid apps you will find useful" href="https://andpalmier.com/posts/fdroid-apps/"></a>
 </article>
     </main>
-
+    
 <footer class="footer">
     <span>&copy; 2022 <a href="https://andpalmier.com">andpalmier</a></span>
     <span>
@@ -325,10 +293,10 @@
 const images = Array.from(document.querySelectorAll(".post-content img"));
 images.forEach(img => {
   mediumZoom(img, {
-    margin: 0,
-    scrollOffset: 40,
-    container: null,
-    template: null,
+    margin: 0,  
+    scrollOffset: 40,  
+    container: null,  
+    template: null,  
     background: 'rgba(0, 0, 0, 0.8)'
   });
 });

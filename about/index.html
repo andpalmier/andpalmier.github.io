@@ -28,34 +28,6 @@ Projects You can find my projects on GitHub, here are some of the most interesti
         }
 
     </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --hljs-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
 </noscript><meta property="og:title" content="Hey 👋" />
 <meta property="og:description" content="My name is Andrea Palmieri. I am interested in everything cyber-security related, machine learning, and reverse engineering. I am passionate about books, movies and art in general. Also, I am a die-hard AS Roma fan.
 Here is a non-updated version of my resume. For a more recent version, you can send me an email at andpalmier [at] gmail [dot] com or contact me on LinkedIn.
@@ -119,14 +91,10 @@ Projects You can find my projects on GitHub, here are some of the most interesti
 </script>
 </head>
 
-<body class="" id="top">
+<body class=" dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -190,7 +158,7 @@ Projects You can find my projects on GitHub, here are some of the most interesti
 <p>You can find my projects on <a href="https://github.com/andpalmier/" target="_blank" rel="noopener">GitHub</a>, here are some of the most interesting ones:</p>
 <ul>
 <li><strong>apkingo</strong>: get detailed information about apk files. <a href="https://github.com/andpalmier/apkingo" target="_blank" rel="noopener">GitHub</a>.</li>
-<li><strong>makephish</strong>: clone and patch websites to create phishing pages. <a href="https://github.com/andpalmier/phishflood" target="_blank" rel="noopener">GitHub</a> and a <a href="https://esgeeks.com/makephish-clonar-sitios-web-login/" target="_blank" rel="noopener">spanish article about it</a>.</li>
+<li><strong>makephish</strong>: clone and patch websites to create phishing pages. <a href="https://github.com/andpalmier/makephish" target="_blank" rel="noopener">GitHub</a> and a <a href="https://esgeeks.com/makephish-clonar-sitios-web-login/" target="_blank" rel="noopener">spanish article about it</a>.</li>
 <li><strong>phishflood</strong>: flood phishing kits with fake data. <a href="https://andpalmier.com/posts/flooding-phishing-kits/" target="_blank" rel="noopener">Blog post</a> and <a href="https://github.com/andpalmier/phishflood" target="_blank" rel="noopener">GitHub</a>.</li>
 <li><strong>mlWithPhishing</strong>: tuning machine learning models for phishing detection. <a href="https://andpalmier.github.io/tags/machine-learning/" target="_blank" rel="noopener">Blog posts</a> and <a href="https://github.com/andpalmier/MLWithPhishing" target="_blank" rel="noopener">GitHub</a>.</li>
 <li><strong>MQTTSA</strong>: detect misconfigurations in MQTT brokers and suggest mitigations. <a href="https://ieeexplore.ieee.org/document/8817102" target="_blank" rel="noopener">IEEEXplore</a>, <a href="https://github.com/stfbk/mqttsa" target="_blank" rel="noopener">GitHub</a> and <a href="https://sites.google.com/fbk.eu/mqttsa" target="_blank" rel="noopener">website</a>.</li>
