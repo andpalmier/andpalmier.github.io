@@ -9,22 +9,22 @@
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>malware</title>
+      <link>https://andpalmier.com/categories/malware/</link>
+      <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/categories/malware/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>phishing</title>
       <link>https://andpalmier.com/categories/phishing/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
       
       <guid>https://andpalmier.com/categories/phishing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>malware</title>
-      <link>https://andpalmier.com/categories/malware/</link>
-      <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
-      
-      <guid>https://andpalmier.com/categories/malware/</guid>
       <description></description>
     </item>
     

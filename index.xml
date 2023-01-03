@@ -5,20 +5,19 @@
     <link>https://andpalmier.com/</link>
     <description>Recent content on andpalmier</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate>
-    
+    <lastBuildDate>Tue, 20 Dec 2022 00:00:00 +0000</lastBuildDate>
+
 	<atom:link href="https://andpalmier.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+
     <item>
       <title>Phishing findings, campaign #3: ING bank</title>
       <link>https://andpalmier.com/posts/phishing-findings-3/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/phishing-findings-3/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/phishing-findings/sampei.jpeg#center&#34;
-         alt=&#34;Sampei&#34;/&gt; 
+         alt=&#34;Sampei&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;I started hunting and reporting phishing websites on Twitter: follow me &lt;a href=&#34;https://twitter.com/andpalmier&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; if you are interested!
@@ -271,16 +270,16 @@ The fields submitted to the form are:&lt;/p&gt;
 &lt;p&gt;The ING kit shows how some criminals are trying to bypass Multi-Factor Authentication, by sending credentials (including OTP) via email as soon as these are stolen; and, probably in case they are not able to enter the OTP quick enough, they also try to steal the security questions, which are often used as a fallback mechanism to access the account.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>PhishFlood: a poc for flooding phishing kits</title>
       <link>https://andpalmier.com/posts/flooding-phishing-kits/</link>
       <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/flooding-phishing-kits/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://steamuserimages-a.akamaihd.net/ugc/2418873130670778483/414245F5E27783EC5F84ABBBF9E5840B641007DC/#center&#34;
-         alt=&#34;phishflood&#34;/&gt; 
+         alt=&#34;phishflood&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
@@ -528,19 +527,19 @@ There is a lot of space for improvements, but, after checking the logs of the ki
 &lt;p&gt;If you want to play around with &lt;code&gt;phishflood&lt;/code&gt; you can use this &lt;a href=&#34;https://github.com/andpalmier/phishflood/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub repo&lt;/a&gt;, I have organized the code and added some improvements. Feel free to let me know what features could be added.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Emotet infection from PHP: generation of a malicious doc</title>
       <link>https://andpalmier.com/posts/emotet-php-maldoc/</link>
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/emotet-php-maldoc/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;During 2020, the Emotet malware distribution was silent between the beginning of February and the middle of July; this was the longest known break for Emotet. After this pause, the email campaigns started again, with multiple vendors reporting that hundreds of thousands of messages were detected every day&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 &lt;p&gt;There is a long list of security researchers on Twitter that are interested in Emotet, with many accounts sharing samples and findings every day. During this summer I started writing multiple threads reporting abused &amp;ldquo;.it&amp;rdquo; domains which were used to distribute this malware. While I was working on one of this daily threads, I found something interesting:&lt;/p&gt;
 &lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/emotet/indexof.png#center&#34;
-         alt=&#34;finding the sample&#34;/&gt; 
+         alt=&#34;finding the sample&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;This domain was reported in multiple occasions during the summer, and it was seen for the first time at the end of July:&lt;/p&gt;
@@ -762,16 +761,16 @@ Emotet is currently considered one of the most costly threats, affecting not onl
 &lt;/div&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Proof of concept of a ransowmare in Go</title>
       <link>https://andpalmier.com/posts/poc-goransom/</link>
       <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/poc-goransom/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/goransom/thief_gopher.jpg#center&#34;
-         alt=&#34;goransom pic&#34;/&gt; 
+         alt=&#34;goransom pic&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
@@ -965,16 +964,16 @@ Emotet is currently considered one of the most costly threats, affecting not onl
 &lt;/ul&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Phishing findings, campaign #2: content.zip (LinkedIn)</title>
       <link>https://andpalmier.com/posts/phishing-findings-2/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/phishing-findings-2/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/phishing-findings/sampei.jpeg#center&#34;
-         alt=&#34;Sampei&#34;/&gt; 
+         alt=&#34;Sampei&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;I started hunting and reporting phishing websites on Twitter: follow me &lt;a href=&#34;https://twitter.com/andpalmier&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; if you are interested!
@@ -1197,16 +1196,16 @@ A new directory is created using &lt;code&gt;@mkdir&lt;/code&gt;, and it has a n
 &lt;p&gt;Even if the phishing page is always the same, the kit puts it in a new URL at every new visit; so that every victim will have a different URL. The kit also provides logging capabilities for IP address of the victims in &lt;code&gt;vu.txt&lt;/code&gt;.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Machine Learning and phishing, pt. 2: Random Forest</title>
       <link>https://andpalmier.com/posts/ml-with-phishing-ep2/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/ml-with-phishing-ep2/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/ml-with-phishing/jaws.jpg#center&#34;
-         alt=&#34;phishing like in jaws&#34;/&gt; 
+         alt=&#34;phishing like in jaws&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;I started hunting and reporting phishing pages on Twitter, follow me &lt;a href=&#34;https://twitter.com/andpalmier&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; if you are interested! After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.&lt;/p&gt;
@@ -1602,16 +1601,16 @@ By default, &lt;code&gt;n_estimators&lt;/code&gt; is set to 100 (before version 
 &lt;p&gt;I will mention again that this is not the proper way of tuning the parameters for a random forest: the best approach would be to extend parameters search using &lt;a href=&#34;https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;RandomizedSearchCV&lt;/a&gt; provided by sklearn.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Phishing findings, campaign #1: u.zip (Office365/Outlook)</title>
       <link>https://andpalmier.com/posts/phishing-findings-1/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/phishing-findings-1/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/phishing-findings/sampei.jpeg#center&#34;
-         alt=&#34;Sampei&#34;/&gt; 
+         alt=&#34;Sampei&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;I started hunting and reporting phishing websites on Twitter: follow me &lt;a href=&#34;https://twitter.com/andpalmier&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; if you are interested!
@@ -1899,16 +1898,16 @@ In this series of posts I am going to analyze and discuss some of the phishing k
 &lt;p&gt;The templates redirect the credentials to &lt;code&gt;emailcode/email.php&lt;/code&gt;, which tries to gather additional information and writes them into an email, that is sent to the exfiltration email address. At the end of the execution, the victim is redirected to &lt;code&gt;login.microsoftonline.com&lt;/code&gt;.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Machine Learning and phishing, pt. 1: Decision Trees</title>
       <link>https://andpalmier.com/posts/ml-with-phishing-ep1/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/ml-with-phishing-ep1/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/ml-with-phishing/jaws.jpg#center&#34;
-         alt=&#34;phishing like in jaws&#34;/&gt; 
+         alt=&#34;phishing like in jaws&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;Last week I started hunting and reporting phishing websites on Twitter (follow me &lt;a href=&#34;https://twitter.com/andpalmier&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; if you are interested). After some digging, I have decided that it would be interesting to use this topic to refresh my memory around the basics of Machine Learning.&lt;/p&gt;
@@ -2316,16 +2315,16 @@ The list of features and the code of this post in form of Jupyter notebook can b
 &lt;p&gt;As pointed out from a friend, this is not the proper way of tuning the parameters of a model: one could extend parameters search by means of the &lt;a href=&#34;https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;RandomizedSearchCV&lt;/a&gt; provided by sklearn.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Practical malware analysis: solutions for Lab 1</title>
       <link>https://andpalmier.com/posts/practical-malware-lab1/</link>
       <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/practical-malware-lab1/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/practical-malware-lab1/practical-malware-header.png#center&#34;
-         alt=&#34;cover of Practical mawlare analysis&#34;/&gt; 
+         alt=&#34;cover of Practical mawlare analysis&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;I am trying to acquire some knowledge on malware analysis by using &lt;a href=&#34;https://practicalmalwareanalysis.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&amp;lsquo;Practical Malware Analysis&amp;rsquo;&lt;/a&gt; (by &lt;em&gt;Sikorski, Michael, and Andrew Honig, 2012&lt;/em&gt;). I will publish my solutions of the exercises as soon as I complete them; &lt;a href=&#34;https://github.com/mikesiko/PracticalMalwareAnalysis-Labs&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; you can find all the executables for the labs.&lt;/p&gt;
@@ -2589,16 +2588,16 @@ Again we see &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;GetProcAddres
 &lt;p&gt;Considering the information obtained, we can assume that the Lab01-04.exe file will be used to change permissions to write in a directory and drop and execute the hidden resource, which contacts the network to download and run additional malware.&lt;/p&gt;
 </description>
     </item>
-    
+
     <item>
       <title>F-Droid apps you will find useful</title>
       <link>https://andpalmier.com/posts/fdroid-apps/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/posts/fdroid-apps/</guid>
       <description>&lt;figure class=&#34;align-center &#34;&gt;
     &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/fdroid-apps/fdroid.png#center&#34;
-         alt=&#34;F-Droid icon&#34;/&gt; 
+         alt=&#34;F-Droid icon&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;h2 id=&#34;what-is-f-droid&#34;&gt;What is F-Droid?&lt;/h2&gt;
@@ -2778,12 +2777,12 @@ You can find the app on the &lt;a href=&#34;https://f-droid.org/en/&#34; target=
 &lt;/ul&gt;
 </description>
     </item>
-    
+
     <item>
       <title>Hey 👋</title>
       <link>https://andpalmier.com/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
+
       <guid>https://andpalmier.com/about/</guid>
       <description>&lt;p&gt;My name is &lt;strong&gt;Andrea Palmieri&lt;/strong&gt;. I am interested in everything cyber-security related, machine learning, and reverse engineering. I am passionate about books, movies and art in general. Also, I am a die-hard AS Roma fan.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://andpalmier.com/AndreaPalmieriCV.pdf&#34;&gt;Here&lt;/a&gt; is a &lt;strong&gt;non-updated&lt;/strong&gt; version of my resume. For a more recent version, you can send me an email at &lt;em&gt;andpalmier [at] gmail [dot] com&lt;/em&gt; or contact me on &lt;a href=&#34;https://www.linkedin.com/in/andpalmier&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;LinkedIn&lt;/a&gt;.&lt;/p&gt;
@@ -2798,6 +2797,6 @@ You can find the app on the &lt;a href=&#34;https://f-droid.org/en/&#34; target=
 &lt;/ul&gt;
 </description>
     </item>
-    
+
   </channel>
 </rss>
