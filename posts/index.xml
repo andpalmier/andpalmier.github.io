@@ -100,5 +100,14 @@
       <description>Discussing the F-Droid apps I use everyday</description>
     </item>
     
+    <item>
+      <title>Dissecting an Android stalkerware</title>
+      <link>https://andpalmier.com/posts/stalkerware-analysis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/posts/stalkerware-analysis/</guid>
+      <description>Analysis of an Italian stalkerware for Android</description>
+    </item>
+    
   </channel>
 </rss>
