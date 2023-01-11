@@ -9,7 +9,16 @@
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 05 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dissecting an Android stalkerware</title>
+      <link>https://andpalmier.com/posts/stalkerware-analysis/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/posts/stalkerware-analysis/</guid>
+      <description>Analysis of an Italian stalkerware for Android</description>
+    </item>
+    
     <item>
       <title>F-Droid apps you will find useful</title>
       <link>https://andpalmier.com/posts/fdroid-apps/</link>
@@ -17,15 +26,6 @@
       
       <guid>https://andpalmier.com/posts/fdroid-apps/</guid>
       <description>Discussing the F-Droid apps I use everyday</description>
-    </item>
-    
-    <item>
-      <title>Dissecting an Android stalkerware</title>
-      <link>https://andpalmier.com/posts/stalkerware-analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://andpalmier.com/posts/stalkerware-analysis/</guid>
-      <description>Analysis of an Italian stalkerware for Android</description>
     </item>
     
   </channel>

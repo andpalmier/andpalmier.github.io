@@ -9,7 +9,34 @@
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>android</title>
+      <link>https://andpalmier.com/tags/android/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/tags/android/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>malware</title>
+      <link>https://andpalmier.com/tags/malware/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/tags/malware/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>stalkerware</title>
+      <link>https://andpalmier.com/tags/stalkerware/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/tags/stalkerware/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>ingbank</title>
       <link>https://andpalmier.com/tags/ingbank/</link>
@@ -52,15 +79,6 @@
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
       
       <guid>https://andpalmier.com/tags/emotet/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>malware</title>
-      <link>https://andpalmier.com/tags/malware/</link>
-      <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
-      
-      <guid>https://andpalmier.com/tags/malware/</guid>
       <description></description>
     </item>
     
@@ -146,15 +164,6 @@
     </item>
     
     <item>
-      <title>android</title>
-      <link>https://andpalmier.com/tags/android/</link>
-      <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://andpalmier.com/tags/android/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>fdroid</title>
       <link>https://andpalmier.com/tags/fdroid/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
@@ -169,15 +178,6 @@
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>https://andpalmier.com/tags/foss/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>stalkerware</title>
-      <link>https://andpalmier.com/tags/stalkerware/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://andpalmier.com/tags/stalkerware/</guid>
       <description></description>
     </item>
     
