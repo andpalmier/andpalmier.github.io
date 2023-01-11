@@ -9,96 +9,96 @@
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 20 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Phishing findings, campaign #3: ING bank</title>
       <link>https://andpalmier.com/posts/phishing-findings-3/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/phishing-findings-3/</guid>
       <description>Analysis of a phishing kit targeting ING Bank</description>
     </item>
-
+    
     <item>
       <title>PhishFlood: a poc for flooding phishing kits</title>
       <link>https://andpalmier.com/posts/flooding-phishing-kits/</link>
       <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/flooding-phishing-kits/</guid>
       <description>Flooding a phishing kit with fake data to make it harder for threat actors</description>
     </item>
-
+    
     <item>
       <title>Emotet infection from PHP: generation of a malicious doc</title>
       <link>https://andpalmier.com/posts/emotet-php-maldoc/</link>
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/emotet-php-maldoc/</guid>
       <description>Analysis of a PHP file used to generate a document containing malicious macros for Emotet infection</description>
     </item>
-
+    
     <item>
       <title>Proof of concept of a ransowmare in Go</title>
       <link>https://andpalmier.com/posts/poc-goransom/</link>
       <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/poc-goransom/</guid>
       <description>Writing a super simple proof of concept for a ransowmare in Go</description>
     </item>
-
+    
     <item>
       <title>Phishing findings, campaign #2: content.zip (LinkedIn)</title>
       <link>https://andpalmier.com/posts/phishing-findings-2/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/phishing-findings-2/</guid>
       <description>Analysis of a phishing kit targeting LinkedIn users</description>
     </item>
-
+    
     <item>
       <title>Machine Learning and phishing, pt. 2: Random Forest</title>
       <link>https://andpalmier.com/posts/ml-with-phishing-ep2/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/ml-with-phishing-ep2/</guid>
       <description>Tuning the Random Forest algorithm to detect phishing pages</description>
     </item>
-
+    
     <item>
       <title>Phishing findings, campaign #1: u.zip (Office365/Outlook)</title>
       <link>https://andpalmier.com/posts/phishing-findings-1/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/phishing-findings-1/</guid>
       <description>Analysis of a phishing kit targeting Outlook and Office365 users</description>
     </item>
-
+    
     <item>
       <title>Machine Learning and phishing, pt. 1: Decision Trees</title>
       <link>https://andpalmier.com/posts/ml-with-phishing-ep1/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/ml-with-phishing-ep1/</guid>
       <description>Tuning the Decision Trees algorithm to detect phishing pages</description>
     </item>
-
+    
     <item>
       <title>Practical malware analysis: solutions for Lab 1</title>
       <link>https://andpalmier.com/posts/practical-malware-lab1/</link>
       <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/practical-malware-lab1/</guid>
       <description>Solutions for the first lab of &amp;lsquo;Practical malware analysis&amp;rsquo;</description>
     </item>
-
+    
     <item>
       <title>F-Droid apps you will find useful</title>
       <link>https://andpalmier.com/posts/fdroid-apps/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
-
+      
       <guid>https://andpalmier.com/posts/fdroid-apps/</guid>
       <description>Discussing the F-Droid apps I use everyday</description>
     </item>
-
+    
   </channel>
 </rss>
