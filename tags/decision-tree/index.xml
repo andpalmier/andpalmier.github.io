@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>decision tree on andpalmier</title>
+    <title>Decision Tree on andpalmier</title>
     <link>https://andpalmier.com/tags/decision-tree/</link>
-    <description>Recent content in decision tree on andpalmier</description>
+    <description>Recent content in Decision Tree on andpalmier</description>
     <image>
+      <title>andpalmier</title>
       <url>https://andpalmier.com/papermod-cover.png</url>
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 09 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/decision-tree/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Sat, 09 May 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://andpalmier.com/tags/decision-tree/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Machine Learning and phishing, pt. 1: Decision Trees</title>
       <link>https://andpalmier.com/posts/ml-with-phishing-ep1/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
-      
       <guid>https://andpalmier.com/posts/ml-with-phishing-ep1/</guid>
       <description>Tuning the Decision Trees algorithm to detect phishing pages</description>
     </item>
-    
   </channel>
 </rss>

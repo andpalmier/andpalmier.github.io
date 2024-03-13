@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>threat analysis on andpalmier</title>
+    <title>Threat Analysis on andpalmier</title>
     <link>https://andpalmier.com/tags/threat-analysis/</link>
-    <description>Recent content in threat analysis on andpalmier</description>
+    <description>Recent content in Threat Analysis on andpalmier</description>
     <image>
+      <title>andpalmier</title>
       <url>https://andpalmier.com/papermod-cover.png</url>
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 12 Oct 2020 10:33:45 +0200</lastBuildDate><atom:link href="https://andpalmier.com/tags/threat-analysis/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Mon, 12 Oct 2020 10:33:45 +0200</lastBuildDate>
+    <atom:link href="https://andpalmier.com/tags/threat-analysis/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Emotet infection from PHP: generation of a malicious doc</title>
       <link>https://andpalmier.com/posts/emotet-php-maldoc/</link>
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
-      
       <guid>https://andpalmier.com/posts/emotet-php-maldoc/</guid>
       <description>Analysis of a PHP file used to generate a document containing malicious macros for Emotet infection</description>
     </item>
-    
   </channel>
 </rss>

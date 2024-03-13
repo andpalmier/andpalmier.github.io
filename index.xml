@@ -5,10 +5,134 @@
     <link>https://andpalmier.com/</link>
     <description>Recent content on andpalmier</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <language>en</language>
+    <lastBuildDate>Fri, 08 Mar 2024 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://andpalmier.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Adventures in Ad-Land: detect malvertising with seads</title>
+      <link>https://andpalmier.com/posts/seads/</link>
+      <pubDate>Fri, 08 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/posts/seads/</guid>
+      <description>&lt;figure class=&#34;align-center &#34;&gt;
+    &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/seads/seads-header.jpeg#center&#34;
+         alt=&#34;seads&#34;/&gt; &lt;figcaption&gt;
+            &lt;p&gt;Picture created with Image Creator from Microsoft Designer&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;This post is about a handy tool I developed called &lt;code&gt;seads&lt;/code&gt;, which helps detecting malvertising on search engines. If you have ideas or feedback related to this project, feel free to drop me an email!&lt;/p&gt;
+&lt;p&gt;The idea for &lt;code&gt;seads&lt;/code&gt; came from the growing number of cases of malicious ads displayed in search engine results and my need for a tool to detect them automatically. Recently, various incidents shows how malvertising has been used for redirecting users to &lt;a href=&#34;https://www.malwarebytes.com/blog/threat-intelligence/2023/05/malvertising-its-a-jungle-out-there&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;phishing websites&lt;/a&gt; and for &lt;a href=&#34;https://securelist.com/malvertising-through-search-engines/108996/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;malware distribution&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Malvertising is a particularly sneaky technique, as it exploits the trust users place in the top search results of by their favorite search engines. A suggestion: to increase your online safety, consider installing tools like &lt;a href=&#34;https://ublockorigin.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;uBlock Origin&lt;/a&gt; or other reputable ad-blockers. These tools can help mitigate the risks associated with malvertising by blocking potentially harmful ads :)&lt;/p&gt;
+&lt;h2 id=&#34;introducing-seads&#34;&gt;Introducing &lt;code&gt;seads&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;seads&lt;/code&gt; is written in GoLang and it uses headless browser pages to navigate to popular search engines, where it retrieves a list of ads displayed in response to user-submitted queries. At the time of this blog post, &lt;code&gt;seads&lt;/code&gt; is able to detect ads on Google, Bing, DuckDuckGo and Yahoo.&lt;/p&gt;
+&lt;p&gt;In addition, &lt;code&gt;seads&lt;/code&gt; can notify about detected ads via email, Slack or Telegram, it can provide a screenshot to support the evidence of malvertising campaigns, and can be executed using Docker.&lt;/p&gt;
+&lt;h2 id=&#34;getting-started&#34;&gt;Getting started&lt;/h2&gt;
+&lt;p&gt;You can download the binary from the &lt;a href=&#34;https://github.com/andpalmier/seads/releases&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;releases section on Github&lt;/a&gt; or compile it from source using the following Go installation command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;go install github.com/andpalmier/seads/cmd/seads@latest
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Alternatively, you can use Docker to run &lt;code&gt;seads&lt;/code&gt; without affecting your local setup:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker build -t seads .
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -it -v &amp;#34;$(pwd)&amp;#34;:/mnt seads -h
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Once installed, you need to create a config file, here is an example that you can adjust to your needs:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;queries&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;query&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;apple&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;expected-domains&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;apple.com, amazon.com]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;query&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;as roma&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;expected-domains&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The config file above will query &amp;ldquo;ipad&amp;rdquo; and &amp;ldquo;as roma&amp;rdquo; in search engines, the field &amp;ldquo;expected-domains&amp;rdquo; is used to specify domains we are expecting to appear in the ads of search engines while searching for the specified keywords. Domains in &amp;ldquo;expected-domains&amp;rdquo; will still appear in the output of &lt;code&gt;seads&lt;/code&gt;, but won&amp;rsquo;t be sent in the notification.&lt;/p&gt;
+&lt;p&gt;Finally, &lt;code&gt;seads&lt;/code&gt; can be executed with the following flags:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -config string (REQUIRED)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    	path to config file (default &amp;#34;config.yaml&amp;#34;).
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -concurrency int
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    	number of concurrent headless browsers (default 4).
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -cleanlinks
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    	print clear links in output (links will remain defanged in notifications).
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    	notify if unexpected domains are found.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -screenshot string
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    	path to store screenshots (if empty, the screenshot feature will be disabled).
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In order to receive notifications via email, Slack, or Telegram, you need to configure the &lt;code&gt;config.yaml&lt;/code&gt; file with your credentials and preferences:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;mail&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;host&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;SMTP server hostname or IP address (string)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;port&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;SMTP server port, common ones are 25, 465, 587 or 2525 (int)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;username&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;SMTP server username (string)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;password&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;SMTP server password (string)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;E-mail address that the mail are sent from (string)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;recipients&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;List of recipient e-mails (list of strings)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;slack&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;token&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;API Bot token (string)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;channels&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;Channels to send messages to in Cxxxxxxxxxx format(list of strings)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;telegram&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;token&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;API Bot token (string)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;chatid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;Chat IDs or Channel names (list of strings)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;testing-it&#34;&gt;Testing it&lt;/h2&gt;
+&lt;p&gt;Here is a real-life example of detecting ads with &lt;code&gt;seads&lt;/code&gt; using the config file pasted above. The tool is executed with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;seads -config config.yaml -screenshot scr -notify
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and it produces the following output:&lt;/p&gt;
+&lt;figure class=&#34;align-center &#34;&gt;
+    &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/seads/seads.gif#center&#34;
+         alt=&#34;seads output&#34;/&gt; &lt;figcaption&gt;
+            &lt;p&gt;Output recorded with &lt;a href=&#34;https://asciinema.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;asciinema&lt;/a&gt;&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;If ads were found, a new folder &lt;code&gt;src&lt;/code&gt; will be created, containing screenshots like the one below:&lt;/p&gt;
+&lt;figure class=&#34;align-center &#34;&gt;
+    &lt;img loading=&#34;lazy&#34; src=&#34;https://andpalmier.com/images/posts/seads/example-yahoo-apple.png#center&#34;
+         alt=&#34;seads screenshot&#34;/&gt; &lt;figcaption&gt;
+            &lt;p&gt;One of the screenshot produced by &lt;code&gt;seads&lt;/code&gt;&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;A screenshot will be taken only if at least one ad is detected, ensuring that screenshots are relevant. Screenshots are named following this format: &lt;code&gt;searchengine-query-timestamp.png&lt;/code&gt;. For example, the screenshot above will be named &lt;code&gt;yahoo-apple-1710278888941790000.png&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;And here is the notification which will be sent to the specified channels:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Here are the &amp;#34;unexpected domains&amp;#34; found during the last execution of seads:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Message creation date: 2024-03-12 22:28:14
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Domain: reparaturpc[.]ch
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Full link: www[.]https://reparaturpc[.]ch/de/?msclkid=75c3ce8f8942156ac179ab7f41a03704
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Domain: fust[.]ch
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Full link: https://www[.]fust[.]ch/de/marken/apple[.]html?&amp;amp;msclkid=a836011a07061ba4052864eacfe7d0fd&amp;amp;utm_source=bing&amp;amp;utm_medium=cpc&amp;amp;utm_campaign=Bing%20-%20NBrand%20-%20S%20-%20D%20-%20MM%20PC%20Marke%20Apple&amp;amp;utm_term=apple&amp;amp;utm_content=1_Apple%3D2_undefined%C2%A63_Nbrand&amp;amp;gclid=a836011a07061ba4052864eacfe7d0fd&amp;amp;gclsrc=3p[.]ds
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Domain: jobs[.]ch
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Full link: https://www[.]jobs[.]ch/en/vacancies/?term=apple&amp;amp;utm_source=bing&amp;amp;utm_medium=search&amp;amp;utm_campaign=wb:jobs|tg:b2c|cn:ww|lg:en|ct:search,nonbrand,company|cd:company|mg:job-application|pd:y|tt:cpc|gt:keyword,nonbrand,company|gd:company&amp;amp;msclkid=17ac4d7d0b0616628f40288dc3e79a46&amp;amp;utm_term=apple&amp;amp;utm_content=gt%3Akeyword,nonbrand,company%7Cgd%3Acompany
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Domain: amazon[.]com
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Full link: https://www[.]amazon[.]com/s?k=applwe&amp;amp;adgrpid=1344703557775981&amp;amp;hvadid=84044278562817&amp;amp;hvbmt=be&amp;amp;hvdev=c&amp;amp;hvlocphy=3322&amp;amp;hvnetw=o&amp;amp;hvqmt=e&amp;amp;hvtargid=kwd-84044521042995%3Aloc-175&amp;amp;hydadcr=29387_14610683&amp;amp;tag=mh0b-20&amp;amp;ref=pd_sl_7xha1yy51_e
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;This message was automatically sent by seads (www.github.com/andpalmier/seads)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;automating-executions&#34;&gt;Automating executions&lt;/h3&gt;
+&lt;p&gt;It is possible to further leverage the notification feature by automating exectution of &lt;code&gt;seads&lt;/code&gt;. In Linux, we can use &lt;code&gt;cron&lt;/code&gt; to do it, for example, to run &lt;code&gt;seads&lt;/code&gt; daily at 9:00 AM, you can add the following entry to your crontab:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0 9 * * * /path/to/seads -config /path/to/config.yaml -screenshot /path/to/screenshots -notify
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For Windows and macOS users, similar scheduling options are available using Task Scheduler and &lt;code&gt;launchd&lt;/code&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;By setting up a well-configured file, we can automate the execution of &lt;code&gt;seads&lt;/code&gt; and receive notifications whenever it detects an ad from an unexpected domain. For instance, if we&amp;rsquo;re interested in potential malvertising targeting our company, we simply list our company&amp;rsquo;s domains in the expected-domains field. This way, &lt;code&gt;seads&lt;/code&gt; will continuously monitor for any ads that don&amp;rsquo;t match our specified domains, alerting us immediately if it finds any.&lt;/p&gt;
+&lt;h2 id=&#34;libraries-used&#34;&gt;Libraries used&lt;/h2&gt;
+&lt;p&gt;For automating the headless browser, I relied on Rod, a powerful library that works with the DevTools Protocol. Rod is very popular for tasks like web scraping and automation, and it is capable of mimicking manual interactions with the browser. You can find additional information about Rod on its &lt;a href=&#34;https://github.com/go-rod/rod&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub repository&lt;/a&gt; and &lt;a href=&#34;https://go-rod.github.io/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;documentation site&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As for notifications, I used the Shoutrrr Notification library, which provides seamless integration for notifications in Go applications. You can find more details about Shoutrrr on its &lt;a href=&#34;https://github.com/containrrr/shoutrrr&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub repository&lt;/a&gt; and &lt;a href=&#34;https://containrrr.dev/shoutrrr/v0.8/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;documentation site&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
+&lt;p&gt;Due to the nature of search engine ads work, a single search might not reveal all the ads. However, by using the &lt;code&gt;concurrency&lt;/code&gt; flag to increase the number of headless browsers working simultaneously - although it may slightly slow down detection - it will ensures a more comprehensive collection of ads.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s also worth mentioning that notifications sent have character limits, so messages exceeding this limit won&amp;rsquo;t be sent. I have encounter this issue while testing &lt;code&gt;seads&lt;/code&gt;, as many search engine ad links may be quite long due to tracking elements. To address this, one approach could be setting up separate config files for different campaigns and running &lt;code&gt;seads&lt;/code&gt; separately for each.&lt;/p&gt;
+&lt;h2 id=&#34;closing-remarks&#34;&gt;Closing remarks&lt;/h2&gt;
+&lt;p&gt;In conclusion, &lt;code&gt;seads&lt;/code&gt; can detect malvertising campaigns in Google, Bing, DuckDuckGo and Yahoo ads by relying on concurrent headless browser pages, which will navigate to the search engines, and display the ads which were found. The tool can be automatically executed with &lt;code&gt;cron&lt;/code&gt;, Windows Scheduler or &lt;code&gt;launchd&lt;/code&gt;, and it can take screenwhots of the ads and send notifications via email, Slack or Telegram.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Dissecting an Android stalkerware</title>
@@ -365,12 +489,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        author = &amp;#34;Andrea Palmieri @andpalmier&amp;#34;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	ref = &amp;#34;https://andpalmier.com/posts/stalkerware-analysis/&amp;#34;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    strings:
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        $s1 = &amp;#34;DataMariaDbSalentoBellaSarda&amp;#34; nocase ascii
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        $s2 = &amp;#34;IsScreenOnServiceMarinellaBella&amp;#34; ascii
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        $s3 = &amp;#34;preInstallServiceAnacondameritocronicavolenzia&amp;#34; nocase ascii
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        $s4 = &amp;#34;ScreenIsOnReceiverMarinellaBella&amp;#34; ascii
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        $s1 = &amp;#34;cliccando il bottone continua sottostante&amp;#34; nocase ascii
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        $s2 = &amp;#34;www.spyapp.ch/eula&amp;#34; nocase ascii
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	      $s3 = &amp;#34;periodicamente il sistema viene aggiornato&amp;#34; nocase ascii
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    condition:
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        uint16(0) == 0x6564 and 4 of them
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        uint16(0) == 0x4B50 and 3 of them
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;iocs&#34;&gt;IOCs&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;u1623673571u.apk	86504d29d3d5a852e8e37c951c049917a9b11907
@@ -1990,6 +2114,7 @@ In this series of posts I am going to analyze and discuss some of the phishing k
 &lt;blockquote class=&#34;twitter-tweet&#34; data-dnt=&#34;true&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/phishing?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#phishing&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/onedrive?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#onedrive&lt;/a&gt;  &lt;br&gt;hxxps://www.bonatura.com/ok.co/u/&lt;br&gt;&lt;br&gt;exf: macdon161@gmail&lt;br&gt;reg: &lt;a href=&#34;https://twitter.com/GoDaddy?ref_src=twsrc%5Etfw&#34;&gt;@GoDaddy&lt;/a&gt; &lt;br&gt;🔐 &lt;a href=&#34;https://twitter.com/letsencrypt?ref_src=twsrc%5Etfw&#34;&gt;@letsencrypt&lt;/a&gt; &lt;br&gt;☣️ 63.249.146.86 (AS54489)&lt;br&gt;🎯 &lt;a href=&#34;https://twitter.com/onedrive?ref_src=twsrc%5Etfw&#34;&gt;@onedrive&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Microsoft?ref_src=twsrc%5Etfw&#34;&gt;@Microsoft&lt;/a&gt; &lt;br&gt; &lt;a href=&#34;https://twitter.com/illegalFawn?ref_src=twsrc%5Etfw&#34;&gt;@illegalFawn&lt;/a&gt; &lt;a href=&#34;https://twitter.com/ActorExpose?ref_src=twsrc%5Etfw&#34;&gt;@ActorExpose&lt;/a&gt; &lt;a href=&#34;https://twitter.com/PhishKitTracker?ref_src=twsrc%5Etfw&#34;&gt;@PhishKitTracker&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Spam404?ref_src=twsrc%5Etfw&#34;&gt;@Spam404&lt;/a&gt; &lt;a href=&#34;https://twitter.com/malwrhunterteam?ref_src=twsrc%5Etfw&#34;&gt;@malwrhunterteam&lt;/a&gt; &lt;a href=&#34;https://twitter.com/JAMESWT_MHT?ref_src=twsrc%5Etfw&#34;&gt;@JAMESWT_MHT&lt;/a&gt; &lt;a href=&#34;https://twitter.com/ANeilan?ref_src=twsrc%5Etfw&#34;&gt;@ANeilan&lt;/a&gt; &lt;a href=&#34;https://twitter.com/sysgoblin?ref_src=twsrc%5Etfw&#34;&gt;@sysgoblin&lt;/a&gt; &lt;a href=&#34;https://twitter.com/PhishStats?ref_src=twsrc%5Etfw&#34;&gt;@PhishStats&lt;/a&gt; &lt;a href=&#34;https://t.co/zbFwmBWEvm&#34;&gt;pic.twitter.com/zbFwmBWEvm&lt;/a&gt;&lt;/p&gt;&amp;mdash; Andrea Palmieri🤌 (@andpalmier) &lt;a href=&#34;https://twitter.com/andpalmier/status/1263931978954485763?ref_src=twsrc%5Etfw&#34;&gt;May 22, 2020&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
 
+
 &lt;p&gt;We can clearly see from the second screenshot that the zip containing the phishing kit is left exposed, thus we can download it and check it on VirusTotal using the hash of the zip:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ sha256sum u.zip
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;c9079c6f6576da99f979b637c358a45f89c7187ddb80edf9e7fb2d9500880173  u.zip&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -3159,6 +3284,7 @@ You can find the app on the &lt;a href=&#34;https://f-droid.org/en/&#34; target=
 &lt;h3 id=&#34;projects&#34;&gt;Projects&lt;/h3&gt;
 &lt;p&gt;You can find my projects on &lt;a href=&#34;https://github.com/andpalmier/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub&lt;/a&gt;, here are some of the most interesting ones:&lt;/p&gt;
 &lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;seads&lt;/strong&gt;: Search Engine ADs Scanner. &lt;a href=&#34;https://github.com/andpalmier/seads&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub&lt;/a&gt; and &lt;a href=&#34;https://www.andpalmier.com/posts/seads/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;blog post&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;apkingo&lt;/strong&gt;: get detailed information about apk files. &lt;a href=&#34;https://github.com/andpalmier/apkingo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;makephish&lt;/strong&gt;: clone and patch websites to create phishing pages. &lt;a href=&#34;https://github.com/andpalmier/makephish&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub&lt;/a&gt; and a &lt;a href=&#34;https://esgeeks.com/makephish-clonar-sitios-web-login/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;spanish article about it&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;phishflood&lt;/strong&gt;: flood phishing kits with fake data. &lt;a href=&#34;https://andpalmier.com/posts/flooding-phishing-kits/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Blog post&lt;/a&gt; and &lt;a href=&#34;https://github.com/andpalmier/phishflood&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;

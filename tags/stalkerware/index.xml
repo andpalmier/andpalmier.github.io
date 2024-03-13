@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>stalkerware on andpalmier</title>
+    <title>Stalkerware on andpalmier</title>
     <link>https://andpalmier.com/tags/stalkerware/</link>
-    <description>Recent content in stalkerware on andpalmier</description>
+    <description>Recent content in Stalkerware on andpalmier</description>
     <image>
+      <title>andpalmier</title>
       <url>https://andpalmier.com/papermod-cover.png</url>
       <link>https://andpalmier.com/papermod-cover.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/stalkerware/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://andpalmier.com/tags/stalkerware/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dissecting an Android stalkerware</title>
       <link>https://andpalmier.com/posts/stalkerware-analysis/</link>
       <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://andpalmier.com/posts/stalkerware-analysis/</guid>
       <description>Analysis of an Italian stalkerware for Android</description>
     </item>
-    
   </channel>
 </rss>

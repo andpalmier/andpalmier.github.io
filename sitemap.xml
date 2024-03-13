@@ -2,13 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://andpalmier.com/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+    <loc>https://andpalmier.com/posts/seads/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andpalmier.com/tags/android/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+    <loc>https://andpalmier.com/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/categories/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/go/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/phishing/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/categories/phishing/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/posts/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/tool/</loc>
+    <lastmod>2024-03-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andpalmier.com/tags/android/</loc>
     <lastmod>2023-01-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/posts/stalkerware-analysis/</loc>
@@ -20,22 +41,10 @@
     <loc>https://andpalmier.com/categories/malware/</loc>
     <lastmod>2023-01-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andpalmier.com/posts/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://andpalmier.com/tags/stalkerware/</loc>
     <lastmod>2023-01-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andpalmier.com/tags/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://andpalmier.com/tags/ingbank/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/tags/phishing/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/categories/phishing/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/posts/phishing-findings-3/</loc>
@@ -43,9 +52,6 @@
   </url><url>
     <loc>https://andpalmier.com/tags/phishingkit/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andpalmier.com/tags/go/</loc>
-    <lastmod>2021-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andpalmier.com/posts/flooding-phishing-kits/</loc>
     <lastmod>2021-01-31T00:00:00+00:00</lastmod>
