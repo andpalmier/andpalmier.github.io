@@ -30,13 +30,14 @@
 </noscript><meta property="og:title" content="Phishing findings, campaign #2: content.zip (LinkedIn)" />
 <meta property="og:description" content="Analysis of a phishing kit targeting LinkedIn users" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://andpalmier.com/posts/phishing-findings-2/" /><meta property="og:image" content="https://andpalmier.com/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://andpalmier.com/posts/phishing-findings-2/" />
+<meta property="og:image" content="https://andpalmier.com/papermod-cover.png" />
+<meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-08T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-07-08T00:00:00+00:00" />
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png"/>
-
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png" />
 <meta name="twitter:title" content="Phishing findings, campaign #2: content.zip (LinkedIn)"/>
 <meta name="twitter:description" content="Analysis of a phishing kit targeting LinkedIn users"/>
 
@@ -74,7 +75,7 @@
   "articleBody": " I started hunting and reporting phishing websites on Twitter: follow me here if you are interested! In this series of posts I am going to analyze and discuss some of the phishing kits found online.\nLet’s start from the beginning The kit was created to steal LinkedIn credentials:\nHow this phishing kit looks like when deployed\nAt a first look, we can notice some characteristics of this page which makes it different from the usual fake login:\nthe message at the top: “Send Your Product quotes to interested buyers via LinkedIn” the two input fields for the password (and the missing ‘Forgot password?’ link) the message under the Continue button: “By clicking Continue you proceed to send your business catalogues and quotes” So this page is not targeting the usual LinkedIn user: it is pretending to provide a feature to send catalogues and quotes using the social network.\nLet’s now check the zip of this kit on VirusTotal, using sha256sum:\n$ sha256sum content.zip e34795a90e1196e5b415ee7386d75474dfc8bcdb4653dcf7b83551a8497e257b content.zip VirusTotal detections for the zip of this phishing kit\nExplore the kit If we extract the archive, we will see the following structure:\n$ tree -a content content ├── blocker.php ├── .htaccess ├── index.php ├── Linkedin │ ├── geoplugin.class.php │ ├── index.php │ └── loginss.php ├── robots.txt └── vu.txt 1 directory, 7 files This kit is simpler than the one analyzed in the previous post, and it contains only the LinkedIn template. The presence of a txt file (vu.txt) usually indicates that the kit is logging information about victims or visitors. It is also interesting to note that a .htaccess and robots.txt files are shipped with the kit itself.\nEntry point So we can start our analysis from the entry point (index.php), here are the first lines:\n\u003c?php $emai = $_GET['user']; include('blocker.php'); $DIR=md5(rand(0,100000000000)); function recurse_copy($home,$DIR) { $dir = opendir($home); @mkdir($DIR); while(false !== ( $file = readdir($dir)) ) { if (( $file != '.' ) \u0026\u0026 ( $file != '..' )) { if ( is_dir($home . '/' . $file) ) { recurse_copy($home . '/' . $file,$DIR . '/' . $file); } else { copy($home . '/' . $file,$DIR . '/' . $file); } } } closedir($dir); } $home=\"Linkedin\"; recurse_copy( $home, $DIR ); We will take a look at blocker.php in the next paragraph, for now, let’s just say that it is included, and let’s focus on the following lines. A new directory is created using @mkdir, and it has a name obtained from the md5 hash of a random number: this means that a new folder will be created every time index.php is reached. The files included in the ‘Linkedin’ folder are then copied in this newly created folder using the recurse_copy function.\nLet’s continue with the definition of a header:\n\u003c?php header(\"location:$DIR?user=$emai\u0026.verify?service=mail\u0026data:text/html;charset=utf-8;base64, PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt\"); Some parameters are specified for a redirection: location is equal to the newly created folder, user equal to $_GET['user'] (it will be used to automatically fill the email address in the fake LinkedIn form) and service is set to mail. This header also includes a base64 string which can easily be decoded:\n$ echo 'PGh0bWw+DQo8c3R5bGU+IGJvZHkgeyBtYXJnaW46IDA7IG92ZXJmbG93OiBoaWRkZW47IH0gPC9zdHlsZT4NCiAgPGlmcmFt' | base64 -d ",
   "wordCount" : "1667",
   "inLanguage": "en",
-  "datePublished": "2020-07-08T00:00:00Z",
+  "image": "https://andpalmier.com/papermod-cover.png","datePublished": "2020-07-08T00:00:00Z",
   "dateModified": "2020-07-08T00:00:00Z",
   "mainEntityOfPage": {
     "@type": "WebPage",
