@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>2024 - [andpalmier.com](https://andpalmier.com)</copyright>
-    <lastBuildDate>Mon, 18 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The subtle art of jailbreaking LLMs</title>
+      <link>https://andpalmier.com/posts/jailbreaking-llms/</link>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://andpalmier.com/posts/jailbreaking-llms/</guid>
+      <description>An n00b overview of the main Large Language Models jailbreaking strategies</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://andpalmier.com/posts/jailbreaking-llms/featured.jpeg" />
+    </item>
+    
     <item>
       <title>Adventures in Ad-Land: detect malvertising with seads</title>
       <link>https://andpalmier.com/posts/seads/</link>

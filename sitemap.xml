@@ -4,13 +4,19 @@
 
   <url>
     <loc>https://andpalmier.com/</loc>
-    <lastmod>2024-11-18T00:00:00+00:00</lastmod>
+    <lastmod>2024-11-17T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://andpalmier.com/posts/</loc>
-    <lastmod>2024-11-18T00:00:00+00:00</lastmod>
+    <lastmod>2024-11-17T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://andpalmier.com/posts/jailbreaking-llms/</loc>
+    <lastmod>2024-11-17T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
