@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Recommendations on andpalmier</title>
     <link>https://andpalmier.com/categories/recommendations/</link>
     <description>Recent content in Recommendations on andpalmier</description>
-    <image>
-      <title>andpalmier</title>
-      <url>https://andpalmier.com/papermod-cover.png</url>
-      <link>https://andpalmier.com/papermod-cover.png</link>
-    </image>
-    <generator>Hugo -- 0.134.3</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 Apr 2020 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://andpalmier.com/categories/recommendations/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2024 - [andpalmier.com](https://andpalmier.com)</copyright>
+    <lastBuildDate>Sun, 05 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/categories/recommendations/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>F-Droid apps you will find useful</title>
       <link>https://andpalmier.com/posts/fdroid-apps/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/posts/fdroid-apps/</guid>
       <description>Discussing the F-Droid apps I use everyday</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://andpalmier.com/posts/fdroid-apps/featured.png" />
     </item>
+    
   </channel>
 </rss>

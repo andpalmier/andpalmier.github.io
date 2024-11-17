@@ -1,150 +1,202 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on andpalmier</title>
     <link>https://andpalmier.com/tags/</link>
     <description>Recent content in Tags on andpalmier</description>
-    <image>
-      <title>andpalmier</title>
-      <url>https://andpalmier.com/papermod-cover.png</url>
-      <link>https://andpalmier.com/papermod-cover.png</link>
-    </image>
-    <generator>Hugo -- 0.134.3</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 08 Mar 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://andpalmier.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2024 - [andpalmier.com](https://andpalmier.com)</copyright>
+    <lastBuildDate>Fri, 08 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go</title>
       <link>https://andpalmier.com/tags/go/</link>
       <pubDate>Fri, 08 Mar 2024 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/go/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Phishing</title>
       <link>https://andpalmier.com/tags/phishing/</link>
       <pubDate>Fri, 08 Mar 2024 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/phishing/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Android</title>
       <link>https://andpalmier.com/tags/android/</link>
       <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/android/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Malware</title>
       <link>https://andpalmier.com/tags/malware/</link>
       <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/malware/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Stalkerware</title>
       <link>https://andpalmier.com/tags/stalkerware/</link>
       <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/stalkerware/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Ingbank</title>
       <link>https://andpalmier.com/tags/ingbank/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/ingbank/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Phishingkit</title>
       <link>https://andpalmier.com/tags/phishingkit/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/phishingkit/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Emotet</title>
       <link>https://andpalmier.com/tags/emotet/</link>
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
+      
       <guid>https://andpalmier.com/tags/emotet/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Threat Analysis</title>
       <link>https://andpalmier.com/tags/threat-analysis/</link>
       <pubDate>Mon, 12 Oct 2020 10:33:45 +0200</pubDate>
+      
       <guid>https://andpalmier.com/tags/threat-analysis/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Linkedin</title>
       <link>https://andpalmier.com/tags/linkedin/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/linkedin/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Machine Learning</title>
       <link>https://andpalmier.com/tags/machine-learning/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/machine-learning/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Random Forest</title>
       <link>https://andpalmier.com/tags/random-forest/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/random-forest/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Office365</title>
       <link>https://andpalmier.com/tags/office365/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/office365/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Outlook</title>
       <link>https://andpalmier.com/tags/outlook/</link>
       <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/outlook/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Decision Tree</title>
       <link>https://andpalmier.com/tags/decision-tree/</link>
       <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/decision-tree/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Exercises</title>
       <link>https://andpalmier.com/tags/exercises/</link>
       <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/exercises/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Malware-Analysis</title>
       <link>https://andpalmier.com/tags/malware-analysis/</link>
       <pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/malware-analysis/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Fdroid</title>
       <link>https://andpalmier.com/tags/fdroid/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/fdroid/</guid>
       <description></description>
+      
     </item>
+    
     <item>
       <title>Foss</title>
       <link>https://andpalmier.com/tags/foss/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/tags/foss/</guid>
       <description></description>
+      
     </item>
+    
   </channel>
 </rss>

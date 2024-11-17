@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Authors on andpalmier</title>
+    <link>https://andpalmier.com/authors/</link>
+    <description>Recent content in Authors on andpalmier</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>2024 - [andpalmier.com](https://andpalmier.com)</copyright>
+    <atom:link href="https://andpalmier.com/authors/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

