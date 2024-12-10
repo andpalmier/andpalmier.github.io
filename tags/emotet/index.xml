@@ -8,6 +8,7 @@
     <language>en</language>
     <copyright>2024 - [andpalmier.com](https://andpalmier.com)</copyright>
     <lastBuildDate>Mon, 12 Oct 2020 10:33:45 +0200</lastBuildDate><atom:link href="https://andpalmier.com/tags/emotet/index.xml" rel="self" type="application/rss+xml" />
+    
     <item>
       <title>Emotet infection from PHP: generation of a malicious doc</title>
       <link>https://andpalmier.com/posts/emotet-php-maldoc/</link>

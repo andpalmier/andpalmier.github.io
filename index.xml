@@ -72,7 +72,7 @@
     
 &lt;/h2&gt;
 &lt;p&gt;This section serves as a &lt;strong&gt;very minimal&lt;/strong&gt; introduction to some concepts which can help understanding the rest of the post. If you&amp;rsquo;re interested in a much more complete overview of the concepts below, be sure to check out the &lt;a href=&#34;https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&#34; target=&#34;_blank&#34;&gt;3Blue1Brown playlist on Neural Networks&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Just like other Machine Learning models, LLMs have to go trough a phase of &lt;strong&gt;training&lt;/strong&gt; before actually being useful: this is when the model is exposed to large datasets and &lt;em&gt;&amp;ldquo;learns&amp;rdquo;&lt;/em&gt; from the observed data. For training LLMs, the models are fed huge amounts of text from various sources (books, websites, articles&amp;hellip;) and they &lt;em&gt;&amp;ldquo;learn&amp;rdquo;&lt;/em&gt; patterns and the statistical correlation in the input data.&lt;/p&gt;
+&lt;p&gt;Just like other Machine Learning models, LLMs have to go through a phase of &lt;strong&gt;training&lt;/strong&gt; before actually being useful: this is when the model is exposed to large datasets and &lt;em&gt;&amp;ldquo;learns&amp;rdquo;&lt;/em&gt; from the observed data. For training LLMs, the models are fed huge amounts of text from various sources (books, websites, articles&amp;hellip;) and they &lt;em&gt;&amp;ldquo;learn&amp;rdquo;&lt;/em&gt; patterns and the statistical correlation in the input data.&lt;/p&gt;
 
 &lt;figure&gt;
       &lt;img class=&#34;my-0 rounded-md&#34; src=&#34;https://andpalmier.com/images/posts/jailbreaking-llms/learns.jpg&#34; alt=&#34;meme on LLMs learning&#34; /&gt;
