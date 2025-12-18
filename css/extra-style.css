@@ -1,0 +1,60 @@
+img {
+    background-color: #dadada;
+}
+
+table td, table th, table tr {
+    border: 2px solid #000;
+}
+
+img.emoji {
+    background-color: transparent;
+}
+
+a {
+    text-decoration: underline;
+}
+
+pre {
+    border: 1px solid #ccc;
+    border-radius: 4px!important;
+}
+
+code {
+    padding: 3px 5px;
+    border-radius: 4px!important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 3.2rem 0 3.2rem 0;
+}
+
+.content {
+    display: initial!important;
+    margin-top: 0px;
+}
+
+.about {
+    margin-top: 1.8rem;
+}
+
+.footer {
+    font-style: italic;
+    font-size: 14px;
+}
+
+.footer hr {
+    width: 5%;
+    height: 2px;
+    border: none;
+    background-color: #ccc
+
+}
+
+.footer ul {
+    padding-left: 0px;
+}
+
+.footer li {
+    display: inline-block;
+}
+
