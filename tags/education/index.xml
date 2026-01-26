@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Education on andpalmier's blog</title><link>/tags/education/</link><description>Recent content in Education on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 23 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="/tags/education/index.xml" rel="self" type="application/rss+xml"/><item><title>Interview preparation for a Cyber Threat Intelligence role</title><link>/posts/cti-interview-preparation/</link><pubDate>Thu, 23 Oct 2025 00:00:00 +0000</pubDate><guid>/posts/cti-interview-preparation/</guid><description>
+&lt;h2 class="relative group"&gt;Introduction
+&lt;div id="introduction" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#introduction" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;I didn&amp;rsquo;t find any interview guide for Cyber Threat Intelligence (CTI) roles that satisfied me (I&amp;rsquo;m not interested in &lt;a href="https://en.wikipedia.org/wiki/AI_slop" target="_blank" rel="noreferrer"&gt;AI slop&lt;/a&gt;), so I decided to write one!&lt;/p&gt;
+&lt;p&gt;I figured writing this post might help me organize my ideas, and - &lt;em&gt;hopefully&lt;/em&gt; - help others preparing for their interviews. The goal is to refresh some topics some of you probably already know, and collect useful links, in case you want to dig deeper into a specific subject.&lt;/p&gt;
+&lt;p&gt;There are 3 sections:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="/posts/cti-interview-preparation/#foundations" &gt;Foundations&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="/posts/cti-interview-preparation/#frameworks" &gt;Frameworks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="/posts/cti-interview-preparation/#analyzing-threats" &gt;Analyzing threats&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;At the end of each section, you&amp;rsquo;ll find some interview questions to practice what we&amp;rsquo;ve revisited.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;Be sure to &lt;strong&gt;tailor your review based on the job description&lt;/strong&gt;: every role may have unique requirements, and some are likely not covered in this post.&lt;/span&gt;
+&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Foundations
+&lt;div id="foundations" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#foundations" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;What is CTI?
+&lt;div id="what-is-cti" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#what-is-cti" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;ll steal the definition from the book &lt;a href="https://www.oreilly.com/library/view/intelligence-driven-incident-response/9781098120672/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Intelligence-Driven Incident Response&amp;rdquo;&lt;/a&gt; by Rebekah Brown and Scott J. Roberts:
+&lt;em&gt;&amp;ldquo;Threat intelligence is the analysis of adversaries - their capabilities, motivations, and goals. Cyber threat intelligence is the analysis of how adversaries use the cyber domain to accomplish their goals&amp;rdquo;&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This shows where CTI fits in the bigger picture; it’s part of a hierarchy that goes from general intelligence down to the cyber domain:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;the Intelligence domain&lt;/li&gt;
+&lt;li&gt;Threat Intelligence&lt;/li&gt;
+&lt;li&gt;Cyber Threat Intelligence&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 class="relative group"&gt;Data vs Intelligence
+&lt;div id="data-vs-intelligence" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#data-vs-intelligence" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Data&lt;/strong&gt; are raw facts or observations, like the measure of the distance between two points.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Intelligence&lt;/strong&gt; is the product of collecting, processing, and analyzing data to answer questions and support decisions. Good intelligence should be relevant, accurate and timely.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basically, &lt;strong&gt;data becomes intelligence only when enriched with appropriate context&lt;/strong&gt;.&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Types of intelligence
+&lt;div id="types-of-intelligence" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#types-of-intelligence" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;There are 3 main categories of intelligence:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Strategic&lt;/strong&gt;: high-level, less prone to perish, used to look at long-term trends and drive decisions and policies. In the context of CTI, it may be motivations of the threat actors.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Operational&lt;/strong&gt;: lower level than strategic intelligence, helps teams plan and decide where to focus their effort. In CTI, this can include information on campaigns, actor attribution and capabilities.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tactical&lt;/strong&gt;: low-level, mostly obtained from technical sources, therefore can support incident response, but highly perishable. Examples in the Cyber Threat Intelligence domain are Indicators of Compromise (IoCs) and observables.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;IoC vs IoA
+&lt;div id="ioc-vs-ioa" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#ioc-vs-ioa" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Indicators of Compromise:&lt;/strong&gt; pieces of information which reveal that a system or a network &lt;strong&gt;has been compromised&lt;/strong&gt;. Some examples may be IP addresses or domain names associated with a C2, or hashes of malicious files. IoCs are reactive indicators, as they are used to identify attacks that already happened.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Indicators of Attack:&lt;/strong&gt; flags indicating that a &lt;strong&gt;threat or attack is in progress&lt;/strong&gt;: often related to threat actors&amp;rsquo; behavior, like anomalies in traffic volume, or suspicious commands executed. IOAs are proactive indicators, because they are used to detect potential attacks in early stages.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Tactics, Techniques &amp;amp; Procedures
+&lt;div id="tactics-techniques--procedures" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#tactics-techniques--procedures" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;Tactics, Techniques and Procedures (often abbreviated TTPs) describe the behavior of threat actors. More specifically:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tactics&lt;/strong&gt;: high-level information, describes how an attacker operates during the attack (examples: compromise targets, infrastructure reuse&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Techniques&lt;/strong&gt;: medium-level information, describes &amp;ldquo;how&amp;rdquo; an attacker carries out a tactic (tools used, malware&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Procedures&lt;/strong&gt;: low-level information, they describe the specific sequence of actions used by the adversary to carry out each step of the attack cycle.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;N.B.&lt;/strong&gt; One technique might fit into several tactics, and vice versa.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll try to make it more practical with an example: an actor wants access to a company’s network, and sends a phishing email with a malicious attachment to employees.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tactic&lt;/strong&gt;: initial access&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Technique&lt;/strong&gt;: phishing (malicious attachment)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Procedures&lt;/strong&gt;: the actor crafts a convincing email, develops or selects a malicious attachment to establish a foothold, sends the email to targeted employees&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Traffic light protocol
+&lt;div id="traffic-light-protocol" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#traffic-light-protocol" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Traffic Light Protocol (TLP) was designed to support the process of information sharing. It uses five color labels to show how far you can share certain information:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;TLP:RED&lt;/strong&gt;: not for disclosure, information shouldn&amp;rsquo;t be disclosed, it&amp;rsquo;s restricted to participants only.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:AMBER+STRICT&lt;/strong&gt;: limited disclosure, information can be shared to participants&amp;rsquo; organization only.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:AMBER&lt;/strong&gt;: limited disclosure, information can be shared to participants&amp;rsquo; organization and its clients.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:GREEN&lt;/strong&gt;: limited disclosure, information can be shared only to member of the community.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:CLEAR&lt;/strong&gt;: disclosure is not limited.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://www.cisa.gov/news-events/news/traffic-light-protocol-tlp-definitions-and-usage" target="_blank" rel="noreferrer"&gt;&amp;ldquo;The Traffic Light Protocol&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;📝 Quiz time
+&lt;div id="-quiz-time" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-quiz-time" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;How are data and intelligence linked between each other?&lt;/li&gt;
+&lt;li&gt;Which are the different types of threat intelligence?&lt;/li&gt;
+&lt;li&gt;What is the difference between IoC and IoA?&lt;/li&gt;
+&lt;li&gt;What is the difference between TLP:AMBER and TLP:AMBER+STRICT?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Frameworks
+&lt;div id="frameworks" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#frameworks" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;Intelligence Cycle
+&lt;div id="intelligence-cycle" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#intelligence-cycle" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Intelligence Cycle is a step-by-step approach to turn raw data into actionable insights. Here are the steps:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Requirements&lt;/strong&gt;: gather answers to questions like &lt;em&gt;&amp;ldquo;what do stakeholders need to know?&amp;rdquo;&lt;/em&gt; and &lt;em&gt;&amp;ldquo;which threats should we focus on?&amp;rdquo;&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Collection&lt;/strong&gt;: once the requirements are defined, it&amp;rsquo;s time to gather data! Some sources can be OSINT, threat feeds, and dark web monitoring.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Analysis&lt;/strong&gt;: this step is where the raw data turns into something meaningful, like patterns, trends, and connections.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dissemination&lt;/strong&gt;: Finally, the findings are condensed in a report that should be distributed to the relevant stakeholders.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 class="relative group"&gt;Cyber kill chain
+&lt;div id="cyber-kill-chain" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#cyber-kill-chain" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Cyber Kill Chain breaks down the steps that threat actors usually take when running an attack. It can help identify potential attack vectors and develop strategies to prevent, detect and respond to threats. Its stages are:&lt;/p&gt;
+&lt;ol start="0"&gt;
+&lt;li&gt;&lt;strong&gt;Targeting&lt;/strong&gt;: attacker chooses the target.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reconnaissance&lt;/strong&gt;: attacker collects information about the target. The attacker can gather information about technical aspects of systems (&lt;em&gt;hard data&lt;/em&gt;), and information about organization (&lt;em&gt;soft data&lt;/em&gt;). Gathering techniques include &lt;strong&gt;active methods&lt;/strong&gt; (require direct interaction with the target) and &lt;strong&gt;passive methods&lt;/strong&gt; (third-party services can be used to collect information).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Weaponization&lt;/strong&gt;: attacker finds one or more vulnerabilities, crafts an exploit, and combines it with a payload.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Delivery&lt;/strong&gt;: attacker delivers the malicious code or software to the target (by email, phishing, SQL injection, &lt;a href="https://en.wikipedia.org/wiki/IP_over_Avian_Carriers" target="_blank" rel="noreferrer"&gt;a pigeon?&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Exploitation&lt;/strong&gt;: attacker uses the vulnerability identified to get unauthorized access to the target&amp;rsquo;s system and gain control of code execution. From now, the attacker has control of at least one process in the system.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Installation&lt;/strong&gt;: attacker installs malware or other tools in the target&amp;rsquo;s system to get ongoing access and establish persistence.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Command and Control&lt;/strong&gt;: attacker creates a communication with the target&amp;rsquo;s system to issue commands and extract data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Action and Exfiltration&lt;/strong&gt;: attacker takes planned actions, (such as stealing data or disrupting operations), and exfiltrate the data out of the target&amp;rsquo;s system.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 class="relative group"&gt;Diamond model
+&lt;div id="diamond-model" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#diamond-model" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Diamond model is a framework to analyze network intrusion events. It works by breaking them down into 4 elements, and highlighting the relationships between them. I think of it as a way to simplify events by zooming into the 4 components of the model:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Adversary&lt;/strong&gt;: the actor who carried out the cyber event.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Infrastructure&lt;/strong&gt;: the systems where the actor performed the attack, such as C2 servers or compromised IoT devices.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Victim&lt;/strong&gt;: the target of the event, such as an individual, an organization, or an industry.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Capability&lt;/strong&gt;: tools and techniques the actor used to achieve their goal, such as a malware, exploits, social engineering techniques.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The Diamond model helps connecting the dots between these parts of an attack, for instance:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If we know the &lt;strong&gt;infrastructure&lt;/strong&gt; is a phishing domain, we may be able to link it to an &lt;strong&gt;adversary&lt;/strong&gt;, maybe using whois information.&lt;/li&gt;
+&lt;li&gt;If we understand the &lt;strong&gt;capability&lt;/strong&gt; is a malware family, we could find reports of other where it&amp;rsquo;s been used, and link them to the same &lt;strong&gt;adversary&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here is an ASCII art representing the framework:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Adversary
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; /\
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; / \
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; / \
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Infrastructure ----- Capability
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; \ /
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; \ /
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; \/
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Victim&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://www.activeresponse.org/wp-content/uploads/2013/07/diamond.pdf" target="_blank" rel="noreferrer"&gt;&amp;ldquo;The Diamond Model of Intrusion Analysis&amp;rdquo;&lt;/a&gt; by Caltagirone, Pendergast and Betz.&lt;/span&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;MITRE ATT&amp;amp;CK Framework
+&lt;div id="mitre-attck-framework" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#mitre-attck-framework" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;MITRE ATT&amp;amp;CK (Adversarial Tactics, Techniques, and Common Knowledge) is a (huge!) database of tactics and techniques (see &lt;a href="/posts/cti-interview-preparation/#tactics-techniques--procedures" &gt;TTPs&lt;/a&gt;) that actors use or have used in the real world.&lt;/p&gt;
+&lt;p&gt;Explaining the whole MITRE ATT&amp;amp;CK framework it&amp;rsquo;s out of scope for this blog post, but I wanted to keep a section about it to remember to take some time to play with it if you have never used it, or if it has been a long time.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll also leave here a great infographic about MITRE ATT&amp;amp;CK by &lt;a href="https://twitter.com/fr0gger_" target="_blank" rel="noreferrer"&gt;Thomas Roccia&lt;/a&gt;:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/cti-interview-preparation/0*dgEfdK1qy4kSEaGQ.webp" alt="MITRE ATT&amp;amp;CK infographic by Thomas Roccia" /&gt;
+&lt;figcaption&gt;MITRE ATT&amp;amp;CK infographic by &lt;a href="https://twitter.com/fr0gger_" target="_blank" rel="noreferrer"&gt;Thomas Roccia&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://attack.mitre.org" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Get started with MITRE ATT&amp;amp;CK&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;📝 Quiz time!
+&lt;div id="-quiz-time-1" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-quiz-time-1" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;How can the intelligence cycle help a CTI team?&lt;/li&gt;
+&lt;li&gt;What is the difference between weaponization and exploitation in the Cyber Kill Chain framework?&lt;/li&gt;
+&lt;li&gt;Describe the 4 main components of the Diamond model.&lt;/li&gt;
+&lt;li&gt;How would a CTI analyst use the MITRE ATT&amp;amp;CK Framework?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Analyzing threats
+&lt;div id="analyzing-threats" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#analyzing-threats" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;Malware
+&lt;div id="malware" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#malware" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;The term &amp;ldquo;malware&amp;rdquo; is used for various kinds of software designed to perform undesired actions on a computer system, network or data. Here are some malware&amp;rsquo; categories:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ransomware&lt;/strong&gt;: disables victim&amp;rsquo;s access to data (often encrypting it) until a ransom is paid&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Spyware&lt;/strong&gt;: collects user&amp;rsquo;s activity information without their knowledge&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Adware&lt;/strong&gt;: pushes unwanted advertisements to the user&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Trojan&lt;/strong&gt;: disguises itself as another application&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backdoor/RAT&lt;/strong&gt;: gives threat actors remote access to the victim&amp;rsquo;s device&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Keylogger&lt;/strong&gt;: monitors user&amp;rsquo;s keystrokes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dropper&lt;/strong&gt;: transports and installs another malicious payload in the infected system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When analyzing suspicious files, there are two approaches:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Static analysis&lt;/strong&gt;: examine files without executing them, for example extracting technical indicators from the file (like suspicious strings), or using a disassembler.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dynamic analysis&lt;/strong&gt;: executes the suspected file in a safe environment (see &lt;a href="/posts/cti-interview-preparation/#sandboxes" &gt;sandboxes&lt;/a&gt;), to watch it in action.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Typically, the best approach is to use a combination of both, to get a full picture of what the file is actually doing.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;Finding malware
+&lt;div id="finding-malware" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#finding-malware" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://virustotal.com" target="_blank" rel="noreferrer"&gt;VirusTotal&lt;/a&gt;&lt;/strong&gt;: my go-to way to quickly check a file, find out some context around it, how it behaves, and related samples. One of the coolest feature is that it&amp;rsquo;s possible to write &lt;a href="/posts/cti-interview-preparation/#yara" &gt;YARA&lt;/a&gt; rules to search VT&amp;rsquo;s database or to get a notification when a new file matching our rules is uploaded.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://bazaar.abuse.ch" target="_blank" rel="noreferrer"&gt;MalwareBazaar&lt;/a&gt;&lt;/strong&gt;: another platform dedicated to sharing malware samples, but &lt;strong&gt;completely free&lt;/strong&gt;! MalwareBazaar focuses only on malware samples: so no Adware, no benign files, and no suspicious domains.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://malpedia.caad.fkie.fraunhofer.de" target="_blank" rel="noreferrer"&gt;Malpedia&lt;/a&gt;&lt;/strong&gt;: the encyclopedia of malware families. Unlike VirusTotal and MalwareBazaar, Malpedia is less about raw samples sharing, and more about context and classification: it works best for quickly looking up a malware family, find reports about it, and check if there are public YARA rules to track it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 class="relative group"&gt;Sandboxes
+&lt;div id="sandboxes" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#sandboxes" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;Sandboxes let an analyst safely run suspicious files or URLs in a controlled environment to observe their behavior. They’re particularly useful to understand what a malware sample does, which files it drops, and which network connections it attempts.&lt;/p&gt;
+&lt;p&gt;The DIY approach to sandboxes is to build a malware analysis lab using something like &lt;a href="https://github.com/mandiant/flare-vm" target="_blank" rel="noreferrer"&gt;FLARE-VM&lt;/a&gt;. But in case you don&amp;rsquo;t want to go through all of that, you can choose from some available online sandboxes like: &lt;a href="https://any.run" target="_blank" rel="noreferrer"&gt;Any.Run&lt;/a&gt;, &lt;a href="https://www.hybrid-analysis.com" target="_blank" rel="noreferrer"&gt;Hybrid Analysis&lt;/a&gt;, or &lt;a href="https://www.joesecurity.org" target="_blank" rel="noreferrer"&gt;Joe Sandbox&lt;/a&gt;. Each of those have different features (some free, some paid), but the idea is the same: run the sample in a safe place, and watch what happens.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;YARA
+&lt;div id="yara" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#yara" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;From the &lt;a href="https://virustotal.github.io/yara/" target="_blank" rel="noreferrer"&gt;project home page&lt;/a&gt;: &lt;em&gt;&amp;ldquo;YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples&amp;rdquo;&lt;/em&gt;. With &lt;a href="https://yara.readthedocs.io/en/stable/writingrules.html" target="_blank" rel="noreferrer"&gt;YARA rules&lt;/a&gt;, you can describe text or binary patterns and use them to scan files, which is critical for hunting malware families in a large database of samples.&lt;/p&gt;
+&lt;p&gt;Here is an example of a YARA rule, and an explanation of some of its elements:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// YARA allows to import modules to extend its functionalities,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// some popular modules are: pe, cuckoo, hash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;import&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;pe&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// The rule name identifies the YARA rule, use a meaningful
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// name (not like the example below!)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;rule&lt;/span&gt; &lt;span class="n"&gt;DetectSuspiciousPE&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// The metadata section allows to specify information about
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// the rule, such as author, date or sample used for the rule
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;meta&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;author&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;Andrea Palmieri&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;Detects suspicious PE files with magic!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// The strings fields is used to define what the rule should
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// match; you can use text, hexadecimals and regex
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;strings&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Simple text string that could appear in malware
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// nocase = case insensitive, fullword = non alphanumeric
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// wide = 2 bytes per character, base64 = base64 encoding
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;text_string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;malicious&amp;#34;&lt;/span&gt; &lt;span class="n"&gt;nocase&lt;/span&gt; &lt;span class="n"&gt;wide&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Hex pattern for the suspicious API LoadLibraryA
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Wildcards = { 4C ?F 6? }, Alternatives { 4C (6F|69) }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Jump = { 72 [2-4] 79 }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;hex_string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="mf"&gt;6F&lt;/span&gt; &lt;span class="mi"&gt;61&lt;/span&gt; &lt;span class="mi"&gt;64&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="mi"&gt;69&lt;/span&gt; &lt;span class="mi"&gt;62&lt;/span&gt; &lt;span class="mi"&gt;72&lt;/span&gt; &lt;span class="mi"&gt;61&lt;/span&gt; &lt;span class="mi"&gt;72&lt;/span&gt; &lt;span class="mi"&gt;79&lt;/span&gt; &lt;span class="mi"&gt;41&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Regex to catch suspicious command-line flags
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;regex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;/--&lt;/span&gt;&lt;span class="n"&gt;inject&lt;/span&gt;&lt;span class="o"&gt;|--&lt;/span&gt;&lt;span class="n"&gt;persist&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// The condition defines when the rule should trigger
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;condition&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Check if the file starts with the PE magic number &amp;#34;MZ&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nf"&gt;uint16&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mh"&gt;0x5A4D&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Ensure it&amp;#39;s actually a valid PE file using the PE module
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;pe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_pe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// And at least one of our suspicious indicators is present
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;any&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;them&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;And here is how to run a rule on files in the current folder:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;yara &amp;lt;yara-rule&amp;gt; .&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Building YARA rules required balance: if they are too specific, they can miss variations of the same malware; if they are too broad, they will match a lot of false positives. A good rule should capture the malware&amp;rsquo;s unique &amp;ldquo;fingerprint&amp;rdquo; without being too restrictive.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://github.com/InQuest/awesome-yara" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Awesome YARA&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;📝 Quiz time!
+&lt;div id="-quiz-time-2" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-quiz-time-2" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Assume you receive a malicious hash, how would you investigate it?&lt;/li&gt;
+&lt;li&gt;What is the main purpose of a sandbox, and when would you use one?&lt;/li&gt;
+&lt;li&gt;How do YARA rules help in identifying malware families? What makes a &amp;ldquo;good&amp;rdquo; rule?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Web-based threats
+&lt;div id="web-based-threats" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#web-based-threats" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;p&gt;Before discussing web-based threats, it may be useful to briefly revisit 2 important protocols:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TLS&lt;/strong&gt; (Transport Layer Security) is a cryptographic protocol that keeps network communication secure by encrypting data, ensuring privacy, integrity, and authentication. Its key functions are &lt;strong&gt;data encryption&lt;/strong&gt; (uses symmetric and asymmetric cryptography to make intercepted data unreadable), &lt;strong&gt;server authentication&lt;/strong&gt; (verifies server identity through a digital certificate issued by a trusted authority) and &lt;strong&gt;data integrity&lt;/strong&gt; (ensures transmitted data remains unaltered during transit). Its steps are:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Client Hello:&lt;/strong&gt; The client (e.g., browser) sends supported TLS versions and cryptographic methods.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Server Response:&lt;/strong&gt; The server replies with its digital certificate and chosen TLS settings.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Exchange:&lt;/strong&gt; Both parties establish a secure, encrypted communication channel.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/cti-interview-preparation/tls-handshake.webp" alt="TLS handshake" /&gt;
+&lt;figcaption&gt;TLS handshake by &lt;a href="https://www.cloudflare.com/en-gb/learning/ssl/what-happens-in-a-tls-handshake" target="_blank" rel="noreferrer"&gt;Cloudflare&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;DNS&lt;/strong&gt; (Domain Name System) is used to translate domain names into IP addresses. It acts like the phonebook of the internet, turning web URLs into IP addresses, here is the step-by-step process:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;User Request:&lt;/strong&gt; You type a domain name into your browser.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DNS Query:&lt;/strong&gt; The browser sends a request to a DNS resolver to find the corresponding IP address.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Response:&lt;/strong&gt; The resolver checks its cache or queries other DNS servers (root, TLD, and authoritative servers) to retrieve the IP address.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Connection:&lt;/strong&gt; The browser uses the IP address to connect to the desired website or service.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="/images/posts/cti-interview-preparation/dns-lookup.webp" alt="DNS lookup" /&gt;
+&lt;figcaption&gt;DNS lookup by &lt;a href="https://www.cloudflare.com/en-gb/learning/dns/what-is-dns/" target="_blank" rel="noreferrer"&gt;Cloudflare&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h4 class="relative group"&gt;Search engines for internet
+&lt;div id="search-engines-for-internet" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#search-engines-for-internet" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.shodan.io" target="_blank" rel="noreferrer"&gt;Shodan&lt;/a&gt;&lt;/strong&gt; continuously scans the internet indexing exposed devices and services. It can be used to track attacker infrastructure (C2, phishing kits, etc.) and monitor the attack surface for specific devices or software.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://help.shodan.io/the-basics/search-query-fundamentals" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Shodan search query fundamentals&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://search.censys.io" target="_blank" rel="noreferrer"&gt;Censys&lt;/a&gt;&lt;/strong&gt; also scans the internet and collects data about exposed systems, but it is more focused on TLS certificates, protocol details, and structured search.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://docs.censys.com/docs/platform-quickstart-guide" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Censys quick start guide&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;Web sandboxes
+&lt;div id="web-sandboxes" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#web-sandboxes" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://urlscan.io" target="_blank" rel="noreferrer"&gt;urlscan.io&lt;/a&gt;&lt;/strong&gt;: similarly to the previously discussed &lt;a href="/posts/cti-interview-preparation/#sandboxes" &gt;sandboxes&lt;/a&gt;, urlscan allows you to analyze websites in a safe environment, and explore what&amp;rsquo;s under the hood: scripts, redirects, trackers, etc. It&amp;rsquo;s perfect to track phishing kits, infected pages or quickly check sketchy links.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://urlscan.io/docs/search/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;urlscan.io Search API Reference&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;JA4+
+&lt;div id="ja4" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#ja4" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;JA4+ is a set of network fingerprints for multiple protocols, and they have &lt;strong&gt;a lot&lt;/strong&gt; of very practical applications, &lt;a href="https://foxio.io/ja4" target="_blank" rel="noreferrer"&gt;many of which are listed here&lt;/a&gt;. You may have heard about &lt;a href="https://engineering.salesforce.com/easily-identify-malicious-servers-on-the-internet-with-jarm-e095edac525a/" target="_blank" rel="noreferrer"&gt;JARM fingerprint&lt;/a&gt;, JA4+ is basically that with superpowers. Personally, I mostly used it to &lt;a href="https://docs.censys.com/docs/platform-jarm-fingerprints" target="_blank" rel="noreferrer"&gt;track TLS servers in Censys&lt;/a&gt;: when the server responds to a TLS handshake a fingerprint of the response is generated, and then used to identify clusters of servers operated by the same actor.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;crt.sh
+&lt;div id="crtsh" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#crtsh" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://crt.sh/" target="_blank" rel="noreferrer"&gt;crt.sh&lt;/a&gt;&lt;/strong&gt; is a free website for looking up TLS/SSL certificates for any domain. It pulls the information directly from the Certificate Transparency (CT) logs: a public list recording every certificate issued by trusted Certificate Authorities (CAs). CT logs make it easy to spot newly issued certificates, like the ones used in phishing campaigns and domain impersonation.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;Passive DNS
+&lt;div id="passive-dns" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#passive-dns" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;Passive DNS is like the &amp;ldquo;memory&amp;rdquo; of DNS: it works by collecting and storing DNS resolution data over time, creating a database of how domain names have resolved to IP addresses. Unlike normal DNS lookups, passive DNS allows to look at past DNS activity, which is useful for tracking malicious infrastructure, identifying related domains, and patterns in actors&amp;rsquo; behavior.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://spamhaus.com/resource-center/what-is-passive-dns-a-beginners-guide" target="_blank" rel="noreferrer"&gt;&amp;ldquo;A beginner’s guide to Passive DNS&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;📝 Quiz time!
+&lt;div id="-quiz-time-3" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-quiz-time-3" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Assume you receive a malicious IP address, how would you investigate it? Which tools from this section would you start with?&lt;/li&gt;
+&lt;li&gt;How could JA4+ help you link track threat actor&amp;rsquo;s infrastructure?&lt;/li&gt;
+&lt;li&gt;What are some red flags that may suggest that a domain is hosting malicious content?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Misc
+&lt;div id="misc" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#misc" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;
+&lt;h4 class="relative group"&gt;MISP
+&lt;div id="misp" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#misp" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.misp-project.org/" target="_blank" rel="noreferrer"&gt;MISP&lt;/a&gt;&lt;/strong&gt; (Malware Information Sharing Platform) is an open-source threat intelligence platform for sharing and ingesting IoCs, attack patterns, threat actor profiles, and other intelligence. MISP members rely on the community: organizations contribute indicators, which are then enriched and shared across trusted groups. It also integrates with a lot of other tools with APIs, so you can pull/push data automatically.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;CyberChef
+&lt;div id="cyberchef" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#cyberchef" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noreferrer"&gt;CyberChef&lt;/a&gt;&lt;/strong&gt; is an open-source web-based tool with various functions for data analysis, transformation, and decoding, all using an intuitive drag-and-drop interface. It can handle and concatenate tasks like decoding Base64, extracting data from files, encrypting or decrypting text, and much more. Whenever I have something weird in front of me (an encoded string, a suspicious payload, or just some ugly logs), I throw it into CyberChef, it saves me from writing random scripts and lets me experiment quickly.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;Programming
+&lt;div id="programming" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#programming" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h4&gt;
+&lt;p&gt;Although programming is not mandatory to enter the CTI field, it is definitely a nice-to-have skill and some jobs may require it; moreover, programming can help you automate repetitive tasks, process data, or enrich indicators.&lt;/p&gt;
+&lt;p&gt;Python is often considered the best choice to learn programming, because of its huge list of libraries for data analysis and security, but other useful languages can be Go (for performance and portability) or JavaScript (if your focus is to understand and analyze web-based threats).&lt;/p&gt;
+&lt;h2 class="relative group"&gt;📝 Bonus quiz time!
+&lt;div id="-bonus-quiz-time" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-bonus-quiz-time" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;A list of questions that I was asked during interviews:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Given a technical report (&lt;a href="https://www.cybereason.com/blog/threat-analysis-phorpiex-downloader" target="_blank" rel="noreferrer"&gt;example 1&lt;/a&gt;, &lt;a href="https://www.silentpush.com/blog/socgholish/" target="_blank" rel="noreferrer"&gt;example 2&lt;/a&gt;, &lt;a href="https://go.recordedfuture.com/hubfs/reports/mtp-2024-0926.pdf" target="_blank" rel="noreferrer"&gt;example 3&lt;/a&gt;, &lt;a href="https://www.bitdefender.fr/files/News/CaseStudies/study/391/IceID-CREAT-5156.pdf" target="_blank" rel="noreferrer"&gt;and 4&lt;/a&gt;), how would you advise your Incident Response team to detect this threat?&lt;/li&gt;
+&lt;li&gt;How does the DNS resolution process work? Which stages can be abused by attackers?&lt;/li&gt;
+&lt;li&gt;What are some red flags that make a newly registered website look suspicious?&lt;/li&gt;
+&lt;li&gt;How would you prioritize Threat Intelligence feeds and alerts?&lt;/li&gt;
+&lt;li&gt;How can you communicate CTI concepts to non-technical stakeholders?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Final notes
+&lt;div id="final-notes" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#final-notes" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;d like to keep this post up to date with relevant CTI topics, so be sure to reach out or comment in case you think I missed something or wrote something awfully wrong 🙃&lt;/p&gt;
+&lt;h2 class="relative group"&gt;External resources
+&lt;div id="external-resources" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#external-resources" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;p&gt;Books, courses and links to expand on these topics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.oreilly.com/library/view/intelligence-driven-incident-response/9781098120672/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Intelligence-Driven Incident Response&amp;rdquo;&lt;/a&gt;, by Rebekah Brown and Scott J. Roberts.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.sans.org/cyber-security-courses/cyber-threat-intelligence" target="_blank" rel="noreferrer"&gt;&amp;ldquo;FOR578: Cyber Threat Intelligence&amp;rdquo;&lt;/a&gt;, a course by SANS.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://attack.mitre.org/resources/learn-more-about-attack/training/cti/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;CTI Training&amp;rdquo;&lt;/a&gt;, a &lt;strong&gt;free&lt;/strong&gt; video course by MITRE ATT&amp;amp;CK.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://blog.securitybreak.io/security-infographics-9c4d3bd891ef" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Security infographics&amp;rdquo;&lt;/a&gt; by &lt;a href="https://twitter.com/fr0gger_" target="_blank" rel="noreferrer"&gt;Thomas Roccia&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gopivot.ing" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Pivot Atlas&amp;rdquo;&lt;/a&gt;, a pivoting handbook for CTI analysts.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Practical malware analysis: solutions for Lab 1</title><link>/posts/practical-malware-lab1/</link><pubDate>Tue, 21 Apr 2020 00:00:00 +0000</pubDate><guid>/posts/practical-malware-lab1/</guid><description>&lt;p&gt;I am trying to acquire some knowledge on malware analysis by using &lt;a href="https://practicalmalwareanalysis.com/" target="_blank" rel="noreferrer"&gt;&amp;lsquo;Practical Malware Analysis&amp;rsquo;&lt;/a&gt; (by &lt;em&gt;Sikorski, Michael, and Andrew Honig, 2012&lt;/em&gt;). I will publish my solutions of the exercises as soon as I complete them. You can find all the executables for the labs here:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-4832065da2debe64ea1091ca1d7ab2f6" target="_blank" href="https://github.com/mikesiko/PracticalMalwareAnalysis-Labs" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/mikesiko/PracticalMalwareAnalysis-Labs"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-4832065da2debe64ea1091ca1d7ab2f6-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+mikesiko/PracticalMalwareAnalysis-Labs
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-4832065da2debe64ea1091ca1d7ab2f6-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+Binaries for the book Practical Malware Analysis
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="default"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+null
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4832065da2debe64ea1091ca1d7ab2f6-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1440
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4832065da2debe64ea1091ca1d7ab2f6-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+378
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/mikesiko/PracticalMalwareAnalysis-Labs"
+data-repo-id="github-4832065da2debe64ea1091ca1d7ab2f6"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;NOTE: I will try to use Linux utilities&lt;/strong&gt; (such as &lt;a href="http://pev.sourceforge.net" target="_blank" rel="noreferrer"&gt;pev&lt;/a&gt;, &lt;a href="https://linux.die.net/man/1/wrestool" target="_blank" rel="noreferrer"&gt;wrestool&lt;/a&gt; and &lt;a href="https://github.com/horsicq/Detect-It-Easy" target="_blank" rel="noreferrer"&gt;Detect It Easy&lt;/a&gt;) &lt;strong&gt;instead of the Windows tools which are mentioned in the book.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The first chapter was about basic static analysis techniques.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-1
+&lt;div id="lab-1-1" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#lab-1-1" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the files to VirusTotal and view the reports. Does either file match any existing antivirus signatures?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Uploading the files on VirusTotal, the results are that Lab01-01.dll is flagged as malicious by 34 engines, and Lab01-01.exe by 41. Here are links to the reports for &lt;a href="https://www.virustotal.com/gui/file/f50e42c8dfaab649bde0398867e930b86c2a599e8db83b8260393082268f2dba/detection" target="_blank" rel="noreferrer"&gt;Lab01-01.dll&lt;/a&gt; and &lt;a href="https://www.virustotal.com/gui/file/58898bd42c5bd3bf9b1389f0eee5b39cd59180e8370eb9ea838a0b327bd6fe47/detection" target="_blank" rel="noreferrer"&gt;Lab01-01.exe&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;When were these files compiled?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I used &lt;a href="http://pev.sourceforge.net" target="_blank" rel="noreferrer"&gt;pev&lt;/a&gt; to detect the timestamp of the compilation:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe Lab01-01.dll &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;#34;time stamp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Date/time stamp: &lt;span class="m"&gt;1292775398&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;Sun, &lt;span class="m"&gt;19&lt;/span&gt; Dec &lt;span class="m"&gt;2010&lt;/span&gt; 16:16:38 UTC&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe Lab01-01.exe &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;#34;time stamp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Date/time stamp: &lt;span class="m"&gt;1292775379&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;Sun, &lt;span class="m"&gt;19&lt;/span&gt; Dec &lt;span class="m"&gt;2010&lt;/span&gt; 16:16:19 UTC&lt;span class="o"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that either of these files is packed or obfuscated? If so, what are these indicators?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The output of &lt;code&gt;strings&lt;/code&gt; on both the files does not include &lt;code&gt;LoadLibrary&lt;/code&gt; or &lt;code&gt;GetProcAddress&lt;/code&gt;. We can have confirmation that these are not packed by using Detect It Easy:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-078952ed2772283d165fde4a67695c90" target="_blank" href="https://github.com/horsicq/Detect-It-Easy" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/horsicq/Detect-It-Easy"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-078952ed2772283d165fde4a67695c90-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+horsicq/Detect-It-Easy
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-078952ed2772283d165fde4a67695c90-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+Program for determining types of files for Windows, Linux and MacOS.
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="YARA"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+YARA
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-078952ed2772283d165fde4a67695c90-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+10098
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-078952ed2772283d165fde4a67695c90-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+875
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/horsicq/Detect-It-Easy"
+data-repo-id="github-078952ed2772283d165fde4a67695c90"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-01.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;DLL32&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-01.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;DLL32&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If the given file is packed, the &lt;code&gt;diec&lt;/code&gt; command would list the packer used in the output.&lt;/p&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at what this malware does? If so, which imports are they?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;pev&lt;/code&gt; allows us to check the imported functions by using the &lt;code&gt;-i&lt;/code&gt; flag, for instance:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe -i Lab01-01.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Imported functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: KERNEL32.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;662&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: Sleep
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;68&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: CreateProcessA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;63&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: CreateMutexA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;493&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: OpenMutexA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;27&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: CloseHandle
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: WS2_32.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;23&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;115&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;11&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;19&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;22&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;16&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;116&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ordinal: &lt;span class="m"&gt;9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: MSVCRT.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;157&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: _adjust_fdiv
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;657&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: malloc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;271&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: _initterm
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;606&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: free
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;704&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: strncmp&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;In order to make the blog post more readable, I&amp;rsquo;ll summarize the findings and list only the interesting functions.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lab01–01.exe imports functions from &lt;code&gt;KERNEL32.dll&lt;/code&gt; and &lt;code&gt;MSVCRT.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Lab01–01.dll imports functions from &lt;code&gt;KERNEL32.dll&lt;/code&gt;, &lt;code&gt;MSVCRT.dll&lt;/code&gt;, and &lt;code&gt;WS2_32.dll&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;KERNEL32.dll&lt;/code&gt; contains important functionalities (like access and edit memory and files), thus is a common DLL to import. It is interesting to note the presence of &lt;code&gt;FindFirstFileA&lt;/code&gt; and &lt;code&gt;FindNextFileA&lt;/code&gt; in Lab01–01.exe, and &lt;code&gt;CreateProcessA&lt;/code&gt; in Lab01–01.dll.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;WS2_32.dll&lt;/code&gt; is used for network functionalities, but in this case is imported by ordinals, thus we don&amp;rsquo;t have many additional information.&lt;/p&gt;
+&lt;ol start="5"&gt;
+&lt;li&gt;&lt;em&gt;Are there any other files or host-based indicators that you could look for on infected systems?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Using &lt;code&gt;strings&lt;/code&gt; on Lab01-01.exe file, we can see some interesting findings, such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kerne132.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kernel32.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\windows\system32\kerne132.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Kernel32.&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Lab01-01.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\System32\Kernel32.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WARNING_THIS_WILL_DESTROY_YOUR_MACHINE&lt;/code&gt; (my favorite)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In particular, we can assume the existence of the file named &lt;code&gt;kerne132.dll&lt;/code&gt; (with a &lt;em&gt;1&lt;/em&gt; instead of an &lt;em&gt;l&lt;/em&gt;) for infected machines.&lt;/p&gt;
+&lt;ol start="6"&gt;
+&lt;li&gt;&lt;em&gt;What network-based indicators could be used to find this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Using &lt;code&gt;strings&lt;/code&gt; on Lab01-01.dll, we can see an IP address: &lt;code&gt;127.26.152.13&lt;/code&gt;.&lt;/p&gt;
+&lt;ol start="7"&gt;
+&lt;li&gt;&lt;em&gt;What would you guess is the purpose of these files?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Other interesting results running &lt;code&gt;strings&lt;/code&gt; are: &lt;code&gt;exec&lt;/code&gt;, &lt;code&gt;hello&lt;/code&gt;, &lt;code&gt;CreateProcess&lt;/code&gt; and &lt;code&gt;sleep&lt;/code&gt;; which are names of functions. Based on the findings provided, we can say that these two files may be used to create a backdoor.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-2
+&lt;div id="lab-1-2" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#lab-1-2" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the Lab01-02.exe file to VirusTotal. Does it match any existing antivirus definitions?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The file is considered malicious by 55 engines, &lt;a href="https://www.virustotal.com/gui/file/c876a332d7dd8da331cb8eee7ab7bf32752834d4b2b54eaa362674a2a48f64a6/detection" target="_blank" rel="noreferrer"&gt;here is the report&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that this file is packed or obfuscated? If so, what are these indicators? If the file is packed, unpack it if possible.&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Detect It Easy finds that UPX has been used in this case:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-02.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: packer: UPX&lt;span class="o"&gt;(&lt;/span&gt;3.04&lt;span class="o"&gt;)[&lt;/span&gt;NRV,best&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;-&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;EXE32,console&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;We can then proceed to unpack the file with the following command:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ upx -d -o Lab01-02_unpacked.exe Lab01-02.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ultimate Packer &lt;span class="k"&gt;for&lt;/span&gt; eXecutables
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Copyright &lt;span class="o"&gt;(&lt;/span&gt;C&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="m"&gt;1996&lt;/span&gt; - &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;UPX git-d7ba31+ Markus Oberhumer, Laszlo Molnar &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; John Reiser Jan 23rd &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; File size Ratio Format Name
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -------------------- ------ ----------- -----------
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="m"&gt;16384&lt;/span&gt; &amp;lt;- &lt;span class="m"&gt;3072&lt;/span&gt; 18.75% win32/pe Lab01-02_unpacked.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Unpacked &lt;span class="m"&gt;1&lt;/span&gt; file.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at this program’s functionality? If so, which imports are they and what do they tell you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;As shown in the previous exercise, we can use &lt;code&gt;readpe -i&lt;/code&gt; to check the imported functions. Here are the interesting findings:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;KERNEL32.DLL&lt;/code&gt;: &lt;code&gt;SystemTimeToFileTime&lt;/code&gt;, &lt;code&gt;GetModuleFileNameA&lt;/code&gt;, &lt;code&gt;CreateMutexA&lt;/code&gt;, &lt;code&gt;CreateThread&lt;/code&gt; and &lt;code&gt;SetWaitableTimer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ADVAPI32.DLL&lt;/code&gt;: &lt;code&gt;CreateServiceA&lt;/code&gt;, &lt;code&gt;StartServiceCtrlDispatcherA&lt;/code&gt; and &lt;code&gt;OpenSCManagerA&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WININET.DLL&lt;/code&gt;: &lt;code&gt;InternetOpenUrlA&lt;/code&gt; and &lt;code&gt;InternetOpenA&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In particular, the last DLL file suggests that the file is communicating over the Internet.&lt;/p&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;What host or network-based indicators could be used to identify this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Again, &lt;code&gt;strings&lt;/code&gt; is our friend: &lt;code&gt;MalService&lt;/code&gt;, &lt;code&gt;Malservice&lt;/code&gt;, &lt;code&gt;HGL345&lt;/code&gt;,&lt;code&gt;http://www.malwareanalysisbook.com&lt;/code&gt; and &lt;code&gt;Internet Explorer 8.0&lt;/code&gt;. These results are suggesting that the file is creating a service (probably &lt;code&gt;MalService&lt;/code&gt;?) and connecting to the URL.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-3
+&lt;div id="lab-1-3" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#lab-1-3" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the Lab01-03.exe file to VirusTotal. Does it match any existing antivirus definitions?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Lab01-03.exe is detected as malicious by 64 engines, &lt;a href="https://www.virustotal.com/gui/file/7983a582939924c70e3da2da80fd3352ebc90de7b8c4c427d484ff4f050f0aec/detection" target="_blank" rel="noreferrer"&gt;here is the report&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that this file is packed or obfuscated? If so, what are these indicators? If the file is packed, unpack it if possible.&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Scanning the file with &lt;code&gt;diec&lt;/code&gt; shows that it is packed with FSG 1.0:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-03.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: packer: FSG&lt;span class="o"&gt;(&lt;/span&gt;1.0&lt;span class="o"&gt;)[&lt;/span&gt;-&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: unknown&lt;span class="o"&gt;(&lt;/span&gt;0.0&lt;span class="o"&gt;)[&lt;/span&gt;EXE32,console&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Unfortunately it is not possible (AFAIK) to unpack it with &lt;code&gt;upx&lt;/code&gt;, thus I cannot proceed:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ upx -d Lab01-03.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Ultimate Packer &lt;span class="k"&gt;for&lt;/span&gt; eXecutables
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Copyright &lt;span class="o"&gt;(&lt;/span&gt;C&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="m"&gt;1996&lt;/span&gt; - &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;UPX git-d7ba31+ Markus Oberhumer, Laszlo Molnar &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; John Reiser Jan 23rd &lt;span class="m"&gt;2020&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; File size Ratio Format Name
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -------------------- ------ ----------- -----------
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;upx: Lab01-03.exe: NotPackedException: not packed by UPX
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Unpacked &lt;span class="m"&gt;0&lt;/span&gt; files.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at this program’s functionality? If so, which imports are they and what do they tell you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Being still packed, we have limited visibility on Lab01–03.exe. We can only see that it imports &lt;code&gt;KERNEL32.DLL&lt;/code&gt; and uses the following functions: &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;GetProcAddress&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe -i Lab01-03.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Imported functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Library
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: KERNEL32.dll
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Functions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: LoadLibraryA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Hint: &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Name: GetProcAddress&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;What host or network-based indicators could be used to identify this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In this case, &lt;code&gt;strings&lt;/code&gt; does not help us a lot, because the file is packed.
+Again we see &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;GetProcAddress&lt;/code&gt;. Some of the other strings seems to refer to &lt;a href="https://en.wikipedia.org/wiki/Object_Linking_and_Embedding" target="_blank" rel="noreferrer"&gt;OLE&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Lab 1-4
+&lt;div id="lab-1-4" class="anchor"&gt;&lt;/div&gt;
+&lt;span
+class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
+&lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#lab-1-4" aria-label="Anchor"&gt;#&lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Upload the Lab01-04.exe file to VirusTotal. Does it match any existing antivirus definitions?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The file is detected as malicious by 61 engines, &lt;a href="https://www.virustotal.com/gui/file/0fa1498340fca6c562cfa389ad3e93395f44c72fd128d7ba08579a69aaf3b126/detection" target="_blank" rel="noreferrer"&gt;here is the report&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;&lt;em&gt;Are there any indications that this file is packed or obfuscated? If so, what are these indicators? If the file is packed, unpack it if possible.&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The file does not seem to be packed:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-04.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0*&lt;span class="o"&gt;)[&lt;/span&gt;EXE32&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;em&gt;When was this program compiled?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The time stamp reported seems suspicious 🤔, considering that the book was published in 2012:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ readpe Lab01-04.exe &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;#34;time stamp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Date/time stamp: &lt;span class="m"&gt;1567204019&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;Fri, &lt;span class="m"&gt;30&lt;/span&gt; Aug &lt;span class="m"&gt;2019&lt;/span&gt; 22:26:59 UTC&lt;span class="o"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;It was probably modified, thus it&amp;rsquo;s not clear when the file was actually compiled.&lt;/p&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;&lt;em&gt;Do any imports hint at this program’s functionality? If so, which imports are they and what do they tell you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here are the imports found with &lt;code&gt;readpe -i&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ADVAPI32.dll&lt;/code&gt;: &lt;code&gt;AdjustTokenPrivileges&lt;/code&gt;, &lt;code&gt;LookupPrivilegeValueA&lt;/code&gt; and &lt;code&gt;OpenProcessToken&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;KERNEL32.dll&lt;/code&gt;: &lt;code&gt;CreateRemoteThread&lt;/code&gt;, &lt;code&gt;MoveFileA&lt;/code&gt;, &lt;code&gt;SizeofResource&lt;/code&gt;, &lt;code&gt;LoadResource&lt;/code&gt;, &lt;code&gt;GetModuleHandleA&lt;/code&gt;, &lt;code&gt;OpenProcess&lt;/code&gt;, &lt;code&gt;GetWindowsDirectoryA&lt;/code&gt;, &lt;code&gt;WriteFile&lt;/code&gt;, &lt;code&gt;GetCurrentProcess&lt;/code&gt;, &lt;code&gt; CreateFileA&lt;/code&gt;, &lt;code&gt;GetProcAddress&lt;/code&gt;, &lt;code&gt;FindResourceA&lt;/code&gt;, &lt;code&gt;LoadLibraryA&lt;/code&gt; and &lt;code&gt;WinExec&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Considering the functions used, we can say that the program will try to access protected files (&lt;code&gt;SizeOfResource&lt;/code&gt;, &lt;code&gt;FindResource&lt;/code&gt;, &lt;code&gt;LoadResource&lt;/code&gt;, &lt;code&gt;LookupPrivilegeValueA&lt;/code&gt; and &lt;code&gt;AdjustTokenPrivilages&lt;/code&gt;) and create and execute files (&lt;code&gt;CreateFile&lt;/code&gt;, &lt;code&gt;WriteFile&lt;/code&gt; and &lt;code&gt;WinExec&lt;/code&gt;).&lt;/p&gt;
+&lt;ol start="5"&gt;
+&lt;li&gt;&lt;em&gt;What host or network-based indicators could be used to identify this malware on infected machines?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here are the host and network-based indicators that can be found using &lt;code&gt;strings&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;host-based&lt;/strong&gt;: &lt;code&gt;C:\WINDOWS\system32\wupdmgrd.exe&lt;/code&gt; and &lt;code&gt;winup.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;network-based&lt;/strong&gt;: &lt;code&gt;http://www.practicalmalwareanalysis.com/updater.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start="6"&gt;
+&lt;li&gt;&lt;em&gt;This file has one resource in the resource section. Use Resource Hacker to examine that resource, and then use it to extract the resource. What can you learn from the resource?&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;We can list and extract the resources from a Windows binary using &lt;code&gt;wrestool&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ wrestool -l Lab01-04.exe
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;--type&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;BIN&amp;#39;&lt;/span&gt; --name&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;101&lt;/span&gt; --language&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1033&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;offset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0x4060 &lt;span class="nv"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;16384&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ wrestool -x --raw --output&lt;span class="o"&gt;=&lt;/span&gt;Lab01-04.bin Lab01-04.exe&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.virustotal.com/gui/file/819b2db1876d85846811799664d512b2f1af13e329f5debe60926c3b03424745/detection" target="_blank" rel="noreferrer"&gt;VirusTotal report&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Not packed:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ diec Lab01-04.bin
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: compiler: Microsoft Visual C/C++&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;msvcrt&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PE: linker: Microsoft Linker&lt;span class="o"&gt;(&lt;/span&gt;6.0&lt;span class="o"&gt;)[&lt;/span&gt;EXE32&lt;span class="o"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Compiled on &lt;code&gt;1298765819 (Sun, 27 Feb 2011 00:16:59 UTC)&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Imports: &lt;code&gt;KERNEl32.dll&lt;/code&gt; (&lt;code&gt;WinExec&lt;/code&gt;) and &lt;code&gt;urlmon.dll&lt;/code&gt; (&lt;code&gt;URLDownloadToFileA&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Interesting strings: &lt;code&gt;\system32\wupdmgr.exe&lt;/code&gt;, &lt;code&gt;winup.exe&lt;/code&gt; and &lt;code&gt;www.malwareanalysisbook.com/updater.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Considering the information obtained, we can assume that the Lab01-04.exe file will be used to change permissions to write in a directory and drop and execute the hidden resource, which contacts the network to download and run additional malware.&lt;/p&gt;</description></item></channel></rss>
