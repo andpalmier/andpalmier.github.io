@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Job Interview on andpalmier's blog</title><link>https://andpalmier.com/tags/job-interview/</link><description>Recent content in Job Interview on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 23 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/job-interview/index.xml" rel="self" type="application/rss+xml"/><item><title>Interview preparation for a Cyber Threat Intelligence role</title><link>https://andpalmier.com/posts/cti-interview-preparation/</link><pubDate>Thu, 23 Oct 2025 00:00:00 +0000</pubDate><guid>https://andpalmier.com/posts/cti-interview-preparation/</guid><description>
+&lt;h2 class="relative group"&gt;Introduction
+&lt;div id="introduction" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I didn&amp;rsquo;t find any interview guide for Cyber Threat Intelligence (CTI) roles that satisfied me (I&amp;rsquo;m not interested in &lt;a href="https://en.wikipedia.org/wiki/AI_slop" target="_blank" rel="noreferrer"&gt;AI slop&lt;/a&gt;), so I decided to write one!&lt;/p&gt;
+&lt;p&gt;I figured writing this post might help me organize my ideas, and - &lt;em&gt;hopefully&lt;/em&gt; - help others preparing for their interviews. The goal is to refresh some topics some of you probably already know, and collect useful links, in case you want to dig deeper into a specific subject.&lt;/p&gt;
+&lt;p&gt;There are 3 sections:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#foundations" &gt;Foundations&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#frameworks" &gt;Frameworks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#analyzing-threats" &gt;Analyzing threats&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;At the end of each section, you&amp;rsquo;ll find some interview questions to practice what we&amp;rsquo;ve revisited.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;Be sure to &lt;strong&gt;tailor your review based on the job description&lt;/strong&gt;: every role may have unique requirements, and some are likely not covered in this post.&lt;/span&gt;
+&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Foundations
+&lt;div id="foundations" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;What is CTI?
+&lt;div id="what-is-cti" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;ll steal the definition from the book &lt;a href="https://www.oreilly.com/library/view/intelligence-driven-incident-response/9781098120672/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Intelligence-Driven Incident Response&amp;rdquo;&lt;/a&gt; by Rebekah Brown and Scott J. Roberts:
+&lt;em&gt;&amp;ldquo;Threat intelligence is the analysis of adversaries - their capabilities, motivations, and goals. Cyber threat intelligence is the analysis of how adversaries use the cyber domain to accomplish their goals&amp;rdquo;&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This shows where CTI fits in the bigger picture; it’s part of a hierarchy that goes from general intelligence down to the cyber domain:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;the Intelligence domain&lt;/li&gt;
+&lt;li&gt;Threat Intelligence&lt;/li&gt;
+&lt;li&gt;Cyber Threat Intelligence&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 class="relative group"&gt;Data vs Intelligence
+&lt;div id="data-vs-intelligence" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Data&lt;/strong&gt; are raw facts or observations, like the measure of the distance between two points.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Intelligence&lt;/strong&gt; is the product of collecting, processing, and analyzing data to answer questions and support decisions. Good intelligence should be relevant, accurate and timely.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basically, &lt;strong&gt;data becomes intelligence only when enriched with appropriate context&lt;/strong&gt;.&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Types of intelligence
+&lt;div id="types-of-intelligence" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;There are 3 main categories of intelligence:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Strategic&lt;/strong&gt;: high-level, less prone to perish, used to look at long-term trends and drive decisions and policies. In the context of CTI, it may be motivations of the threat actors.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Operational&lt;/strong&gt;: lower level than strategic intelligence, helps teams plan and decide where to focus their effort. In CTI, this can include information on campaigns, actor attribution and capabilities.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tactical&lt;/strong&gt;: low-level, mostly obtained from technical sources, therefore can support incident response, but highly perishable. Examples in the Cyber Threat Intelligence domain are Indicators of Compromise (IoCs) and observables.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;IoC vs IoA
+&lt;div id="ioc-vs-ioa" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Indicators of Compromise:&lt;/strong&gt; pieces of information which reveal that a system or a network &lt;strong&gt;has been compromised&lt;/strong&gt;. Some examples may be IP addresses or domain names associated with a C2, or hashes of malicious files. IoCs are reactive indicators, as they are used to identify attacks that already happened.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Indicators of Attack:&lt;/strong&gt; flags indicating that a &lt;strong&gt;threat or attack is in progress&lt;/strong&gt;: often related to threat actors&amp;rsquo; behavior, like anomalies in traffic volume, or suspicious commands executed. IOAs are proactive indicators, because they are used to detect potential attacks in early stages.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Tactics, Techniques &amp;amp; Procedures
+&lt;div id="tactics-techniques--procedures" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Tactics, Techniques and Procedures (often abbreviated TTPs) describe the behavior of threat actors. More specifically:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tactics&lt;/strong&gt;: high-level information, describes how an attacker operates during the attack (examples: compromise targets, infrastructure reuse&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Techniques&lt;/strong&gt;: medium-level information, describes &amp;ldquo;how&amp;rdquo; an attacker carries out a tactic (tools used, malware&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Procedures&lt;/strong&gt;: low-level information, they describe the specific sequence of actions used by the adversary to carry out each step of the attack cycle.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;N.B.&lt;/strong&gt; One technique might fit into several tactics, and vice versa.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll try to make it more practical with an example: an actor wants access to a company’s network, and sends a phishing email with a malicious attachment to employees.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tactic&lt;/strong&gt;: initial access&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Technique&lt;/strong&gt;: phishing (malicious attachment)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Procedures&lt;/strong&gt;: the actor crafts a convincing email, develops or selects a malicious attachment to establish a foothold, sends the email to targeted employees&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Traffic light protocol
+&lt;div id="traffic-light-protocol" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Traffic Light Protocol (TLP) was designed to support the process of information sharing. It uses five color labels to show how far you can share certain information:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;TLP:RED&lt;/strong&gt;: not for disclosure, information shouldn&amp;rsquo;t be disclosed, it&amp;rsquo;s restricted to participants only.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:AMBER+STRICT&lt;/strong&gt;: limited disclosure, information can be shared to participants&amp;rsquo; organization only.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:AMBER&lt;/strong&gt;: limited disclosure, information can be shared to participants&amp;rsquo; organization and its clients.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:GREEN&lt;/strong&gt;: limited disclosure, information can be shared only to member of the community.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TLP:CLEAR&lt;/strong&gt;: disclosure is not limited.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://www.cisa.gov/news-events/news/traffic-light-protocol-tlp-definitions-and-usage" target="_blank" rel="noreferrer"&gt;&amp;ldquo;The Traffic Light Protocol&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;📝 Quiz time
+&lt;div id="-quiz-time" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;How are data and intelligence linked between each other?&lt;/li&gt;
+&lt;li&gt;Which are the different types of threat intelligence?&lt;/li&gt;
+&lt;li&gt;What is the difference between IoC and IoA?&lt;/li&gt;
+&lt;li&gt;What is the difference between TLP:AMBER and TLP:AMBER+STRICT?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Frameworks
+&lt;div id="frameworks" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;Intelligence Cycle
+&lt;div id="intelligence-cycle" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Intelligence Cycle is a step-by-step approach to turn raw data into actionable insights. Here are the steps:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Requirements&lt;/strong&gt;: gather answers to questions like &lt;em&gt;&amp;ldquo;what do stakeholders need to know?&amp;rdquo;&lt;/em&gt; and &lt;em&gt;&amp;ldquo;which threats should we focus on?&amp;rdquo;&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Collection&lt;/strong&gt;: once the requirements are defined, it&amp;rsquo;s time to gather data! Some sources can be OSINT, threat feeds, and dark web monitoring.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Analysis&lt;/strong&gt;: this step is where the raw data turns into something meaningful, like patterns, trends, and connections.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dissemination&lt;/strong&gt;: Finally, the findings are condensed in a report that should be distributed to the relevant stakeholders.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 class="relative group"&gt;Cyber kill chain
+&lt;div id="cyber-kill-chain" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Cyber Kill Chain breaks down the steps that threat actors usually take when running an attack. It can help identify potential attack vectors and develop strategies to prevent, detect and respond to threats. Its stages are:&lt;/p&gt;
+&lt;ol start="0"&gt;
+&lt;li&gt;&lt;strong&gt;Targeting&lt;/strong&gt;: attacker chooses the target.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reconnaissance&lt;/strong&gt;: attacker collects information about the target. The attacker can gather information about technical aspects of systems (&lt;em&gt;hard data&lt;/em&gt;), and information about organization (&lt;em&gt;soft data&lt;/em&gt;). Gathering techniques include &lt;strong&gt;active methods&lt;/strong&gt; (require direct interaction with the target) and &lt;strong&gt;passive methods&lt;/strong&gt; (third-party services can be used to collect information).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Weaponization&lt;/strong&gt;: attacker finds one or more vulnerabilities, crafts an exploit, and combines it with a payload.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Delivery&lt;/strong&gt;: attacker delivers the malicious code or software to the target (by email, phishing, SQL injection, &lt;a href="https://en.wikipedia.org/wiki/IP_over_Avian_Carriers" target="_blank" rel="noreferrer"&gt;a pigeon?&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Exploitation&lt;/strong&gt;: attacker uses the vulnerability identified to get unauthorized access to the target&amp;rsquo;s system and gain control of code execution. From now, the attacker has control of at least one process in the system.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Installation&lt;/strong&gt;: attacker installs malware or other tools in the target&amp;rsquo;s system to get ongoing access and establish persistence.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Command and Control&lt;/strong&gt;: attacker creates a communication with the target&amp;rsquo;s system to issue commands and extract data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Action and Exfiltration&lt;/strong&gt;: attacker takes planned actions, (such as stealing data or disrupting operations), and exfiltrate the data out of the target&amp;rsquo;s system.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 class="relative group"&gt;Diamond model
+&lt;div id="diamond-model" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The Diamond model is a framework to analyze network intrusion events. It works by breaking them down into 4 elements, and highlighting the relationships between them. I think of it as a way to simplify events by zooming into the 4 components of the model:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Adversary&lt;/strong&gt;: the actor who carried out the cyber event.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Infrastructure&lt;/strong&gt;: the systems where the actor performed the attack, such as C2 servers or compromised IoT devices.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Victim&lt;/strong&gt;: the target of the event, such as an individual, an organization, or an industry.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Capability&lt;/strong&gt;: tools and techniques the actor used to achieve their goal, such as a malware, exploits, social engineering techniques.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The Diamond model helps connecting the dots between these parts of an attack, for instance:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If we know the &lt;strong&gt;infrastructure&lt;/strong&gt; is a phishing domain, we may be able to link it to an &lt;strong&gt;adversary&lt;/strong&gt;, maybe using whois information.&lt;/li&gt;
+&lt;li&gt;If we understand the &lt;strong&gt;capability&lt;/strong&gt; is a malware family, we could find reports of other where it&amp;rsquo;s been used, and link it them to the same &lt;strong&gt;adversary&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here is an ASCII art representing the framework:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Adversary
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; /\
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; / \
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; / \
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Infrastructure ----- Capability
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; \ /
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; \ /
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; \/
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Victim&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://www.activeresponse.org/wp-content/uploads/2013/07/diamond.pdf" target="_blank" rel="noreferrer"&gt;&amp;ldquo;The Diamond Model of Intrusion Analysis&amp;rdquo;&lt;/a&gt; by Caltagirone, Pendergast and Betz.&lt;/span&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;MITRE ATT&amp;amp;CK Framework
+&lt;div id="mitre-attck-framework" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;MITRE ATT&amp;amp;CK (Adversarial Tactics, Techniques, and Common Knowledge) is a (huge!) database of tactics and techniques (see &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#tactics-techniques--procedures" &gt;TTPs&lt;/a&gt;) that actors use or have used in the real world.&lt;/p&gt;
+&lt;p&gt;Explaining the whole MITRE ATT&amp;amp;CK framework it&amp;rsquo;s out of scope for this blog post, but I wanted to keep a section about it to remember to take some time to play with it if you never used or if it has been a long time.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll also leave here a great infographic about MITRE ATT&amp;amp;CK by &lt;a href="https://twitter.com/fr0gger_" target="_blank" rel="noreferrer"&gt;Thomas Roccia&lt;/a&gt;:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/cti-interview-preparation/0*dgEfdK1qy4kSEaGQ.webp" alt="MITRE ATT&amp;amp;CK infographic by Thomas Roccia" /&gt;
+&lt;figcaption&gt;MITRE ATT&amp;amp;CK infographic by &lt;a href="https://twitter.com/fr0gger_" target="_blank" rel="noreferrer"&gt;Thomas Roccia&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://attack.mitre.org" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Get started with MITRE ATT&amp;amp;CK&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;📝 Quiz time!
+&lt;div id="-quiz-time-1" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;How can the intelligence cycle help a CTI team?&lt;/li&gt;
+&lt;li&gt;What is the difference between weaponization and exploitation in the Cyber Kill Chain framework?&lt;/li&gt;
+&lt;li&gt;Describe the 4 main components of the Diamond model.&lt;/li&gt;
+&lt;li&gt;How would a CTI analyst use the MITRE ATT&amp;amp;CK Framework?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Analyzing threats
+&lt;div id="analyzing-threats" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;Malware
+&lt;div id="malware" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The term &amp;ldquo;malware&amp;rdquo; is used for various kinds of software designed to perform undesired actions on a computer system, network or data. Here are some malware&amp;rsquo; categories:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ransomware&lt;/strong&gt;: disables victim&amp;rsquo;s access to data (often encrypting it) until a ransom is paid&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Spyware&lt;/strong&gt;: collects user&amp;rsquo;s activity information without their knowledge&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Adware&lt;/strong&gt;: pushes unwanted advertisements to the user&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Trojan&lt;/strong&gt;: disguises itself as another application&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backdoor/RAT&lt;/strong&gt;: gives threat actors remote access to the victim&amp;rsquo;s device&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Keylogger&lt;/strong&gt;: monitors user&amp;rsquo;s keystrokes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dropper&lt;/strong&gt;: transports and installs another malicious payload in the infected system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When analyzing suspicious files, there are two approaches:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Static analysis&lt;/strong&gt;: examine files without executing them, for example extracting technical indicators from the file (like suspicious strings), or using a disassembler.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dynamic analysis&lt;/strong&gt;: executes the suspected file in a safe environment (see &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#sandboxes" &gt;sandboxes&lt;/a&gt;), to watch it in action.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Typically, the best approach is to use a combination of both, to get a full picture of what the file is actually doing.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;Finding malware
+&lt;div id="finding-malware" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://virustotal.com" target="_blank" rel="noreferrer"&gt;VirusTotal&lt;/a&gt;&lt;/strong&gt;: my go-to way to quickly check a file, find out some context around it, how it behaves, and related samples. One of the coolest feature is that it&amp;rsquo;s possible to write &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#yara" &gt;YARA&lt;/a&gt; rules to search VT&amp;rsquo;s database or to get a notification when a new file matching our rules is uploaded.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://bazaar.abuse.ch" target="_blank" rel="noreferrer"&gt;MalwareBazaar&lt;/a&gt;&lt;/strong&gt;: another platform dedicated to sharing malware samples, but &lt;strong&gt;completely free&lt;/strong&gt;! MalwareBazaar focuses only on malware samples: so no Adware, no benign files, and no suspicious domains.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://malpedia.caad.fkie.fraunhofer.de" target="_blank" rel="noreferrer"&gt;Malpedia&lt;/a&gt;&lt;/strong&gt;: the encyclopedia of malware families. Unlike VirusTotal and MalwareBazaar, Malpedia is less about raw samples sharing, and more about context and classification: it works best for quickly looking up a malware family, find reports about it, and check if there are public YARA rules to track it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 class="relative group"&gt;Sandboxes
+&lt;div id="sandboxes" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;Sandboxes let an analyst safely run suspicious files or URLs in a controlled environment to observe their behavior. They’re particularly useful to understand what a malware sample does, which files it drops, and which network connections it attempts.&lt;/p&gt;
+&lt;p&gt;The DIY approach to sandboxes is to build a malware analysis lab using something like &lt;a href="https://github.com/mandiant/flare-vm" target="_blank" rel="noreferrer"&gt;FLARE-VM&lt;/a&gt;. But in case you don&amp;rsquo;t want to go through all of that, you can choose from some available online sandboxes like: &lt;a href="https://any.run" target="_blank" rel="noreferrer"&gt;Any.Run&lt;/a&gt;, &lt;a href="https://www.hybrid-analysis.com" target="_blank" rel="noreferrer"&gt;Hybrid Analysis&lt;/a&gt;, or &lt;a href="https://www.joesecurity.org" target="_blank" rel="noreferrer"&gt;Joe Sandbox&lt;/a&gt;. Each of those have different features (some free, some paid), but the idea is the same: run the sample in a safe place, and watch what happens.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;YARA
+&lt;div id="yara" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;From the &lt;a href="https://virustotal.github.io/yara/" target="_blank" rel="noreferrer"&gt;project home page&lt;/a&gt;: &lt;em&gt;&amp;ldquo;YARA is is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples&amp;rdquo;&lt;/em&gt;. With &lt;a href="https://yara.readthedocs.io/en/stable/writingrules.html" target="_blank" rel="noreferrer"&gt;YARA rules&lt;/a&gt;, you can describe text or binary patterns and use them to scan files, which is critical for hunting malware families in a large database of samples.&lt;/p&gt;
+&lt;p&gt;Here is an example of a YARA rule, and an explanation of some of its elements:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// YARA allows to import modules to extend its functionalities,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// some popular modules are: pe, cuckoo, hash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;import&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;pe&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// The rule name identifies the YARA rule, use a meaningful
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// name (not like the example below!)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;rule&lt;/span&gt; &lt;span class="n"&gt;DetectSuspiciousPE&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// The metadata section allows to specify information about
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// the rule, such as author, date or sample used for the rule
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;meta&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;author&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;Andrea Palmieri&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;Detects suspicious PE files with magic!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// The strings fields is used to define what the rule should
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// match; you can use text, hexadecimals and regex
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;strings&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Simple text string that could appear in malware
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// nocase = case insensitive, fullword = non alphanumeric
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// wide = 2 bytes per character, base64 = base64 encoding
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;text_string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;malicious&amp;#34;&lt;/span&gt; &lt;span class="n"&gt;nocase&lt;/span&gt; &lt;span class="n"&gt;wide&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Hex pattern for the suspicious API LoadLibraryA
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Wildcards = { 4C ?F 6? }, Alternatives { 4C (6F|69) }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Jump = { 72 [2-4] 79 }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;hex_string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="mf"&gt;6F&lt;/span&gt; &lt;span class="mi"&gt;61&lt;/span&gt; &lt;span class="mi"&gt;64&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="mi"&gt;69&lt;/span&gt; &lt;span class="mi"&gt;62&lt;/span&gt; &lt;span class="mi"&gt;72&lt;/span&gt; &lt;span class="mi"&gt;61&lt;/span&gt; &lt;span class="mi"&gt;72&lt;/span&gt; &lt;span class="mi"&gt;79&lt;/span&gt; &lt;span class="mi"&gt;41&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Regex to catch suspicious command-line flags
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;regex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;/--&lt;/span&gt;&lt;span class="n"&gt;inject&lt;/span&gt;&lt;span class="o"&gt;|--&lt;/span&gt;&lt;span class="n"&gt;persist&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// The condition defines when the rule should trigger
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;condition&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Check if the file starts with the PE magic number &amp;#34;MZ&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nf"&gt;uint16&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mh"&gt;0x5A4D&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// Ensure it&amp;#39;s actually a valid PE file using the PE module
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;pe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_pe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// And at least one of our suspicious indicators is present
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;any&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;them&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;And here is how to run a rule on files in the current folder:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;yara &amp;lt;yara-rule&amp;gt; .&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Building YARA rules required balance: if they are too specific, they can miss variations of the same malware; if they are too broad, they will match a lot of false positives. A good rule should capture the malware&amp;rsquo;s unique &amp;ldquo;fingerprint&amp;rdquo; without being too restrictive.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://github.com/InQuest/awesome-yara" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Awesome YARA&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;📝 Quiz time!
+&lt;div id="-quiz-time-2" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Assume you receive a malicious hash, how would you investigate it?&lt;/li&gt;
+&lt;li&gt;What is the main purpose of a sandbox, and when would you use one?&lt;/li&gt;
+&lt;li&gt;How do YARA rules help in identifying malware families? What makes a &amp;ldquo;good&amp;rdquo; rule?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Web-based threats
+&lt;div id="web-based-threats" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Before discussing web-based threats, it may be useful to briefly revisit 2 important protocols:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TLS&lt;/strong&gt; (Transport Layer Security) is a cryptographic protocol that keeps network communication secure by encrypting data, ensuring privacy, integrity, and authentication. Its key functions are &lt;strong&gt;data encryption&lt;/strong&gt; (uses symmetric and asymmetric cryptography to make intercepted data unreadable), &lt;strong&gt;server authentication&lt;/strong&gt; (verifies server identity through a digital certificate issued by a trusted authority) and &lt;strong&gt;data integrity&lt;/strong&gt; (ensures transmitted data remains unaltered during transit). Its steps are:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Client Hello:&lt;/strong&gt; The client (e.g., browser) sends supported TLS versions and cryptographic methods.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Server Response:&lt;/strong&gt; The server replies with its digital certificate and chosen TLS settings.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Exchange:&lt;/strong&gt; Both parties establish a secure, encrypted communication channel.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/cti-interview-preparation/tls-handshake.webp" alt="TLS handshake" /&gt;
+&lt;figcaption&gt;TLS handshake by &lt;a href="https://www.cloudflare.com/en-gb/learning/ssl/what-happens-in-a-tls-handshake" target="_blank" rel="noreferrer"&gt;Cloudflare&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;DNS&lt;/strong&gt; (Domain Name System) is used to translate domain names into IP addresses. It acts like the phonebook of the internet, turning web URLs into IP addresses, here is the step-by-step process:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;User Request:&lt;/strong&gt; You type a domain name into your browser.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DNS Query:&lt;/strong&gt; The browser sends a request to a DNS resolver to find the corresponding IP address.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Response:&lt;/strong&gt; The resolver checks its cache or queries other DNS servers (root, TLD, and authoritative servers) to retrieve the IP address.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Connection:&lt;/strong&gt; The browser uses the IP address to connect to the desired website or service.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/cti-interview-preparation/dns-lookup.webp" alt="DNS lookup" /&gt;
+&lt;figcaption&gt;DNS lookup by &lt;a href="https://www.cloudflare.com/en-gb/learning/dns/what-is-dns/" target="_blank" rel="noreferrer"&gt;Cloudflare&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h4 class="relative group"&gt;Search engines for internet
+&lt;div id="search-engines-for-internet" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.shodan.io" target="_blank" rel="noreferrer"&gt;Shodan&lt;/a&gt;&lt;/strong&gt; continuously scans the internet indexing exposed devices and services. It can be used to track attacker infrastructure (C2, phishing kits, etc.) and monitor the attack surface for specific devices or software.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://help.shodan.io/the-basics/search-query-fundamentals" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Shodan search query fundamentals&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://search.censys.io" target="_blank" rel="noreferrer"&gt;Censys&lt;/a&gt;&lt;/strong&gt; also scans the internet and collects data about exposed systems, but it is more focused on TLS certificates, protocol details, and structured search.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://docs.censys.com/docs/platform-quickstart-guide" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Censys quick start guide&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;Web sandboxes
+&lt;div id="web-sandboxes" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://urlscan.io" target="_blank" rel="noreferrer"&gt;urlscan.io&lt;/a&gt;&lt;/strong&gt;: similarly to the previously discussed &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#sandboxes" &gt;sandboxes&lt;/a&gt;, urlscan allows you to analyze websites in a safe environment, and explore what&amp;rsquo;s under the hood: scripts, redirects, trackers, etc. It&amp;rsquo;s perfect to track phishing kits, infected pages or quickly check sketchy links.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://urlscan.io/docs/search/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;urlscan.io Search API Reference&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;JA4+
+&lt;div id="ja4" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;JA4+is a set of network fingerprints for multiple protocols, and they have &lt;strong&gt;a lot&lt;/strong&gt; of very practical applications, &lt;a href="https://foxio.io/ja4" target="_blank" rel="noreferrer"&gt;many of which are listed here&lt;/a&gt;. You may have heard about &lt;a href="https://engineering.salesforce.com/easily-identify-malicious-servers-on-the-internet-with-jarm-e095edac525a/" target="_blank" rel="noreferrer"&gt;JARM fingerprint&lt;/a&gt;, JA4+ is basically that with superpowers. Personally, I mostly used it to &lt;a href="https://docs.censys.com/docs/platform-jarm-fingerprints" target="_blank" rel="noreferrer"&gt;track TLS servers in Censys&lt;/a&gt;: when the server responds to a TLS handshake a fingerprint of the response is generated, and then used to identify clusters of servers operated by the same actor.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;crt.sh
+&lt;div id="crtsh" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://crt.sh/" target="_blank" rel="noreferrer"&gt;crt.sh&lt;/a&gt;&lt;/strong&gt; is a free website for looking up TLS/SSL certificates for any domain. It pulls the information directly from the Certificate Transparency (CT) logs: a public list recording every certificate issued by trusted Certificate Authorities (CAs). CT logs make it easy to spot newly issued certificates, like the ones used in phishing campaigns and domain impersonation.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;Passive DNS
+&lt;div id="passive-dns" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;Passive DNS is like the &amp;ldquo;memory&amp;rdquo; of DNS: it works by collecting and storing DNS resolution data over time, creating a database of how domain names have resolved to IP addresses. Unlike normal DNS lookups, passive DNS allows to look at past DNS activity, which is useful for tracking malicious infrastructure, identifying related domains, and patterns in actors&amp;rsquo; behavior.&lt;/p&gt;
+&lt;div
+class="flex px-4 py-3 rounded-md shadow bg-primary-100 dark:bg-primary-900"
+&gt;
+&lt;span
+class="text-primary-400 pe-3 flex items-center"
+&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;path fill="currentColor" d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;span
+class="dark:text-neutral-300"
+&gt;&lt;strong&gt;Further reading:&lt;/strong&gt; &lt;a href="https://spamhaus.com/resource-center/what-is-passive-dns-a-beginners-guide" target="_blank" rel="noreferrer"&gt;&amp;ldquo;A beginner’s guide to Passive DNS&amp;rdquo;&lt;/a&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;h4 class="relative group"&gt;📝 Quiz time!
+&lt;div id="-quiz-time-3" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Assume you receive a malicious IP address, how would you investigate it? Which tools from this section would you start with?&lt;/li&gt;
+&lt;li&gt;How could JA4+ help you link track threat actor&amp;rsquo;s infrastructure?&lt;/li&gt;
+&lt;li&gt;What are some red flags that may suggest that a domain is hosting malicious content?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;Misc
+&lt;div id="misc" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;h4 class="relative group"&gt;MISP
+&lt;div id="misp" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.misp-project.org/" target="_blank" rel="noreferrer"&gt;MISP&lt;/a&gt;&lt;/strong&gt; (Malware Information Sharing Platform) is an open-source threat intelligence platform for sharing and ingesting IoCs, attack patterns, threat actor profiles, and other intelligence. MISP members rely on the community: organizations contribute indicators, which are then enriched and shared across trusted groups. It also integrates with a lot of other tools with APIs, so you can pull/push data automatically.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;CyberChef
+&lt;div id="cyberchef" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noreferrer"&gt;CyberChef&lt;/a&gt;&lt;/strong&gt; is an open-source web-based tool with various functions for data analysis, transformation, and decoding, all using an intuitive drag-and-drop interface. It can handle and concatenate tasks like decoding Base64, extracting data from files, encrypting or decrypting text, and much more. Whenever I have something weird in front of me (an encoded string, a suspicious payload, or just some ugly logs), I throw it into CyberChef, it saves me from writing random scripts and lets me experiment quickly.&lt;/p&gt;
+&lt;h4 class="relative group"&gt;Programming
+&lt;div id="programming" class="anchor"&gt;&lt;/div&gt;
+&lt;/h4&gt;
+&lt;p&gt;Although programming is not mandatory to enter the CTI field, it is definitely a nice-to-have skill and some jobs may require it; moreover, programming can help you automate repetitive tasks, process data, or enrich indicators.&lt;/p&gt;
+&lt;p&gt;Python is often considered the best choice to learn programming, because of its huge list of libraries for data analysis and security, but other useful languages can be Go (for performance and portability) or JavaScript (if your focus is to understand and analyze web-based threats).&lt;/p&gt;
+&lt;h2 class="relative group"&gt;📝 Bonus quiz time!
+&lt;div id="-bonus-quiz-time" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;A list of questions that I was asked during interviews:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Given a technical report (&lt;a href="https://www.cybereason.com/blog/threat-analysis-phorpiex-downloader" target="_blank" rel="noreferrer"&gt;example 1&lt;/a&gt;, &lt;a href="https://www.silentpush.com/blog/socgholish/" target="_blank" rel="noreferrer"&gt;example 2&lt;/a&gt;, &lt;a href="https://go.recordedfuture.com/hubfs/reports/mtp-2024-0926.pdf" target="_blank" rel="noreferrer"&gt;example 3&lt;/a&gt;, &lt;a href="https://www.bitdefender.fr/files/News/CaseStudies/study/391/IceID-CREAT-5156.pdf" target="_blank" rel="noreferrer"&gt;and 4&lt;/a&gt;), how would you advise your Incident Response team to detect this threat?&lt;/li&gt;
+&lt;li&gt;How does the DNS resolution process work? Which stages can be abused by attackers?&lt;/li&gt;
+&lt;li&gt;What are some red flags that make a newly registered website look suspicious?&lt;/li&gt;
+&lt;li&gt;How would you prioritize Threat Intelligence feeds and alerts?&lt;/li&gt;
+&lt;li&gt;How can you communicate CTI concepts to non-technical stakeholders?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Final notes
+&lt;div id="final-notes" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;d like to keep this post up to date with relevant CTI topics, so be sure to reach out or comment in case you think I missed something or wrote something awfully wrong 🙃&lt;/p&gt;
+&lt;h2 class="relative group"&gt;External resources
+&lt;div id="external-resources" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Books, courses and links to expand on these topics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.oreilly.com/library/view/intelligence-driven-incident-response/9781098120672/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Intelligence-Driven Incident Response&amp;rdquo;&lt;/a&gt;, by Rebekah Brown and Scott J. Roberts.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.sans.org/cyber-security-courses/cyber-threat-intelligence" target="_blank" rel="noreferrer"&gt;&amp;ldquo;FOR578: Cyber Threat Intelligence&amp;rdquo;&lt;/a&gt;, a course by SANS.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://attack.mitre.org/resources/learn-more-about-attack/training/cti/" target="_blank" rel="noreferrer"&gt;&amp;ldquo;CTI Training&amp;rdquo;&lt;/a&gt;, a &lt;strong&gt;free&lt;/strong&gt; video course by MITRE ATT&amp;amp;CK.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://blog.securitybreak.io/security-infographics-9c4d3bd891ef" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Security infographics&amp;rdquo;&lt;/a&gt; by &lt;a href="https://twitter.com/fr0gger_" target="_blank" rel="noreferrer"&gt;Thomas Roccia&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gopivot.ing" target="_blank" rel="noreferrer"&gt;&amp;ldquo;Pivot Atlas&amp;rdquo;&lt;/a&gt;, a pivoting handbook for CTI analysts.&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

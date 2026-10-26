@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Android on andpalmier's blog</title><link>https://andpalmier.com/tags/android/</link><description>Recent content in Android on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/android/index.xml" rel="self" type="application/rss+xml"/><item><title>Dissecting an Android stalkerware</title><link>https://andpalmier.com/posts/stalkerware-analysis/</link><pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate><guid>https://andpalmier.com/posts/stalkerware-analysis/</guid><description>&lt;p&gt;In this technical blog post, we will examine the components of a stalkerware app designed for Android devices and marketed towards Italian customers. By analyzing the various components of this type of software, hopefully we can gain a deeper understanding of how these apps operate and develop strategies for detecting and removing it from infected devices.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;What is stalkerware?
+&lt;div id="what-is-stalkerware" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Stalkerware is a type of malicious software that is designed to track and monitor someone&amp;rsquo;s digital activity without their knowledge or consent. This type of software is often used by individuals who want to spy on their partners or children, or by employers who want to monitor the activity of their employees. Stalkerware can be used to track a wide range of digital activity, including web searches, geolocation, text messages and chats, photos, voice calls, and more. The use of stalkerware is generally considered unethical and may also be illegal, as it violates the privacy of the targeted individual.&lt;/p&gt;
+&lt;p&gt;These apps are often distributed as paid services outside of the Google Play Store, as Google&amp;rsquo;s Developer Program Policy prohibits the distribution of apps that collect and transmit personal or sensitive data from a device without adequate notice or consent (&lt;a href="https://support.google.com/googleplay/android-developer/answer/10065487" target="_blank" rel="noreferrer"&gt;Developer Program Policy: September 16, 2020 announcement&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In this post, we will be focusing on a specific Android sample which was developed for the Italian market, as it was advertised in a website in Italian and the code of the sample contains numerous Italian expressions.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;The website
+&lt;div id="the-website" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The app is described on the website as a tool for &amp;ldquo;secretly spying Android phones without being noticed by the owner of the smartphone&amp;rdquo;. The company behind the app claims to be active in 24 countries around the world, with headquarters in Europe, New Zealand, Brazil, and Canada.&lt;/p&gt;
+&lt;p&gt;The website of the app includes an End-User License Agreement (EULA) stating that the app should only be installed on devices owned by the user, and it also requires the user to notify any person using a device with the software installed, or any other person with the right to access a monitored account, of the presence of the software.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/eula.webp" alt="&amp;#39;End-User License agreement&amp;#39; from the website of the app" /&gt;
+&lt;figcaption&gt;&amp;lsquo;End-User License Agreement&amp;rsquo; from the website of the app. The highlighted section roughly translates to &amp;lsquo;&lt;em&gt;you also agree to notify on the presence of the software any person using a device with the software installed, or any other person with the right to access a monitored account&lt;/em&gt;&amp;rsquo;.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;However, according to the company&amp;rsquo;s website, the most common reason that clients use their stalkerware service is for &amp;ldquo;relationship cheating&amp;rdquo; with 40% of respondents citing this as their motivation; 32% of respondents said that they were using the service to monitor their minor children, and 11% cited &amp;ldquo;personal curiosity, no real reason&amp;rdquo;.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/reasons.webp" alt="&amp;#39;Reasons for using the spy app&amp;#39; from the website of the app" /&gt;
+&lt;figcaption&gt;&amp;lsquo;Reasons for using the spy app&amp;rsquo; from the website of the app&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The licensing model for this stalkerware app includes a free trial of 3 days, during which users have access to all of the features of the app and the online panel for viewing the data captured from the device. After the free trial expires, users must pay a fee of €22 per month to continue using the service. This fee can be paid via PayPal or credit card, after registering in the admin panel of the website.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Features
+&lt;div id="features" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The list of features advertised include the ability to extract WhatsApp audios, pictures, and videos, access all media files on the phone, record calls and ambient audio, record the screen, report on notifications received, list installed apps, and track the phone&amp;rsquo;s location. The website of the app also claims that it is &amp;ldquo;invisible&amp;rdquo; to the user of the phone and to many antivirus solutions.&lt;/p&gt;
+&lt;p&gt;To use this stalkerware app, the user must have physical access to the victim&amp;rsquo;s phone and enable the installation of &amp;ldquo;unknown apps&amp;rdquo; from the Android settings. This process can be a bit tedious for non-experienced users, so the website provides various guides and short videos to help users download and install the app on different Android devices and access the panel to view the stolen information.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Analysis of the sample
+&lt;div id="analysis-of-the-sample" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The apk sample can be downloaded directly from the website. At time of writing, the sample is not listed in VirusTotal, but we can use a small tool I wrote called apkingo to gather some information on the app:&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-14ea2c40e6be00efba898b3f88cfe69f" target="_blank" href="https://github.com/andpalmier/apkingo" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/apkingo"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-14ea2c40e6be00efba898b3f88cfe69f-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/apkingo
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-14ea2c40e6be00efba898b3f88cfe69f-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+extract info from apk files
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-14ea2c40e6be00efba898b3f88cfe69f-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+85
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-14ea2c40e6be00efba898b3f88cfe69f-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+12
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/apkingo"
+data-repo-id="github-14ea2c40e6be00efba898b3f88cfe69f"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;App name: X Android Antivirus
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* General info
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PackageName: com.vitefa.fosupevilucugo
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Version: 1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;MainActivity: com.vitefa.fosupevilucugo.MainActivity
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;MinimumSdk: 22 (Android 5.1)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;TargetSdk: 31 (Android 12)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Hash values
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Md5: 67f5f3b3c858453fdc0c901d3f09f985
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Sha1: 86504d29d3d5a852e8e37c951c049917a9b11907
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Sha256: 5ab4ff9f8028c02cbb0886922142227732cfe3aaec99af1a5af2ddb43b0fb5a8
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Permissions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_NETWORK_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_SYNC_STATS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.WRITE_SYNC_SETTINGS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.AUTHENTICATE_ACCOUNTS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_SYNC_SETTINGS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_COARSE_LOCATION
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_FINE_LOCATION
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_LOCATION_EXTRA_COMMANDS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_NOTIFICATION_POLICY
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_WIFI_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_WIMAX_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACTION_MANAGE_OVERLAY_PERMISSION
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.BODY_SENSORS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.BROADCAST_STICKY
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CALL_PHONE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CAMERA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CHANGE_NETWORK_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CHANGE_WIFI_MULTICAST_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CHANGE_WIFI_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CHANGE_WIMAX_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.DISABLE_KEYGUARD
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.GET_ACCOUNTS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.INTERNET
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.MANAGE_ACCOUNTS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.MODIFY_AUDIO_SETTINGS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.PERSISTENT_ACTIVITY
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.PROCESS_OUTGOING_CALLS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.PACKAGE_USAGE_STATS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_CELL_BROADCASTS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_CONTACTS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_EXTERNAL_STORAGE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_PHONE_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_INSTALL_SESSIONS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_PROFILE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_SMS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.RECEIVE_MMS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.RECEIVE_SMS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.RECORD_AUDIO
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.CAPTURE_AUDIO_OUTPUT
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.RESTART_PACKAGES
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.SEND_SMS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.SET_ALARM
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;com.android.alarm.permission.SET_ALARM
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.USE_SIP
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.WAKE_LOCK
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.WRITE_CALENDAR
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.WRITE_CALL_LOG
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.WRITE_CONTACTS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.WRITE_EXTERNAL_STORAGE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.MANAGE_EXTERNAL_STORAGE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.FOREGROUND_SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;com.donnemartin.android.fieldreporter.permission.MAPS_RECEIVE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;com.google.android.providers.gsf.permission.READ_GSERVICES
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.sec.MDM_APP_MGMT
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ACCESS_BACKGROUND_LOCATION
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.MANAGE_OWN_CALLS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_CALL_LOG
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.ANSWER_PHONE_CALLS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.READ_PRIVILEGED_PHONE_STATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.SYSTEM_ALERT_WINDOW
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.SCHEDULE_EXACT_ALARM
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.MANAGE_MEDIA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;android.permission.VIBRATE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Metadata
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;no metadata found
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Certificate
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Serial: 2126353726
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Sha1: f3e17dfdb98b1f7774a16967fd1d84d3d9d59389
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Subject: C=US, O=corudagiruducodi, CN=corudagiruducodi
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Issuer: C=US, O=corudagiruducodi, CN=corudagiruducodi
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ValidFrom: 09 Dec 22 13:04 UTC
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ValidTo: 23 Sep 96 13:04 UTC
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* Play Store
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;app not found in Play Store&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This sample was named like an antivirus app, in order to make the victim think it is safe.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/icon.webp" alt="app icon" /&gt;
+&lt;figcaption&gt;Icon of this sample&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 class="relative group"&gt;Permissions requested
+&lt;div id="permissions-requested" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;One tactic commonly used by stalkerware apps is to request a large number of permissions from the user, including access to call logs, contacts, camera, messages, and microphone. This is often done without the user&amp;rsquo;s knowledge or consent, as stalkerware apps are designed to be installed behind the user&amp;rsquo;s back.&lt;/p&gt;
+&lt;p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/permissions.webp" alt="permissions asked by the stalkerware" /&gt;
+&lt;figcaption&gt;List of permissions aked by the stalkerweare&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/notification.webp" alt="notification access" /&gt;
+&lt;figcaption&gt;Notification access requested by the sample&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;In addition to requesting all these permissions, the sample is abusing Accessibility services and Device administration features of Android. Accessibility services are designed to help users with disabilities interact with their devices, but malicious apps can request access to these services in order to gain additional permissions on a device, such as: read and intercept text messages and notifications, even control the device simulating clicks, drawing over other apps and even reading the screen while other apps are being used. Device administration features, instead, allows IT departments to ensure the security and compliance of their devices by remotely controlling various settings and even remotely locking or wiping the device in case it was stolen. By requesting device administrator privileges, the sample can greatly extend its capabilities (as shown in the screenshot below) and even make it more difficult for the user to remove the app from their device.&lt;/p&gt;
+&lt;p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/deviceadmin.webp" alt="abusing device admin" /&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/deviceadmin2.webp" alt="abusing device admin pt2" /&gt;
+&lt;figcaption&gt;The stalkerware abusing the &amp;lsquo;Device administration&amp;rsquo; feature of Android&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Randomly generated package name
+&lt;div id="randomly-generated-package-name" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The package name of an Android app is used to uniquely identifies the app on the device and in the stores; usually developers choose a package name with a reference to the company developing the app or the product, but in this sample the package name is a bit odd. Downloading multiple samples of the app from the website, it is possible to note that every apk has a different package name and different certificate issuer, and both appear to be randomly generated.&lt;/p&gt;
+&lt;p&gt;This approach could be used for evading antivirus detections based on the package name and the hash of the apk, as well as for distinguishing between different licenses. The randomly generated package name is specified in the &lt;code&gt;strings.xml&lt;/code&gt; file, and here are these sections for two different samples:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-xml" data-lang="xml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;string&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;ACCOUNT_TYPE&amp;#34;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;com.vitefa.fosupevilucugo.sync&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;string&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;AUTORITY&amp;#34;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;com.vitefa.fosupevilucugo.sync.StubProvider&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;string&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;ACCOUNT_TYPE&amp;#34;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;com.babili.ribisosisubugu.sync&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;string&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;AUTORITY&amp;#34;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;com.babili.ribisosisubugu.sync.StubProvider&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The strings &lt;code&gt;ACCOUNT_TYPE&lt;/code&gt; and &lt;code&gt;AUTORITY&lt;/code&gt; are referenced in the code while setting app the account of the service used to send the data to the online panel:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/account.webp" alt="account class definition" /&gt;
+&lt;figcaption&gt;Definition of the &amp;lsquo;account&amp;rsquo; class using &lt;code&gt;AUTORITY&lt;/code&gt; and &lt;code&gt;ACCOUNT_TYPE&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 class="relative group"&gt;Getting the PIN
+&lt;div id="getting-the-pin" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Right after installing the app, the following message will be shown: &lt;em&gt;&amp;ldquo;Wait 5 seconds. Some windows may appear asking for authorization, accept and confirm everything. Below is a continuous button. After clicking on it, a numeric PIN will appear. You must enter the numeric PIN in our control panel, see the installation and license activation guides on our site. By clicking the continue button below you declare that you have read and accepted all the conditions on the site.&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/postinstallation.webp" alt="post installation message" /&gt;
+&lt;figcaption&gt;A screenshot showing part of the post-installation message&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The PIN appearing after this prompt must be entered in the control panel to access the data stolen from the device. To retrieve this PIN, the app first attempts to generate a fingerprint of the device by gathering hardware and software information about it, like IMEI number, manufacturer and model, screen resolution, SDK version and build ID:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/getpinfromserver.webp" alt="gathering info on the device" /&gt;
+&lt;figcaption&gt;The function &lt;code&gt;getPinFromServer&lt;/code&gt; is used to gather information about the device&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The information obtained are then used to call the &lt;code&gt;getPin&lt;/code&gt; function, which connects to the server, submits all the details gathered, and parses the response from the server to get the PIN associated with the license:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/getpin.webp" alt="getting the pin" /&gt;
+&lt;figcaption&gt;The function &lt;code&gt;getPin&lt;/code&gt; is used to retrieve the PIN from the server&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/pindisplayed.webp" alt="pin received" /&gt;
+&lt;figcaption&gt;Message displayed afater obatining the PIN (a 9-digit number)&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;After entering the PIN received into the control panel, we can new send commands to the phone to perform various actions (see screenshot below), listen to phone calls, view media files stolen from the device, and even check the status of the permissions enabled for the stalkerware app.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/cmdlist.webp" alt="cmd list" /&gt;
+&lt;figcaption&gt;The list of commands available from the control panel: record audio for 6 seconds, 2, 5, 15 and 30 minutes, ask for GPS position, download data, record screen, and take a picture&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 class="relative group"&gt;Extracting and sending media files
+&lt;div id="extracting-and-sending-media-files" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;One of the major feature provided by the stalkerware app is the extraction of all the media files stored in the device, including pictures and videos from WhatsApp chats. This feature is provided by the &lt;code&gt;extractMedia&lt;/code&gt; function, which is designed to access the external and internal storage of the device, and it contains a call to the &lt;code&gt;getMedia&lt;/code&gt; function, which searches for media files within the specified directory and its subdirectories:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/extractmedia.webp" alt="extracting media files" /&gt;
+&lt;figcaption&gt;Content of&lt;code&gt;extractMedia&lt;/code&gt; and &lt;code&gt;getMedia&lt;/code&gt; functions&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The &lt;code&gt;getMedia&lt;/code&gt; function contains a call to &lt;code&gt;getFile&lt;/code&gt;, which has the purpose of storing the name of the file found either in &lt;code&gt;mediaWhatsapp&lt;/code&gt; or &lt;code&gt;media&lt;/code&gt; (depending on where the file was found); both of these are SQL database used to store which files are sent to the server. The function is then used to call &lt;code&gt;FileClientNoDelete&lt;/code&gt; on every file.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/getfile.webp" alt="getFile function" /&gt;
+&lt;figcaption&gt;Content of &lt;code&gt;getFile&lt;/code&gt; function&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/sendfile.webp" alt="sendfile" /&gt;
+&lt;figcaption&gt;Content of &lt;code&gt;FileClientNoDelete&lt;/code&gt; and &lt;code&gt;sendFile&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The class &lt;code&gt;FileClientNoDelete&lt;/code&gt; describes a client which can send a file to the remote server over a socket connection. When an object of &lt;code&gt;FileClientNoDelete&lt;/code&gt; is created, it establishes a socket connection with the server at the specified IP address and port, and sets the timeout value of the socket to 15 minutes. Then it calls &lt;code&gt;sendFile&lt;/code&gt;, which after writing the file name, the PIN number and the file lenght to the output stream of the socket, sends the specified file to the server by reading the file in 1024-byte chunks and writing them to the output stream until the end of the file is reached.&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Screen and audio recording
+&lt;div id="screen-and-audio-recording" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;This sample extends the Android class &lt;code&gt;MediaProjection&lt;/code&gt; to capture screen contents and/or record system audio.&lt;/p&gt;
+&lt;p&gt;The function below is responsible for initializing, preparing, and starting the screen recording: it first retrieves the screen density of the device and initializes and prepares the media recorder by creating a &lt;code&gt;MediaProjectionCallback&lt;/code&gt; instance, registering it with the media projection and creating a virtual display for the screen recording using the &lt;code&gt;createVirtualDisplay&lt;/code&gt; function. Finally, it starts the media recorder and leave it working for 10 seconds, before stopping it.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/videorec.webp" alt="screen recording function" /&gt;
+&lt;figcaption&gt;Function used to setup recording of the screen&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;A second class is used to capture audio from the device and record it to a file. The code below shows how the sample does this by creating an instance of &lt;code&gt;AudioRecord&lt;/code&gt; and calling its &lt;code&gt;startRecording()&lt;/code&gt; method. It then creates a new thread which will run a method called &lt;code&gt;writeAudioDataToFile()&lt;/code&gt;, which will be responsible for writing the recorded audio data to a file.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/audiorec.webp" alt="audio recording function" /&gt;
+&lt;figcaption&gt;Function used to setup audio recording&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Another functionality of the stalkerware app is the recording of WhatsApp calls. The code below is using Android&amp;rsquo;s accessibility services to identify which app is currently opened on the device, check if a WhatsApp call is happening, and extract the name or the phone number having a call with the victim. The code then checks for a view with the resource name &lt;code&gt;end_call_btn&lt;/code&gt;, and if it finds it, it will attempt to record the audio call by using the service &lt;code&gt;rCallVoip&lt;/code&gt;.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/whatsapprec.webp" alt="whatspp call recording" /&gt;
+&lt;figcaption&gt;Function used to record WhatsApp calls&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/rcallvoip.webp" alt="rcallvoip" /&gt;
+&lt;figcaption&gt;Function called when for the service &lt;code&gt;rCallVoip&lt;/code&gt; is created&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 class="relative group"&gt;GPS location
+&lt;div id="gps-location" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;The sample is also able to get the device&amp;rsquo;s current location by using either GPS or the device&amp;rsquo;s mobile network.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/getpos.webp" alt="get position of the device" /&gt;
+&lt;figcaption&gt;Function used to obtain the position of the device&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The function above checks if either GPS or the device&amp;rsquo;s mobile network is enabled on the device: if one of those is enabled, it starts listening for location updates from the chosen provider. When the device&amp;rsquo;s location changes, the method &lt;code&gt;onLocationChanged&lt;/code&gt; is called to write latitute and longitude coordinates in an XML document:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/stalkerware-analysis/locchanged.webp" alt="record device movement" /&gt;
+&lt;figcaption&gt;Function called when the position of the device changes&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 class="relative group"&gt;Closing remarks
+&lt;div id="closing-remarks" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;In conclusion, the android stalkerware app that was analyzed is a concerning and potentially dangerous tool. It has the ability to track a person&amp;rsquo;s location, access their messaging and call logs, and even record their phone calls without their knowledge or consent. This type of app can be used to stalk and harass individuals, and it raises serious privacy and security concerns. If you read this post and you now suspect there may be stalkerware on your device, refer to &lt;a href="https://stopstalkerware.org/information-for-survivors/" target="_blank" rel="noreferrer"&gt;this article&lt;/a&gt; from the &lt;a href="https://stopstalkerware.org/" target="_blank" rel="noreferrer"&gt;Coalition Against Stalkerware&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Mitre ATT&amp;amp;CK Tactics And Techniques
+&lt;div id="mitre-attck-tactics-and-techniques" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;TA0011 - Command and Control&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1071 - Application Layer Protocol (&lt;em&gt;uses HTTPS and performs DNS lookups&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1095 - Non-Application Layer Protocol (&lt;em&gt;performs DNS lookups&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1573 - Encrypted Channel (&lt;em&gt;uses HTTPS&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TA0030 - Defense Evasion&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1418 - Software Discovery (&lt;em&gt;queries a list of installed applications&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1447 - Delete Device Data (&lt;em&gt;lists and deletes files in the same context&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TA0031 - Credential Access&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1409 - Stored Application Data (&lt;em&gt;queries stored mail and application accounts like Gmail or WhatsApp&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1412 - Capture SMS Messages (&lt;em&gt;monitors incoming SMS&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TA0032 - Discovery&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1418 - Software Discovery (&lt;em&gt;queries a list of installed applications&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1421 - System Network Connections Discovery (&lt;em&gt;checks an internet connection is available&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1426 - System Information Discovery (&lt;em&gt;queries the unqiue device ID)&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;T1430 - Location Tracking (&lt;em&gt;queries the phones location&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TA0034 - Impact&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1447 - Delete Device Data (&lt;em&gt;lists and deletes files in the same context&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1448 - Carrier Billing Fraud (&lt;em&gt;has permission to send SMS in the background&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TA0035 - Collection&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1409 - Stored Application Data (&lt;em&gt;queries stored mail and application accounts like Gmail or WhatsApp)&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;T1412 - Capture SMS Messages (&lt;em&gt;monitors incoming SMS&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1429 - Audio Capture (&lt;em&gt;accesses the audio/media managers and records audio/media&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1430 - Location Tracking (&lt;em&gt;queries the phones location&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1432 - Access Contact List (&lt;em&gt;queries phone contact information&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1433 - Access Call Log (&lt;em&gt;monitors incoming and outgoing Phone calls&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;T1507 - Network Information Discovery (&lt;em&gt;checks an internet connection is available&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TA0038 - Network Effects&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T1449 - Exploit SS7 to Redirect Phone Calls/SMS (&lt;em&gt;has permissions to perform, monitor, redirect and/or block calls and to send SMS in the background&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 class="relative group"&gt;YARA
+&lt;div id="yara" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;rule&lt;/span&gt; &lt;span class="nl"&gt;italianstalkerware&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;stalkerware&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;meta&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;author&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;Andrea Palmieri @andpalmier&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;ref&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;https://andpalmier.com/posts/stalkerware-analysis/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;strings&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;s1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;cliccando il bottone continua sottostante&amp;#34;&lt;/span&gt; &lt;span class="n"&gt;nocase&lt;/span&gt; &lt;span class="n"&gt;ascii&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;s2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;www.spyapp.ch/eula&amp;#34;&lt;/span&gt; &lt;span class="n"&gt;nocase&lt;/span&gt; &lt;span class="n"&gt;ascii&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;s3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;periodicamente il sistema viene aggiornato&amp;#34;&lt;/span&gt; &lt;span class="n"&gt;nocase&lt;/span&gt; &lt;span class="n"&gt;ascii&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nl"&gt;condition&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nf"&gt;uint16&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mh"&gt;0x4B50&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;them&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 class="relative group"&gt;IOCs
+&lt;div id="iocs" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;u1623673571u.apk 86504d29d3d5a852e8e37c951c049917a9b11907
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;u187763837u.apk 19d990ace5e4fd5871265485d2ec4431bba33f28
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;u555625802u.apk 8fbaa94dfdce19e5484e12bac0ce4cbe56d908d8&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</description></item><item><title>F-Droid apps you will find useful</title><link>https://andpalmier.com/posts/fdroid-apps/</link><pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate><guid>https://andpalmier.com/posts/fdroid-apps/</guid><description>
+&lt;h2 class="relative group"&gt;What is F-Droid?
+&lt;div id="what-is-f-droid" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;F-Droid is a community-maintained software repository for Android devices; or - to make it simpler - an alternative store for Android apps.
+Similarly to the Google Play Store, F-Droid allows searching, installing and updating apps. What makes F-Droid different from the Google Play Store (and other alternative stores, such as Aptoide) is the fact that its entire list of applications is FOSS (&lt;em&gt;Free and Open Source Software&lt;/em&gt;), meaning that the source code of the apps is available online, and can be inspected by everyone.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;Why use F-Droid?
+&lt;div id="why-use-f-droid" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;There are different advantages of using F-Droid. On the privacy side, F-Droid allows the user to download, install and update applications without being registered to the store. In addition, every app on F-Droid has to have the so-called ‘&lt;em&gt;anti-features&lt;/em&gt;’:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;No user tracking systems;&lt;/li&gt;
+&lt;li&gt;No advertising;&lt;/li&gt;
+&lt;li&gt;No dependence on non-free software: everyone can download, run, and use all the features of the application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On the security side, its open-source license allows everyone to check the source code of every app before downloading it. In addition, F-Droid sends all the information over HTTPS by default, and, if &lt;a href="https://guardianproject.info/apps/orbot/" target="_blank" rel="noreferrer"&gt;Orbot&lt;/a&gt; is installed on the device, it can even force the traffic to go through Tor.&lt;/p&gt;
+&lt;p&gt;If you are interested in the building and signing process of the apps, you can find some details in the &lt;a href="https://f-droid.org/en/docs/FAQ_-_General" target="_blank" rel="noreferrer"&gt;FAQ section on f-droid.org&lt;/a&gt; or in the documentation about the &lt;a href="https://f-droid.org/en/docs/Security_Model/" target="_blank" rel="noreferrer"&gt;security model&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;How to install F-Droid?
+&lt;div id="how-to-install-f-droid" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Due to its FOSS nature, F-Droid cannot be found in the Google Play store. This means that it has to be downloaded and installed manually.
+You can find the app on the &lt;a href="https://f-droid.org/en/" target="_blank" rel="noreferrer"&gt;f-droid website&lt;/a&gt;, but, in order to install it, you should allow your browser to &amp;lsquo;&lt;em&gt;install apps from unknown sources&lt;/em&gt;&amp;rsquo; directly from the Android settings. This should also be enabled for F-Droid itself, in order to download and install apps from it.&lt;/p&gt;
+&lt;p&gt;A suggestion: disable this special permission for your browser as soon as the F-Droid installation is completed, because it creates a security risk for your device.&lt;/p&gt;
+&lt;h2 class="relative group"&gt;My favorite FOSS apps
+&lt;div id="my-favorite-foss-apps" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Here is a list of my favorite &lt;em&gt;FOSS&lt;/em&gt; Android apps. Keep in mind that some of them can be found also on the Google Play store.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: center"&gt;Name&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Google Play?&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Category&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Description&lt;/th&gt;
+&lt;th style="text-align: center"&gt;Source code&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;AdAway&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Adblocker&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Lightweight adblocker for your phone. It can work without root permissions.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/AdAway/AdAway" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Aegis&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.beemdevelopment.aegis" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2FA token&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Free, easy and secure app to manage 2-step verification tokens.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/beemdevelopment/Aegis" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;AntennaPod&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=de.danoeh.antennapod" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Podcast&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Download, stream or queue episodes with tons of features. Millions of free and paid podcasts available.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/antennapod/AntennaPod" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Birday&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Birthdays reminder&lt;/td&gt;
+&lt;td style="text-align: center"&gt;A simple yet useful birthday manager. Birday is free and ad-free!&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/m-i-n-a-r/birday" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Bitwarden&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.x8bit.bitwarden" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Password manager&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Easy password manager solution which can be self-hosted and can generate 2FA tokens.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/bitwarden/mobile" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Bromite&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Browser&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Chromium fork with ad blocking and enhanced privacy.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/bromite/bromite" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Catima&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=me.hackerchick.catima" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Wallet&lt;/td&gt;
+&lt;td style="text-align: center"&gt;For barcodes, memberships, loyalty programs, coupons and tickets.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/CatimaLoyalty/Android" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Download Navi&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.tachibana.downloader" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Download manager&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Easy to use download manager for your phone.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/TachibanaGeneralLaboratories/download-navi" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Gadgetbridge&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Wearables&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Communicate with wearables without giving your privacy away. Many features available depending on the device.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://codeberg.org/Freeyourgadget/Gadgetbridge/" target="_blank" rel="noreferrer"&gt;Codeberg&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Infinity&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Reddit&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Beautiful, feature-rich app that offers a smooth Reddit browsing experience.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/Docile-Alligator/Infinity-For-Reddit" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;KISS&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=fr.neamar.kiss" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Launcher&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Easy to use and extremely lightweight Android launcher.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/Neamar/KISS" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Loop Habit Tracker&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=org.isoron.uhabits" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Habit tracker&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Helps you create and maintain good habits, allowing you to achieve your long-term goals.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/iSoron/uhabits" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Material Files&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=me.zhanghai.android.files" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;File manager&lt;/td&gt;
+&lt;td style="text-align: center"&gt;A Material Design file manager, for Android 5.0+.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/zhanghai/MaterialFiles" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Medito&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=meditofoundation.medito" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Meditation&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Meditation app that includes guided meditations, breathing exercises, mindfulness practices, relaxing sounds, and more.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/meditohq/medito-app" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Mull&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Browser&lt;/td&gt;
+&lt;td style="text-align: center"&gt;This is a fork of Firefox without proprietary blobs. Addons available.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://gitlab.com/divested-mobile/mull-fenix" target="_blank" rel="noreferrer"&gt;GitLab&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;NewPipe&lt;/td&gt;
+&lt;td style="text-align: center"&gt;No&lt;/td&gt;
+&lt;td style="text-align: center"&gt;YouTube (&amp;amp; more)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Youtube client that allows audio only playback in background and download. No Google account needed.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/TeamNewPipe/NewPipe" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Tusky&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.keylesspalace.tusky" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Mastodon&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Lightweight and feature-rich client for Mastodon.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/tuskyapp/Tusky" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Voice&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Audiobooks&lt;/td&gt;
+&lt;td style="text-align: center"&gt;Audiobook player which remembers last position, has bookmarks, Android Auto compatibility and Sleep-timer.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://github.com/PaulWoitaschek/Voice" target="_blank" rel="noreferrer"&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;WireGuard&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://play.google.com/store/apps/details?id=com.wireguard.android" target="_blank" rel="noreferrer"&gt;Yes&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: center"&gt;VPN&lt;/td&gt;
+&lt;td style="text-align: center"&gt;The official app for managing WireGuard VPN tunnels.&lt;/td&gt;
+&lt;td style="text-align: center"&gt;&lt;a href="https://git.zx2c4.com/wireguard-android" target="_blank" rel="noreferrer"&gt;Git&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 class="relative group"&gt;Conclusion
+&lt;div id="conclusion" class="anchor"&gt;&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;This is only a brief introduction to the F-Droid world. Next time you are looking for an app, remember to check first if a FOSS alternative exists. Even if you don&amp;rsquo;t want to install the F-Droid client, maybe you could find it on the Play Store: you will receive in return less ads on your phone and a more privacy friendly experience.&lt;/p&gt;
+&lt;p&gt;Before installing the app, always check when was the last update. Outdated apps may expose you to security issues (this is a suggestion that applies also when installing apps from the Play Store).&lt;/p&gt;
+&lt;h1 class="relative group"&gt;Sources
+&lt;div id="sources" class="anchor"&gt;&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;If you are interested in this topic, you can check:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://f-droid.org/en/" target="_blank" rel="noreferrer"&gt;fdroid.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.reddit.com/r/fdroid/" target="_blank" rel="noreferrer"&gt;r/fdroid on Reddit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.reddit.com/r/fossdroid/" target="_blank" rel="noreferrer"&gt;r/fossdroid on Reddit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://fossdroid.com/" target="_blank" rel="noreferrer"&gt;fossdroid.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

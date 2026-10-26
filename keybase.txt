@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/andpalmier
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://andpalmier.com
+  * I am andpalmier (https://keybase.io/andpalmier) on keybase.
+  * I have a public key ASCNBiMu9PRAO4zMNzJi4HtizPiqCnfbTBmeEcHG-KLBsAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "01205759e8df8c2c1bae22a271ce2cd16c666ed32341c2d5b8dd1bfbbb158066995a0a",
+      "host": "keybase.io",
+      "kid": "01208d06232ef4f4403b8ccc373262e07b62ccf8aa0a77db4c199e11c1c6f8a2c1b00a",
+      "uid": "11e8ee1daaddcc19f0c8a2968f9f1519",
+      "username": "andpalmier"
+    },
+    "merkle_root": {
+      "ctime": 1612794535,
+      "hash": "178d29e233b80e39339a3f0dcaf9c1c0dc8a42cb535025a17f5f739883bf9f3f37dfa77668b8f0ab55caf0923e830014cfd36357d2723ade168f0682997d6d39",
+      "hash_meta": "d441daef1a59f09416fa2ab26e298933b9288ecc4ae71e1a797d1a38884cdc30",
+      "seqno": 19047306
+    },
+    "service": {
+      "entropy": "ZCAXFobgVzPtJrCNgAeZIYb5",
+      "hostname": "andpalmier.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.6.2"
+  },
+  "ctime": 1612794549,
+  "expire_in": 504576000,
+  "prev": "e4cb92f6532b1b9976736025fdda1f249178cfa8698ac16fa3250b74899d30b9",
+  "seqno": 19,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgjQYjLvT0QDuMzDcyYuB7Ysz4qgp320wZnhHBxviiwbAKp3BheWxvYWTESpcCE8Qg5MuS9lMrG5l2c2Al/dofJJF4z6hpisFvoyULdImdMLnEIMHjYi8P4algyhw4YQK+twMIZq+z1thtf1Fc5jFFoPGGAgHCo3NpZ8RAVoJX8a4aSaJBw+SlWCvUvA8aPIYVCihenOp4b8riMR73hHCvMJhCAgqZuTVqV2Nlf9kJ9IXhUpq52ap1gmBGDKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIEakhRGAF3irokN2OUVBdwYUJmT7ynsa659oAw+0yFY2o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/andpalmier
+
+==================================================================
