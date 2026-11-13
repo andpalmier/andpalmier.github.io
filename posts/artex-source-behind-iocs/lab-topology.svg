@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Lab topology</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="400" rx="14" fill="#fbfbfa" stroke="#dddddb"/>
+  <rect x="20" y="20" width="960" height="320" rx="12" fill="none" stroke="#a9a9a6" stroke-dasharray="6 4"/>
+  <text x="40" y="48" font-size="15" font-weight="700" fill="#444">Docker network created with --internal: no route out</text>
+
+  <rect x="50" y="90" width="270" height="200" rx="10" fill="#2f5f8f"/>
+  <text x="185" y="122" font-size="16" font-weight="600" text-anchor="middle" fill="#fff">client under test</text>
+  <text x="185" y="156" font-size="13.5" text-anchor="middle" fill="#fff">ARTEX worker harness</text>
+  <text x="185" y="178" font-size="13.5" text-anchor="middle" fill="#fff">(ARTEX v0.3.15, e6ec569)</text>
+  <text x="185" y="212" font-size="13.5" text-anchor="middle" fill="#fff">Bash tool: curl, python, node</text>
+  <text x="185" y="236" font-size="13.5" text-anchor="middle" fill="#fff">Norma WebFetch</text>
+  <text x="185" y="260" font-size="13.5" text-anchor="middle" fill="#fff">optional traffic recorder</text>
+
+  <rect x="400" y="215" width="230" height="95" rx="10" fill="#efefec" stroke="#8a8a87"/>
+  <text x="515" y="245" font-size="16" font-weight="600" text-anchor="middle" fill="#222">stub LLM</text>
+  <text x="515" y="270" font-size="13.5" text-anchor="middle" fill="#444">scripted tool calls,</text>
+  <text x="515" y="292" font-size="13.5" text-anchor="middle" fill="#444">configurable latency</text>
+
+  <rect x="700" y="80" width="250" height="125" rx="10" fill="#efefec" stroke="#8a8a87"/>
+  <text x="825" y="110" font-size="16" font-weight="600" text-anchor="middle" fill="#222">capture target :80 / :443</text>
+  <text x="825" y="138" font-size="13.5" text-anchor="middle" fill="#444">raw header lines, in wire order</text>
+  <text x="825" y="160" font-size="13.5" text-anchor="middle" fill="#444">pcap → tshark → JA4</text>
+  <text x="825" y="182" font-size="13.5" text-anchor="middle" fill="#444">self-signed certificate</text>
+
+  <line x1="320" y1="140" x2="696" y2="140" stroke="#555" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="508" y="130" font-size="13.5" text-anchor="middle" fill="#333">HTTP / HTTPS requests</text>
+  <line x1="322" y1="262" x2="396" y2="262" stroke="#555" stroke-width="2" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text x="358" y="252" font-size="12" text-anchor="middle" fill="#555">chat API</text>
+
+  <text x="500" y="375" font-size="13" text-anchor="middle" fill="#666">Nothing in this network could reach the internet, a real model or anybody else's system.</text>
+</svg>

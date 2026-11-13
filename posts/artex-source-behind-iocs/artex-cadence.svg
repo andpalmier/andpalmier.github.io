@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Requests over time, with a fake LLM answering after 15 seconds</title>
+  <rect x="0" y="0" width="1000" height="360" rx="14" fill="#fbfbfa" stroke="#dddddb"/>
+  <text x="20" y="36" font-size="15" font-weight="700" fill="#444">Requests reaching the target when the fake LLM takes 15 s to answer</text>
+
+  <!-- gap annotation, lane 1 -->
+  <path d="M146,82 L146,74 L294,74 L294,82" fill="none" stroke="#b55d24" stroke-width="1.6"/>
+  <text x="220" y="66" font-size="13" font-weight="600" text-anchor="middle" fill="#b55d24">15.02 s</text>
+  <text x="220" y="124" font-size="12" text-anchor="middle" fill="#b55d24">waiting for the LLM</text>
+
+  <!-- lane 1: 1 worker -->
+  <text x="20" y="105" font-size="14" font-weight="600" fill="#333">1 worker</text>
+  <line x1="140" y1="100" x2="950" y2="100" stroke="#dddddb" stroke-width="1"/>
+  <g fill="#2f5f8f">
+    <circle cx="140" cy="100" r="7"/>
+    <circle cx="290.2" cy="100" r="7"/>
+    <circle cx="440.5" cy="100" r="7"/>
+    <circle cx="590.7" cy="100" r="7"/>
+    <circle cx="740.9" cy="100" r="7"/>
+    <circle cx="891.1" cy="100" r="7"/>
+  </g>
+
+  <!-- lane 2: 3 workers -->
+  <text x="20" y="215" font-size="14" font-weight="600" fill="#333">3 workers</text>
+  <line x1="140" y1="210" x2="950" y2="210" stroke="#dddddb" stroke-width="1"/>
+  <g fill="#2f5f8f">
+    <circle cx="140" cy="190" r="7"/><circle cx="140" cy="210" r="7"/><circle cx="140" cy="230" r="7"/>
+    <circle cx="290.2" cy="190" r="7"/><circle cx="290.2" cy="210" r="7"/><circle cx="290.2" cy="230" r="7"/>
+    <circle cx="440.5" cy="190" r="7"/><circle cx="440.5" cy="210" r="7"/><circle cx="440.5" cy="230" r="7"/>
+    <circle cx="590.7" cy="190" r="7"/><circle cx="590.7" cy="210" r="7"/><circle cx="590.7" cy="230" r="7"/>
+    <circle cx="740.9" cy="190" r="7"/><circle cx="740.9" cy="210" r="7"/><circle cx="740.9" cy="230" r="7"/>
+    <circle cx="891.1" cy="190" r="7"/><circle cx="891.1" cy="210" r="7"/><circle cx="891.1" cy="230" r="7"/>
+  </g>
+  <text x="891" y="256" font-size="12" text-anchor="middle" fill="#555">3 at once</text>
+
+  <!-- axis -->
+  <line x1="140" y1="272" x2="950" y2="272" stroke="#8a8a87" stroke-width="1.4"/>
+  <g font-size="12.5" text-anchor="middle" fill="#444">
+    <line x1="140" y1="272" x2="140" y2="279" stroke="#8a8a87"/><text x="140" y="295">0</text>
+    <line x1="290" y1="272" x2="290" y2="279" stroke="#8a8a87"/><text x="290" y="295">15</text>
+    <line x1="440" y1="272" x2="440" y2="279" stroke="#8a8a87"/><text x="440" y="295">30</text>
+    <line x1="590" y1="272" x2="590" y2="279" stroke="#8a8a87"/><text x="590" y="295">45</text>
+    <line x1="740" y1="272" x2="740" y2="279" stroke="#8a8a87"/><text x="740" y="295">60</text>
+    <line x1="890" y1="272" x2="890" y2="279" stroke="#8a8a87"/><text x="890" y="295">75</text>
+  </g>
+  <text x="545" y="318" font-size="13" text-anchor="middle" fill="#444">seconds since the first request</text>
+  <text x="500" y="345" font-size="12.5" text-anchor="middle" fill="#666">Each dot is one request. Of each 15.02 s gap, ARTEX itself takes about 0.02 s; the rest is the LLM.</text>
+</svg>

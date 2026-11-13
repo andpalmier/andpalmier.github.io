@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Where ARTEX's requests come from</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+    <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#999"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1120" height="640" rx="14" fill="#fbfbfa" stroke="#dddddb"/>
+
+  <!-- section 1 -->
+  <text x="24" y="34" font-size="15" font-weight="700" fill="#444">Traffic that reaches targets</text>
+
+  <rect x="20" y="168" width="110" height="50" rx="8" fill="#efefec" stroke="#8a8a87"/>
+  <text x="75" y="198" font-size="15" text-anchor="middle" fill="#222">planner</text>
+  <rect x="165" y="168" width="110" height="50" rx="8" fill="#efefec" stroke="#8a8a87"/>
+  <text x="220" y="198" font-size="15" text-anchor="middle" fill="#222">workers</text>
+  <line x1="130" y1="193" x2="163" y2="193" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+
+  <rect x="315" y="90" width="175" height="58" rx="8" fill="#efefec" stroke="#8a8a87"/>
+  <text x="402" y="114" font-size="15" text-anchor="middle" fill="#222">Bash tool</text>
+  <text x="402" y="134" font-size="12.5" text-anchor="middle" fill="#555">model writes the command</text>
+  <rect x="315" y="250" width="175" height="58" rx="8" fill="#efefec" stroke="#8a8a87"/>
+  <text x="402" y="274" font-size="15" text-anchor="middle" fill="#222">WebFetch tool</text>
+  <text x="402" y="294" font-size="12.5" text-anchor="middle" fill="#555">from the Norma SDK</text>
+  <path d="M275,185 C295,185 295,119 313,119" fill="none" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+  <path d="M275,201 C295,201 295,279 313,279" fill="none" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+
+  <rect x="525" y="50" width="290" height="300" rx="10" fill="none" stroke="#a9a9a6" stroke-dasharray="5 4"/>
+  <text x="670" y="72" font-size="13" text-anchor="middle" fill="#666">what leaves the worker</text>
+
+  <rect x="540" y="84" width="260" height="70" rx="8" fill="#b55d24"/>
+  <text x="670" y="112" font-size="15" text-anchor="middle" fill="#fff">curl · python · nmap · node …</text>
+  <text x="670" y="136" font-size="13" text-anchor="middle" fill="#fff">User-Agent: the tool's, or the model's</text>
+
+  <rect x="540" y="166" width="260" height="70" rx="8" fill="#2f5f8f" stroke="#fff" stroke-dasharray="4 3"/>
+  <text x="670" y="194" font-size="14" text-anchor="middle" fill="#fff">api-recon skill scripts (if run)</text>
+  <text x="670" y="218" font-size="13" text-anchor="middle" fill="#fff">Mozilla/5.0 (spa-api-recon[ spider])</text>
+
+  <rect x="540" y="256" width="260" height="70" rx="8" fill="#2f5f8f"/>
+  <text x="670" y="284" font-size="14" text-anchor="middle" fill="#fff">WebFetch request</text>
+  <text x="670" y="308" font-size="13" text-anchor="middle" fill="#fff">User-Agent: norma/0.4</text>
+
+  <line x1="490" y1="119" x2="538" y2="119" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+  <path d="M490,132 C515,132 515,201 538,201" fill="none" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+  <line x1="490" y1="291" x2="538" y2="291" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+
+  <circle cx="1040" cy="130" r="52" fill="#efefec" stroke="#555" stroke-width="1.6"/>
+  <text x="1040" y="136" font-size="16" font-weight="600" text-anchor="middle" fill="#222">target</text>
+
+  <line x1="815" y1="130" x2="985" y2="130" stroke="#555" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="900" y="120" font-size="13" text-anchor="middle" fill="#333">recording off (default)</text>
+  <text x="900" y="150" font-size="12" text-anchor="middle" fill="#666">tools keep their own TLS</text>
+
+  <text x="905" y="234" font-size="13" text-anchor="middle" fill="#333">recording on (opt-in)</text>
+  <rect x="860" y="244" width="236" height="82" rx="8" fill="#2f5f8f"/>
+  <text x="978" y="270" font-size="14" text-anchor="middle" fill="#fff">go-mitmproxy :8788</text>
+  <text x="978" y="292" font-size="12.5" text-anchor="middle" fill="#fff">re-makes TLS with Go's crypto/tls</text>
+  <text x="978" y="310" font-size="12.5" text-anchor="middle" fill="#fff">re-orders the headers</text>
+  <line x1="815" y1="285" x2="858" y2="285" stroke="#555" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+  <line x1="1040" y1="244" x2="1040" y2="184" stroke="#555" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+  <text x="670" y="372" font-size="12.5" text-anchor="middle" fill="#666">node 20 ignores the proxy variables, so it always goes direct</text>
+
+  <!-- divider -->
+  <line x1="20" y1="402" x2="1100" y2="402" stroke="#dddddb" stroke-width="1.5"/>
+  <text x="24" y="434" font-size="15" font-weight="700" fill="#444">Traffic that never reaches targets</text>
+
+  <rect x="20" y="456" width="330" height="72" rx="8" fill="#e4e4e2" stroke="#999" stroke-dasharray="5 4"/>
+  <text x="185" y="484" font-size="14" text-anchor="middle" fill="#333">enrich engine: artex-enrich/1.0</text>
+  <text x="185" y="508" font-size="13" text-anchor="middle" fill="#555">wired into the workers, never called</text>
+
+  <rect x="420" y="462" width="140" height="60" rx="8" fill="#efefec" stroke="#8a8a87"/>
+  <text x="490" y="488" font-size="15" text-anchor="middle" fill="#222">console</text>
+  <text x="490" y="508" font-size="12" text-anchor="middle" fill="#555">every page load</text>
+  <rect x="590" y="462" width="210" height="60" rx="8" fill="#2f5f8f"/>
+  <text x="695" y="488" font-size="14" text-anchor="middle" fill="#fff">update check</text>
+  <text x="695" y="508" font-size="13" text-anchor="middle" fill="#fff">User-Agent: artex-selfupdate</text>
+  <line x1="560" y1="492" x2="588" y2="492" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+  <circle cx="980" cy="492" r="62" fill="#efefec" stroke="#555" stroke-width="1.6"/>
+  <text x="980" y="497" font-size="13.5" text-anchor="middle" fill="#222">api.github.com</text>
+  <line x1="800" y1="492" x2="916" y2="492" stroke="#555" stroke-width="1.6" marker-end="url(#ah)"/>
+  <text x="858" y="482" font-size="12" text-anchor="middle" fill="#666">cached 30 min</text>
+
+  <!-- legend -->
+  <rect x="24" y="582" width="18" height="18" rx="3" fill="#2f5f8f"/>
+  <text x="50" y="596" font-size="13" fill="#333">hard-coded in ARTEX or Norma (A)</text>
+  <rect x="300" y="582" width="18" height="18" rx="3" fill="#b55d24"/>
+  <text x="326" y="596" font-size="13" fill="#333">decided by the model or the tool (C/D)</text>
+  <rect x="610" y="582" width="18" height="18" rx="3" fill="#e4e4e2" stroke="#999" stroke-dasharray="3 2"/>
+  <text x="636" y="596" font-size="13" fill="#333">in the code, never executed</text>
+  <line x1="850" y1="591" x2="890" y2="591" stroke="#555" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="898" y="596" font-size="13" fill="#333">opt-in path</text>
+</svg>
