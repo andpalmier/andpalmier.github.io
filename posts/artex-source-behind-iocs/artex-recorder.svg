@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>What the target sees, with and without ARTEX's recorder</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="540" rx="14" fill="#fbfbfa" stroke="#dddddb"/>
+  <text x="840" y="32" font-size="14" font-weight="700" text-anchor="middle" fill="#444">what the target sees</text>
+
+  <!-- recording off -->
+  <text x="20" y="40" font-size="15" font-weight="700" fill="#444">Recording off (ARTEX's default)</text>
+  <rect x="20" y="62" width="170" height="76" rx="10" fill="#efefec" stroke="#8a8a87"/>
+  <text x="105" y="96" font-size="15" font-weight="600" text-anchor="middle" fill="#222">curl 7.88.1</text>
+  <text x="105" y="118" font-size="12.5" text-anchor="middle" fill="#444">run by the Bash tool</text>
+  <line x1="190" y1="100" x2="566" y2="100" stroke="#555" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="378" y="90" font-size="13" text-anchor="middle" fill="#333">curl's own TLS handshake</text>
+  <rect x="570" y="62" width="80" height="76" rx="10" fill="#efefec" stroke="#555"/>
+  <text x="610" y="105" font-size="14" font-weight="600" text-anchor="middle" fill="#222">target</text>
+  <rect x="680" y="52" width="300" height="96" rx="8" fill="#fff" stroke="#cfcfcc"/>
+  <text x="694" y="76" font-size="13" fill="#222">User-Agent: curl/7.88.1</text>
+  <text x="694" y="98" font-size="13" fill="#222">TLS: OpenSSL, 31 ciphers, X25519</text>
+  <text x="694" y="126" font-size="11.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#444">t13d3112h2_e8f1e7e78f70_b26ce05bbdd6</text>
+
+  <!-- recording on -->
+  <text x="20" y="200" font-size="15" font-weight="700" fill="#444">Recording on</text>
+  <rect x="20" y="232" width="170" height="76" rx="10" fill="#efefec" stroke="#8a8a87"/>
+  <text x="105" y="266" font-size="15" font-weight="600" text-anchor="middle" fill="#222">curl 7.88.1</text>
+  <text x="105" y="288" font-size="12.5" text-anchor="middle" fill="#444">run by the Bash tool</text>
+  <line x1="190" y1="270" x2="256" y2="270" stroke="#555" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="223" y="260" font-size="11.5" text-anchor="middle" fill="#555">proxy</text>
+  <rect x="260" y="215" width="230" height="110" rx="10" fill="#2f5f8f"/>
+  <text x="375" y="243" font-size="15" font-weight="600" text-anchor="middle" fill="#fff">ARTEX's recorder</text>
+  <text x="375" y="263" font-size="12.5" text-anchor="middle" fill="#fff">(go-mitmproxy)</text>
+  <text x="375" y="287" font-size="12.5" text-anchor="middle" fill="#fff">ends curl's connection, records it,</text>
+  <text x="375" y="306" font-size="12.5" text-anchor="middle" fill="#fff">opens a new one in Go</text>
+  <line x1="490" y1="270" x2="566" y2="270" stroke="#b55d24" stroke-width="2.5" marker-end="url(#ah)"/>
+  <text x="528" y="260" font-size="12" text-anchor="middle" fill="#b55d24">Go's TLS</text>
+  <rect x="570" y="232" width="80" height="76" rx="10" fill="#efefec" stroke="#555"/>
+  <text x="610" y="275" font-size="14" font-weight="600" text-anchor="middle" fill="#222">target</text>
+  <rect x="680" y="200" width="300" height="140" rx="8" fill="#fff" stroke="#cfcfcc"/>
+  <text x="694" y="224" font-size="13" fill="#222">User-Agent: curl/7.88.1 (unchanged)</text>
+  <text x="694" y="246" font-size="13" font-weight="600" fill="#b55d24">TLS: Go, 20 ciphers,</text>
+  <text x="694" y="266" font-size="13" font-weight="600" fill="#b55d24">post-quantum X25519MLKEM768</text>
+  <text x="694" y="292" font-size="11.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#b55d24">t13d2012h2_314f1408a5a6_ab7e3b40a677</text>
+  <text x="694" y="322" font-size="12.5" fill="#b55d24">plain HTTP: + Proxy-Connection: Keep-Alive</text>
+
+  <!-- node -->
+  <text x="20" y="390" font-size="15" font-weight="700" fill="#444">Node 20, recording on or off</text>
+  <rect x="20" y="410" width="170" height="70" rx="10" fill="#efefec" stroke="#8a8a87"/>
+  <text x="105" y="441" font-size="15" font-weight="600" text-anchor="middle" fill="#222">node fetch</text>
+  <text x="105" y="462" font-size="12.5" text-anchor="middle" fill="#444">run by the Bash tool</text>
+  <line x1="190" y1="445" x2="566" y2="445" stroke="#555" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="378" y="435" font-size="13" text-anchor="middle" fill="#333">ignores the proxy settings</text>
+  <rect x="570" y="410" width="80" height="70" rx="10" fill="#efefec" stroke="#555"/>
+  <text x="610" y="450" font-size="14" font-weight="600" text-anchor="middle" fill="#222">target</text>
+  <rect x="680" y="405" width="300" height="80" rx="8" fill="#fff" stroke="#cfcfcc"/>
+  <text x="694" y="430" font-size="13" fill="#222">Node's own TLS handshake,</text>
+  <text x="694" y="452" font-size="13" fill="#222">same as with recording off</text>
+
+  <text x="500" y="520" font-size="12.5" text-anchor="middle" fill="#666">Orange: what changes when recording is on. Measured in the lab, from the target's pcap.</text>
+</svg>

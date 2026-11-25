@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CTI on andpalmier's blog</title><link>https://andpalmier.com/tags/cti/</link><description>Recent content in CTI on andpalmier's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 20 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://andpalmier.com/tags/cti/index.xml" rel="self" type="application/rss+xml"/><item><title>Releasing an Abuse.ch toolkit for threat intelligence</title><link>https://andpalmier.com/posts/abuse-ch-toolkit/</link><pubDate>Tue, 20 Jan 2026 00:00:00 +0000</pubDate><guid>https://andpalmier.com/posts/abuse-ch-toolkit/</guid><description>
+&lt;h2 class="relative group"&gt;Introduction
+&lt;div id="introduction" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;While working on the post &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/" &gt;&amp;ldquo;Interview preparation for a Cyber Threat Intelligence role&amp;rdquo;&lt;/a&gt;, I realized that a lot of CTI tools need a subscription or a license in order to be used. That could be an issue, especially for small companies or people trying to enter the field.&lt;/p&gt;
+&lt;p&gt;To give back to the community and highlight the potential of community-driven platforms, I decided to put together 4 command-line tools to interact with some of the services from &lt;a href="https://abuse.ch" target="_blank" rel="noreferrer"&gt;Abuse.ch&lt;/a&gt;. You&amp;rsquo;re going to need an API key to use these tools, but &lt;a href="https://auth.abuse.ch/" target="_blank" rel="noreferrer"&gt;it is free to get one&lt;/a&gt;. Hopefully, they will be useful to some of you.&lt;/p&gt;
+&lt;p&gt;Here are the platforms covered by the toolset:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://bazaar.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;MalwareBazaar&lt;/strong&gt;&lt;/a&gt;: for sharing malware samples.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://threatfox.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;ThreatFox&lt;/strong&gt;&lt;/a&gt;: for sharing indicators of compromise (IOCs) associated with malware.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://urlhaus.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;URLhaus&lt;/strong&gt;&lt;/a&gt;: for sharing malicious URLs being used for malware distribution.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://yaraify.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;YARAify&lt;/strong&gt;&lt;/a&gt;: a repository of YARA rules to identify and classify malware, can be used to share rules, hunt, and scan.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&amp;rsquo;m aware that &lt;a href="https://abuse.ch/blog/creating-sustainability-for-abuse-ch-and-its-community/" target="_blank" rel="noreferrer"&gt;abuse.ch and Spamhaus are working on a commercial model to sustain the services&lt;/a&gt;, but they also say &lt;em&gt;&amp;ldquo;if you contribute data, you will be able to access the data for free&amp;rdquo;&lt;/em&gt;. Some of these tools I&amp;rsquo;m releasing can help you making those contributions. So check them out, and let&amp;rsquo;s keep the collaboration alive!&lt;/p&gt;
+&lt;h3 class="relative group"&gt;Less is more
+&lt;div id="less-is-more" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;I developed these tools with some principles in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UNIX philosophy&lt;/strong&gt;: Do one thing and do it well, each tool maps to one specific service.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No dependencies&lt;/strong&gt;: Written in Go using &lt;em&gt;only&lt;/em&gt; the standard library. No &lt;code&gt;node_modules&lt;/code&gt; black holes, no dependency hell: just small binaries that work.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JSON first&lt;/strong&gt;: Output is JSON by default. It can be piped to &lt;code&gt;jq&lt;/code&gt;, ingested into a SIEM, or scripted around easily.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container ready&lt;/strong&gt;: Docker/Podman images are available for every tool.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 class="relative group"&gt;Installation and first steps
+&lt;div id="installation-and-first-steps" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The installation process has four options:&lt;/p&gt;
+&lt;p&gt;🍺 &lt;strong&gt;Using brew&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The easiest way to install any of these tools on macOS (or Linux via Linuxbrew) is through the custom tap:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew tap andpalmier/tap
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install mbzr tfox urlhs yrfy&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;🏃‍♂️ &lt;strong&gt;Using Go&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;go install github.com/andpalmier/mbzr@latest&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;🐳 &lt;strong&gt;Using containers (Docker/Podman)&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull pre-built image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker pull ghcr.io/andpalmier/tfox:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Or build locally&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/andpalmier/tfox.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build -t tfox .&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;✅ &lt;strong&gt;From source&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/andpalmier/urlhs.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; urlhs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;make build&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;BONUS: ⬇️ &lt;strong&gt;Binaries from GitHub&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Plus, the GitHub page of every tool has a &amp;ldquo;Releases&amp;rdquo; section with pre-built binaries, so you can download them from there.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img class="my-0 rounded-md" src="https://andpalmier.com/images/posts/abuse-ch-toolkit/releases_yrfy.jpg" alt="yrfy releases" /&gt;
+&lt;figcaption&gt;&lt;a href="https://github.com/andpalmier/yrfy/releases" target="_blank" rel="noreferrer"&gt;yrfy releases&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 class="relative group"&gt;API key setup
+&lt;div id="api-key-setup" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;An API key is required to use all of the tool. You can get one for free from &lt;a href="https://auth.abuse.ch/" target="_blank" rel="noreferrer"&gt;abuse.ch authentication portal&lt;/a&gt;, and then export it as environment variable:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;ABUSECH_API_KEY&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;your_api_key_here&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Introducing the toolkit
+&lt;div id="introducing-the-toolkit" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 class="relative group"&gt;Get fresh samples with mbzr
+&lt;div id="get-fresh-samples-with-mbzr" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/mbzr" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;mbzr&lt;/strong&gt;&lt;/a&gt; serves as an interface to &lt;a href="https://bazaar.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;MalwareBazaar&lt;/strong&gt;&lt;/a&gt;, which has a massive &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#finding-malware" &gt;database of malware samples&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;When analyzing a campaign, you may need to get fresh samples of a specific malware family (e.g., Emotet), or a retrieve a specific binary from its hash.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Examples:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Retrieve the last 5 Emotet samples:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mbzr query -tag Emotet -limit &lt;span class="m"&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Or download a binary:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mbzr download -sha256 &amp;lt;hash&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-d5fad16f8c9749259d788657085abfe2" target="_blank" href="https://github.com/andpalmier/mbzr" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/mbzr"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-d5fad16f8c9749259d788657085abfe2-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/mbzr
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-d5fad16f8c9749259d788657085abfe2-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+A cli tool to interact with MalwareBazaar API
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d5fad16f8c9749259d788657085abfe2-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+4
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d5fad16f8c9749259d788657085abfe2-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+2
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/mbzr"
+data-repo-id="github-d5fad16f8c9749259d788657085abfe2"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Hunt for IOCs with tfox
+&lt;div id="hunt-for-iocs-with-tfox" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/tfox" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;tfox&lt;/strong&gt;&lt;/a&gt; taps into &lt;a href="https://threatfox.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;ThreatFox&lt;/strong&gt;&lt;/a&gt;, a platform for sharing &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#ioc-vs-ioa" &gt;Indicators of Compromise (IOCs)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;When observing a suspicious domain or IP in logs, the typical first step is to verify if it&amp;rsquo;s in a known database of IOC.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Examples:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Verify if &amp;ldquo;evil.com&amp;rdquo; is in ThreatFox:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tfox search -ioc evil.com&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Or get the IOCs reported in the last 24 hours:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tfox recent -days &lt;span class="m"&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-d8f9c007e16436bf7e96a8617e4b651b" target="_blank" href="https://github.com/andpalmier/tfox" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/tfox"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-d8f9c007e16436bf7e96a8617e4b651b-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/tfox
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-d8f9c007e16436bf7e96a8617e4b651b-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+CLI tool to search in ThreatFox IOC database
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d8f9c007e16436bf7e96a8617e4b651b-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+0
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-d8f9c007e16436bf7e96a8617e4b651b-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+0
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/tfox"
+data-repo-id="github-d8f9c007e16436bf7e96a8617e4b651b"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Watch dangerous URLs with urlhs
+&lt;div id="watch-dangerous-urls-with-urlhs" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/urlhs" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;urlhs&lt;/strong&gt;&lt;/a&gt; connects to &lt;a href="https://urlhaus.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;URLhaus&lt;/strong&gt;&lt;/a&gt;, which aggregates malware distribution URLs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;When you need to block malware-serving URLs or track current malware distribution trends.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Discovery of recent payload URLs:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;urlhs recent -payloads -limit &lt;span class="m"&gt;10&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-ea8e8b40cf9b52637a98819503a14716" target="_blank" href="https://github.com/andpalmier/urlhs" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/urlhs"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-ea8e8b40cf9b52637a98819503a14716-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/urlhs
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-ea8e8b40cf9b52637a98819503a14716-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+CLI tool to search in URLhaus database and submit URLs
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-ea8e8b40cf9b52637a98819503a14716-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-ea8e8b40cf9b52637a98819503a14716-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+0
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/urlhs"
+data-repo-id="github-ea8e8b40cf9b52637a98819503a14716"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h3 class="relative group"&gt;Easy scans with yrfy
+&lt;div id="easy-scans-with-yrfy" class="anchor"&gt;&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/andpalmier/yrfy" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;yrfy&lt;/strong&gt;&lt;/a&gt; leverages &lt;a href="https://yaraify.abuse.ch" target="_blank" rel="noreferrer"&gt;&lt;strong&gt;YARAify&lt;/strong&gt;&lt;/a&gt; to scan files against a repository of community &lt;a href="https://andpalmier.com/posts/cti-interview-preparation/#yara" &gt;YARA rules&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When could it be useful?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;If you need to analyze a suspicious binary without uploading it to VirusTotal, or check for matches against community rules.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Scanning a local file:&lt;/p&gt;
+&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;yrfy scan -file suspect_installer.exe&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;It can even unpack the file prior to scanning if the &lt;code&gt;-unpack&lt;/code&gt; flag is used!&lt;/p&gt;
+&lt;div class="github-card-wrapper"&gt;
+&lt;a id="github-4c68c02e6aa2fe265447c6c21d000bec" target="_blank" href="https://github.com/andpalmier/yrfy" class="cursor-pointer"&gt;
+&lt;div
+class="w-full md:w-auto p-0 m-0 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl"&gt;&lt;div class="w-full nozoom"&gt;
+&lt;img
+src="https://opengraph.githubassets.com/0/andpalmier/yrfy"
+alt="GitHub Repository Thumbnail"
+class="nozoom mt-0 mb-0 w-full h-full object-cover"&gt;
+&lt;/div&gt;&lt;div class="w-full md:w-auto pt-3 p-5"&gt;
+&lt;div class="flex items-center"&gt;
+&lt;span class="text-2xl text-neutral-800 dark:text-neutral me-2"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"&gt;&lt;path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;div
+id="github-4c68c02e6aa2fe265447c6c21d000bec-full_name"
+class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"&gt;
+andpalmier/yrfy
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id="github-4c68c02e6aa2fe265447c6c21d000bec-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral"&gt;
+CLI tool to interact with YARAify API
+&lt;/p&gt;
+&lt;div class="m-0 mt-2 flex items-center"&gt;
+&lt;span class="mr-1 inline-block h-3 w-3 rounded-full language-dot" data-language="Go"&gt;&lt;/span&gt;
+&lt;div class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+Go
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4c68c02e6aa2fe265447c6c21d000bec-stargazers" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1
+&lt;/div&gt;
+&lt;span class="text-md mr-1 text-neutral-800 dark:text-neutral"&gt;
+&lt;span class="relative block icon"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;path fill="currentColor" d="M80 104c13.3 0 24-10.7 24-24s-10.7-24-24-24S56 66.7 56 80s10.7 24 24 24zm80-24c0 32.8-19.7 61-48 73.3V192c0 17.7 14.3 32 32 32H304c17.7 0 32-14.3 32-32V153.3C307.7 141 288 112.8 288 80c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V192c0 53-43 96-96 96H256v70.7c28.3 12.3 48 40.5 48 73.3c0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V288H144c-53 0-96-43-96-96V153.3C19.7 141 0 112.8 0 80C0 35.8 35.8 0 80 0s80 35.8 80 80zm208 24c13.3 0 24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24zM248 432c0-13.3-10.7-24-24-24s-24 10.7-24 24s10.7 24 24 24s24-10.7 24-24z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;div id="github-4c68c02e6aa2fe265447c6c21d000bec-forks" class="m-0 mr-5 text-md text-neutral-800 dark:text-neutral"&gt;
+1
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script
+async
+type="text/javascript"
+src="https://andpalmier.com/js/fetch-repo.min.dc5533c50cefd50405344b235937142271f26229fe39cbee27fd4960e8bb897a0beebfad77a1091ca91cd0d1fb14e70fc37cc114dd9674fb2c32e0ab512ec8a4.js"
+integrity="sha512-3FUzxQzv1QQFNEsjWTcUInHyYin&amp;#43;OcvuJ/1JYOi7iXoL7r&amp;#43;td6EJHKkc0NH7FOcPw3zBFN2WdPssMuCrUS7IpA=="
+data-repo-url="https://api.github.com/repos/andpalmier/yrfy"
+data-repo-id="github-4c68c02e6aa2fe265447c6c21d000bec"&gt;&lt;/script&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;h2 class="relative group"&gt;Conclusion
+&lt;div id="conclusion" class="anchor"&gt;&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The cyber security industry is full of services providing complex dashboards and enterprise subscriptions, but - sometimes - the most efficient path is a simple &lt;code&gt;grep&lt;/code&gt; for a hash, or a quick bash loop to check a list of domains. This toolset was built for those moments: every tool is fast, scriptable, and respectful of system resources.&lt;/p&gt;
+&lt;p&gt;These projects are all open source (AGPLv3) and contributions are more than welcome, Happy hunting!&lt;/p&gt;</description></item></channel></rss>
